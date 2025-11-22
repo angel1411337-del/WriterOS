@@ -3,6 +3,7 @@ Dramatist Agent - Tracks emotional beats, pacing, and tension curves
 """
 import json
 from typing import List, Dict, Any, Optional
+from uuid import uuid4
 from sqlmodel import Session, select
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -27,6 +28,32 @@ class DramatistAgent(BaseAgent):
             "action": {"pattern": "spikes", "baseline": 7.0, "peak_frequency": "very_high"},
             "drama": {"pattern": "wave", "baseline": 4.5, "peak_frequency": "medium"},
             "horror": {"pattern": "rising", "baseline": 6.5, "peak_frequency": "high"},
+        }
+
+    async def run(self, full_text: str, existing_notes: str, title: str, genre: str = "general"):
+        """Standard entry point: analyze a single scene for tension and emotion."""
+        logger.info(f"🎭 Running Dramatist on: {title}...")
+
+        scene = Document(
+            vault_id=uuid4(),
+            title=title,
+            content=full_text,
+            doc_type="scene",
+            metadata_={"notes": existing_notes},
+        )
+
+        analyzed_scene = await self.analyze_scene(scene, genre)
+        pacing = await self.analyze_pacing([analyzed_scene])
+        validation = await self.validate_tension_curve([analyzed_scene], genre)
+        visualization = self.visualize_tension_arc([analyzed_scene])
+
+        return {
+            "title": title,
+            "genre": genre,
+            "pacing": pacing,
+            "validation": validation,
+            "visualization": visualization,
+            "scene": analyzed_scene,
         }
     
     async def score_tension(self, scene_text: str, genre: str = "general") -> float:

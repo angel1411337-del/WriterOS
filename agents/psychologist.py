@@ -1,5 +1,3 @@
-print("--- LOADING NEW PSYCHOLOGIST V2 AGENT ---") # <--- Verifies file load
-
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
