@@ -9,8 +9,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 from .base import BaseAgent, logger
-from .schema import Entity, Relationship, EntityType
+from .schema import Document, Entity, Fact, Relationship, EntityType
 from utils.db import engine
+from utils.embeddings import embedding_service
 
 class ProducerAgent(BaseAgent):
     def __init__(self, model_name="gpt-4o"):
@@ -110,9 +111,9 @@ class ProducerAgent(BaseAgent):
         if mode is None:
             mode = await self._detect_mode(question)
             logger.info(f"🤖 Auto-detected mode: {mode}")
-        
+
         if mode == "local":
-            return "⚠️ Local mode not yet implemented - needs pgvector setup"
+            return await self._local_vector_search(question)
         
         elif mode == "global":
             context = await self._load_targeted_context(question)
@@ -133,6 +134,46 @@ class ProducerAgent(BaseAgent):
         else:
             context = await self._load_targeted_context(question)
             return await self.consult(question, context)
+
+    async def _local_vector_search(self, query: str, limit: int = 5) -> str:
+        """Semantic search over Facts and Documents using vector similarity."""
+        logger.info(f"🔎 Producer running local vector search for: {query}")
+
+        embedding = embedding_service.embed_query(query)
+
+        with Session(engine) as session:
+            facts = session.exec(
+                select(Fact)
+                .order_by(Fact.embedding.cosine_distance(embedding))
+                .limit(limit)
+            ).all()
+
+            documents = session.exec(
+                select(Document)
+                .order_by(Document.embedding.cosine_distance(embedding))
+                .limit(limit)
+            ).all()
+
+        if not facts and not documents:
+            return "No relevant information found in local vector search."
+
+        sections = []
+
+        if facts:
+            formatted_facts = []
+            for fact in facts:
+                source = f" (source: {fact.source})" if fact.source else ""
+                formatted_facts.append(f"- ({fact.fact_type}) {fact.content}{source}")
+            sections.append("📌 Facts:\n" + "\n".join(formatted_facts))
+
+        if documents:
+            formatted_docs = []
+            for doc in documents:
+                snippet = doc.content[:200] + ("..." if len(doc.content) > 200 else "")
+                formatted_docs.append(f"- {doc.title} [{doc.doc_type}]: {snippet}")
+            sections.append("📄 Documents:\n" + "\n".join(formatted_docs))
+
+        return "\n\n".join(sections)
 
     # ============================================
     # 🧠 INTELLIGENCE LAYER
