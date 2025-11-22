@@ -15,15 +15,36 @@ from utils.db import engine
 from utils.embeddings import embedding_service
 
 class ProducerAgent(BaseAgent):
-    def __init__(self, model_name="gpt-4o"):
+    def __init__(self, model_name="gpt-4o", vault_root: Optional[str] = None):
         super().__init__(model_name)
-        
-        # ✅ HYBRID FIX: Keep the correct Desktop Vault paths
-        self.vault_root = Path(r"C:\Users\rahme\Desktop\Genius Loci")
+
+        self.repo_root = Path(__file__).resolve().parent.parent
+        self.sample_vault_root = self.repo_root / "sample_data" / "sample_vault"
+        self.default_vault_root = Path(vault_root) if vault_root else Path(r"C:\Users\rahme\Desktop\Genius Loci")
+
+        self._set_vault_root(self._resolve_vault_root(self.default_vault_root))
+
+        logger.info(f"📁 Producer initialized with vault: {self.vault_root}")
+
+    def _set_vault_root(self, vault_root: Path) -> None:
+        self.vault_root = vault_root
         self.project_bible_path = self.vault_root / "00_Project_Bible"
         self.story_bible_path = self.vault_root / "01_Story_Bible"
 
-        logger.info(f"📁 Producer initialized with vault: {self.vault_root}")
+    def _resolve_vault_root(self, preferred_root: Optional[Path]) -> Path:
+        """Pick the best available vault root, falling back to sample data."""
+        candidate_root = preferred_root or self.default_vault_root
+        if candidate_root and candidate_root.exists():
+            return candidate_root
+
+        if self.sample_vault_root.exists():
+            logger.warning(
+                f"Preferred vault '{candidate_root}' not found. Falling back to sample vault at {self.sample_vault_root}."
+            )
+            return self.sample_vault_root
+
+        logger.warning(f"Preferred vault '{candidate_root}' not found and no sample vault available.")
+        return candidate_root
 
     # ============================================
     # 📂 FILE LOADING UTILITIES
@@ -108,6 +129,9 @@ class ProducerAgent(BaseAgent):
     async def query(self, question: str, mode: Optional[str] = None, vault_path: Optional[str] = None) -> str:
         """Main entry point for Producer queries."""
         logger.info(f"🎬 Producer received query: {question}")
+
+        active_root = self._resolve_vault_root(Path(vault_path) if vault_path else self.default_vault_root)
+        self._set_vault_root(active_root)
         
         if mode is None:
             mode = await self._detect_mode(question)
