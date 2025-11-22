@@ -1,0 +1,35 @@
+# --- Core AI Framework (LangChain 0.3+) ---
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-openai>=0.2.0
+openai>=1.50.0
+tiktoken>=0.7.0
+
+# --- API Server (The "Brain" Interface) ---
+fastapi>=0.115.0
+uvicorn>=0.32.0
+
+# --- Data Validation & Schema ---
+pydantic>=2.9.0
+
+# --- Ingestion Engine (YouTube/Video) ---
+yt-dlp>=2024.10.0
+youtube-transcript-api>=0.6.3
+google-api-python-client>=2.127.0
+isodate>=0.6.1
+
+# --- Image Processing (Visual RAG) ---
+opencv-python>=4.10.0
+numpy>=1.26.0
+
+# --- Utilities ---
+python-dotenv>=1.0.1
+pyyaml>=6.0.1
+tenacity>=8.5.0
+
+# --- Database (The Heavy Metal Stack) ---
+sqlmodel>=0.0.16
+psycopg2-binary>=2.9.9
+pgvector>=0.2.0
+asyncpg>=0.29.0

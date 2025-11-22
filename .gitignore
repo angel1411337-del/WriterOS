@@ -1,0 +1,99 @@
+# ============================================
+# CRITICAL - NEVER COMMIT THESE
+# ============================================
+
+# Environment variables & API keys
+.env
+.env.*
+*.env
+!.env.example
+api_keys.txt
+secrets/
+config/local.py
+
+# ============================================
+# Python
+# ============================================
+
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.dylib
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+virtualenv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ============================================
+# IDE / Editors
+# ============================================
+
+# PyCharm
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Other editors
+*.swp
+*.swo
+*~
+
+# ============================================
+# Database
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+postgres-data/
+pgdata/
+
+# ============================================
+# Logs
+# ============================================
+*.log
+logs/
+
+# ============================================
+# OS Files
+# ============================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ============================================
+# Project Specific
+# ============================================
+
+# Your personal writing/content
+output/
+
+# Temporary files
+temp/
+tmp/
+*.backup
+*.bak
+*.tmp
+
+# Test outputs
+test_output/
+sandbox/
+
+# Large binaries (optional - uncomment if not needed)
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe
