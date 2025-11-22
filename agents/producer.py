@@ -4,7 +4,6 @@ import asyncio
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from sqlmodel import Session, select
-from sqlalchemy import col
 from sqlalchemy.sql.expression import func
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -76,24 +75,30 @@ class ProducerAgent(BaseAgent):
         
         return "\n".join(context_parts)
     
-    def _load_targeted_context(self, query: str) -> str:
-        """Smart context loading based on query keywords."""
-        query_lower = query.lower()
+    async def _detect_context_type(self, question: str) -> str:
+        """Use LLM to classify whether question is about project or story"""
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", """Classify this query as either 'project' or 'story':
+            - project: Questions about development, implementation, roadmap, agents, code, architecture, WriterOS features
+            - story: Questions about characters, plot, world-building, narrative, chapters, novel content
+            Reply with ONLY one word: 'project' or 'story'"""),
+            ("user", f"Query: {question}")
+        ])
+        chain = prompt | self.llm | StrOutputParser()
+        result = await chain.ainvoke({})
+        return result.strip().lower()
+    
+    async def _load_targeted_context(self, query: str) -> str:
+        """Smart context loading based on semantic analysis"""
+        context_type = await self._detect_context_type(query)
         
-        # ✅ HYBRID FIX: Keep the robust keyword list
-        dogfood_keywords = [
-            "work on", "should i", "priority", "roadmap", "sprint",
-            "agent", "mechanic", "architect", "next task", "today", "project",
-            "v2", "v2.5", "implementation", "build", "code", "backlog"
-        ]
-        
-        if any(kw in query_lower for kw in dogfood_keywords):
-            logger.info("🐕 Dogfooding detected - loading Project Bible")
+        if context_type == "project":
+            logger.info("🐕 Project query detected - loading Project Bible")
             return self._load_project_context()
-        
-        logger.info("📖 Story query detected - loading Story Bible")
-        return self._load_story_context()
-
+        else:
+            logger.info("📖 Story query detected - loading Story Bible")
+            return self._load_story_context()
+   
     # ============================================
     # 🎬 MAIN ORCHESTRATOR
     # ============================================
@@ -110,23 +115,23 @@ class ProducerAgent(BaseAgent):
             return "⚠️ Local mode not yet implemented - needs pgvector setup"
         
         elif mode == "global":
-            context = self._load_targeted_context(question)
+            context = await self._load_targeted_context(question)
             return await self.global_view(question, context)
         
         elif mode == "drift":
-            context = self._load_targeted_context(question)
+            context = await self._load_targeted_context(question)
             return await self.drift_search(question, context)
         
         elif mode == "sql":
             criteria = await self._parse_sql_query(question)
-            return await self.structured_query(criteria, vault_path)
+            return await self.structured_query(criteria, vault_path)    
         
         elif mode == "traversal":
             nodes = await self._parse_traversal_query(question)
             return await self.agentic_traversal(nodes["start"], nodes["end"], vault_path)
         
         else:
-            context = self._load_targeted_context(question)
+            context = await self._load_targeted_context(question)
             return await self.consult(question, context)
 
     # ============================================

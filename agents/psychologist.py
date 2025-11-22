@@ -4,6 +4,10 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from .base import BaseAgent, logger
+from .schema import Fact
+from sqlmodel import Session, select
+from utils.db import engine
+from utils.embeddings import embedding_service
 
 # --- V2 EXTRACTION SCHEMAS ---
 
@@ -62,3 +66,29 @@ class PsychologistAgent(BaseAgent):
 
         chain = prompt | self.extractor
         return await chain.ainvoke({})
+
+    async def find_similar_states(self, query: str, limit: int = 5) -> str:
+        """
+        Finds psychological states (Facts) similar to the query.
+        Example: "Fear of abandonment" -> Returns characters with similar fears/traumas.
+        """
+        logger.info(f"🧠 Psychologist searching for states similar to: {query}")
+        
+        embedding = embedding_service.embed_query(query)
+        
+        with Session(engine) as session:
+            # Search Facts (could filter by fact_type if needed, but semantic search handles it well)
+            results = session.exec(
+                select(Fact)
+                .order_by(Fact.embedding.cosine_distance(embedding))
+                .limit(limit)
+            ).all()
+            
+            if not results:
+                return "No similar psychological states found."
+                
+            formatted_results = []
+            for fact in results:
+                formatted_results.append(f"FACT ({fact.fact_type}): {fact.content}")
+                
+            return "\n\n".join(formatted_results)

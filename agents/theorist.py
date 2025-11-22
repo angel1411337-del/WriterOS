@@ -1,4 +1,5 @@
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 from pydantic import BaseModel, Field
 from typing import List, Literal
 from .base import BaseAgent, logger
@@ -32,7 +33,7 @@ class CraftExtractionSchema(BaseModel):
 # --- The Agent ---
 
 class TheoristAgent(BaseAgent):
-    def __init__(self, model_name="gpt-4o"):
+    def __init__(self, model_name="gpt-5.1"):
         super().__init__(model_name)
         # We map the schema here
         self.extractor = self.llm.with_structured_output(CraftExtractionSchema)
