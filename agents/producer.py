@@ -4,6 +4,7 @@ import asyncio
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from sqlmodel import Session, select
+from sqlalchemy.sql import column
 from sqlalchemy.sql.expression import func
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -283,8 +284,10 @@ class ProducerAgent(BaseAgent):
             if entity_type:
                 statement = statement.where(Entity.type == entity_type.lower())
             if key and value:
-                # ✅ HYBRID FIX: Use sqlalchemy.col for JSONB querying
-                statement = statement.where(col(Entity.properties)[key].astext.icontains(value))
+                # ✅ HYBRID FIX: Use SQLAlchemy column helpers for JSONB querying
+                properties_column = column("properties")
+                json_value = func.json_extract_path_text(properties_column, key)
+                statement = statement.where(json_value.ilike(f"%{value}%"))
 
             results = session.exec(statement).all()
             if not results: return "No entities found matching criteria in Database."
