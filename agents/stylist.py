@@ -7,6 +7,11 @@ class StylistAgent(BaseAgent):
     def __init__(self, model_name="gpt-5.1"):
         super().__init__(model_name)
 
+    async def run(self, full_text: str, existing_notes: str, title: str):
+        """Standard entry point to critique prose using existing craft notes."""
+        logger.info(f"💅 Stylist critiquing: {title}...")
+        return await self.critique_prose(full_text, existing_notes)
+
     async def critique_prose(self, draft_text: str, craft_context: str) -> str:
         logger.info("💅 Stylist analyzing prose...")
 
