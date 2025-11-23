@@ -1,0 +1,51 @@
+# WriterOS Cursor Rules
+
+## Project Overview
+WriterOS is a hybrid local/SaaS AI writing assistant for epic fantasy authors.
+- **Target Intelligence:** **GPT-5.1** (Design for high reasoning capabilities).
+- **Frontend:** **Obsidian Plugin** (TypeScript) communicating with Dockerized API.
+- **Backend:** Python 3.11+, FastAPI, SQLModel, **PostgreSQL** (with **pgvector**).
+- **RAG Strategy:** **GraphRAG** (Vector + Knowledge Graph).
+
+## Directory Structure Enforcement
+Always follow the `src/` layout:
+- Core Logic -> `src/writeros/`
+- Data Models -> `src/writeros/schema/` (Modular split)
+- Agents -> `src/writeros/agents/`
+- API Routes -> `src/writeros/api/routes/`
+- Configuration -> `src/writeros/config.py`
+
+## Coding Standards
+
+### 1. Intelligence & LLM
+- **Model:** Default to `gpt-5.1` (or latest high-reasoning model) for complex Agent tasks.
+- **Chunking:** Use **`ClusterSemanticChunker`** in `src/writeros/preprocessing/chunker.py` (do not use simple fixed-size chunking).
+- **Retrieval:** Implement Hybrid Search (Dense Vector via `pgvector` + Graph Traversal) in `src/writeros/rag/`.
+
+### 2. Database & Schema
+- **SQLModel:** Use for all DB tables.
+- **Database:** PostgreSQL is the source of truth. Ensure `alembic` migrations are created for schema changes.
+- **Modular Schema:**
+  - `schema.world`: Entities, Facts (Graph Nodes).
+  - `schema.library`: Documents, Scenes (Source Text).
+  - `schema.{domain}`: Agent-specific outputs.
+- **Mixins:** Always use `UUIDMixin` and `TimestampMixin`.
+
+### 3. Logging (Strict)
+- **NEVER** use `print()` or standard `logging`.
+- **ALWAYS** use `structlog`.
+- Pattern:
+  ```python
+  from writeros.core.logging import get_logger
+  log = get_logger("module_name")
+  log.info("event_name", key=value)
+  ```
+
+### 4. Architecture & Deployment
+- **Docker First:** All code must run inside the Docker container defined in `docker/Dockerfile`.
+- **Async/Await:** All I/O operations (DB, LLM, File) must be async.
+- **Obsidian API:** Ensure API responses match the TypeScript interfaces expected by the Obsidian Plugin.
+
+### 5. Testing
+- Use `pytest` with `pytest-asyncio`.
+- Do not make external API calls during tests; mock `LLMClient`.

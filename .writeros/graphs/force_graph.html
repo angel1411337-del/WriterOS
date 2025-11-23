@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WriterOS Graph - Force</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            background: #f5f7fa;
+        }
+
+        #graph {
+            position: fixed;
+            top: 0;
+            left: 300px;
+            width: calc(100% - 300px);
+            height: 100vh;
+            background: white;
+        }
+
+        .controls {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h4 {
+            margin: 15px 0 10px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #34495e;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        input[type="text"],
+        input[type="range"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        select {
+            background: white;
+        }
+
+        button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 0.9em;
+        }
+
+        button:hover {
+            background-color: #34495e;
+        }
+
+        #stats {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .node {
+            cursor: grab;
+        }
+
+        .node:active {
+            cursor: grabbing;
+        }
+
+        .node-label {
+            font-size: 10px;
+            pointer-events: none;
+            fill: #2c3e50;
+            text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <h3>WriterOS Graph - Force</h3>
+        <div class="control-group">
+            <input type="text" id="search" placeholder="Search entities..." onkeyup="handleSearch()">
+        </div>
+        <div class="control-group">
+            <h4>Layout</h4>
+            <select id="layoutSelect" onchange="updateLayout()">
+                <option value="force">Force Directed</option>
+                <option value="family">Family Tree</option>
+                <option value="faction">Faction Network</option>
+                <option value="location">Location Map</option>
+                <option value="radial">Radial (by Type)</option>
+                <option value="grid">Grid (Alphabetical)</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <h4>Timeline</h4>
+            <input type="range" id="timeSlider" min="0" max="100" value="0" oninput="handleTimeChange(this.value)">
+            <div id="timeDisplay" style="font-size: 0.8em; color: #7f8c8d; text-align: right;">Sequence: 0</div>
+        </div>
+        <div class="control-group">
+            <h4>Entity Types</h4>
+            <div id="entityFilters"></div>
+        </div>
+        <div class="control-group">
+            <h4>Relationship Types</h4>
+            <div id="relFilters"></div>
+        </div>
+        <div class="control-group">
+            <h4>Export</h4>
+            <button onclick="exportSVG()">SVG</button>
+            <button onclick="exportPNG()">PNG</button>
+        </div>
+        <div id="stats"></div>
+    </div>
+    <svg id="graph"></svg>
+    <script>
+        const rawData = {"nodes": [], "links": [], "clusters": {}, "total_hidden": 0};
+        let nodes = rawData.nodes.map(d => ({ ...d }));
+        let links = rawData.links.map(d => ({ ...d }));
+        let activeEntityTypes = new Set(nodes.map(d => d.type));
+        let activeRelTypes = new Set(links.map(d => d.type));
+        let currentLayout = "force";
+        let simulation = null;
+        let currentTime = 0;
+        const width = window.innerWidth - 300;
+        const height = window.innerHeight;
+        const colors = { "character": "#4A90E2", "EntityType.CHARACTER": "#4A90E2", "location": "#50C878", "EntityType.LOCATION": "#50C878", "faction": "#E74C3C", "EntityType.FACTION": "#E74C3C", "item": "#F39C12", "event": "#9B59B6", "default": "#95a5a6" };
+
+        const svg = d3.select("#graph").attr("width", width).attr("height", height);
+        const g = svg.append("g");
+        const zoom = d3.zoom().scaleExtent([0.1, 5]).on("zoom", (event) => { g.attr("transform", event.transform); });
+        svg.call(zoom);
+
+        initFilters();
+        updateGraph();
+
+        function initFilters() {
+            const eTypes = Array.from(new Set(rawData.nodes.map(d => d.type))).sort();
+            const eContainer = document.getElementById("entityFilters");
+            eTypes.forEach(type => {
+                const div = document.createElement("div");
+                div.innerHTML = `<label><input type="checkbox" checked onchange="toggleEntityType('${type}')"><span style="color:${colors[type] || colors.default}">&#9679;</span> ${type}</label>`;
+                eContainer.appendChild(div);
+            });
+            const rTypes = Array.from(new Set(rawData.links.map(d => d.type))).sort();
+            const rContainer = document.getElementById("relFilters");
+            rTypes.forEach(type => {
+                const div = document.createElement("div");
+                div.innerHTML = `<label><input type="checkbox" checked onchange="toggleRelType('${type}')">${type}</label>`;
+                rContainer.appendChild(div);
+            });
+        }
+
+        function updateGraph() {
+            const filteredNodes = nodes.filter(d => activeEntityTypes.has(d.type));
+            const nodeIds = new Set(filteredNodes.map(d => d.id));
+            const filteredLinks = links.filter(d => activeRelTypes.has(d.type) && nodeIds.has(d.source.id || d.source) && nodeIds.has(d.target.id || d.target) && checkTemporal(d));
+            render(filteredNodes, filteredLinks);
+        }
+
+        function checkTemporal(link) {
+            if (!link.effective_from && !link.effective_until) return true;
+            const start = link.effective_from ? (link.effective_from.sequence || 0) : 0;
+            const end = link.effective_until ? (link.effective_until.sequence || 999999) : 999999;
+            return currentTime >= start && currentTime <= end;
+        }
+
+        function render(filteredNodes, filteredLinks) {
+            g.selectAll("*").remove();
+
+            const link = g.append("g").selectAll("line").data(filteredLinks).join("line")
+                .attr("stroke", "#999")
+                .attr("stroke-opacity", 0.6)
+                .attr("stroke-width", 2);
+
+            const node = g.append("g").selectAll("circle").data(filteredNodes, d => d.id).join("circle")
+                .attr("r", 8)
+                .attr("fill", d => colors[d.type] || colors.default)
+                .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+
+            const label = g.append("g").selectAll("text").data(filteredNodes).join("text")
+                .attr("class", "node-label").text(d => d.name).attr("x", 12).attr("y", 4);
+
+            node.append("title").text(d => `${d.name} (${d.type})\n${d.description}`);
+
+            // Clear fixed positions from previous layouts
+            filteredNodes.forEach(n => { n.fx = null; n.fy = null; });
+
+            if (simulation) simulation.stop();
+            simulation = d3.forceSimulation(filteredNodes)
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collide", d3.forceCollide(20));
+
+            if (currentLayout === "force") {
+                simulation.force("link", d3.forceLink(filteredLinks).id(d => d.id).distance(100));
+            } else if (currentLayout === "family") {
+                applyFamilyTree(filteredNodes, filteredLinks);
+            } else if (currentLayout === "faction") {
+                applyFactionNetwork(filteredNodes, filteredLinks);
+            } else if (currentLayout === "location") {
+                applyLocationMap(filteredNodes, filteredLinks);
+            } else if (currentLayout === "radial") {
+                const types = Array.from(activeEntityTypes).sort();
+                simulation.force("link", d3.forceLink(filteredLinks).id(d => d.id).strength(0.1));
+                simulation.force("radial", d3.forceRadial(d => { const index = types.indexOf(d.type); return index === -1 ? 0 : 100 + (index * 80); }, width / 2, height / 2).strength(0.8));
+            } else if (currentLayout === "grid") {
+                const cols = Math.ceil(Math.sqrt(filteredNodes.length));
+                const spacing = 120;
+                simulation.force("x", d3.forceX(d => { const i = filteredNodes.indexOf(d); return (width / 2 - (cols * spacing) / 2) + (i % cols) * spacing; }).strength(1));
+                simulation.force("y", d3.forceY(d => { const i = filteredNodes.indexOf(d); return (height / 2 - (cols * spacing) / 2) + Math.floor(i / cols) * spacing; }).strength(1));
+            }
+
+            simulation.on("tick", () => {
+                link.attr("x1", d => d.source.x).attr("y1", d => d.source.y).attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+                node.attr("cx", d => d.x).attr("cy", d => d.y);
+                label.attr("x", d => d.x + 12).attr("y", d => d.y + 4);
+            });
+
+            updateStats(filteredNodes.length, filteredLinks.length);
+        }
+
+        function applyFamilyTree(filteredNodes, filteredLinks) {
+            const roots = filteredNodes.filter(n => !filteredLinks.some(l => (l.type.includes('PARENT') && (l.target.id || l.target) === n.id)));
+            if (roots.length === 0) return;
+            const virtualRoot = { id: '__virtual_root__', virtual: true };
+            const augmentedNodes = [virtualRoot, ...filteredNodes];
+            const virtualLinks = roots.map(r => ({ source: '__virtual_root__', target: r.id, virtual: true }));
+            const augmentedLinks = [...virtualLinks, ...filteredLinks];
+            try {
+                const stratify = d3.stratify().id(d => d.id).parentId(d => {
+                    if (d.id === '__virtual_root__') return null;
+                    const parentLink = augmentedLinks.find(l => l.type.includes('PARENT') && (l.target.id || l.target) === d.id);
+                    if (!parentLink) return '__virtual_root__';
+                    return parentLink.source.id || parentLink.source;
+                });
+                const hierarchy = stratify(augmentedNodes);
+                const treeLayout = d3.tree().size([width - 200, height - 200]);
+                treeLayout(hierarchy);
+                hierarchy.descendants().forEach(treeNode => {
+                    if (treeNode.id !== '__virtual_root__') {
+                        const node = filteredNodes.find(n => n.id === treeNode.id);
+                        if (node) { node.fx = treeNode.x + 100; node.fy = treeNode.y + 100; }
+                    }
+                });
+            } catch (e) { console.error('Family tree layout failed:', e); }
+        }
+
+        function applyFactionNetwork(filteredNodes, filteredLinks) {
+            // Rank 0: Factions
+            const factions = filteredNodes.filter(n => n.type.includes('FACTION'));
+            const ranks = {};
+            const queue = [];
+
+            factions.forEach(f => {
+                ranks[f.id] = 0;
+                queue.push(f.id);
+            });
+
+            // BFS to assign ranks
+            while (queue.length > 0) {
+                const currentId = queue.shift();
+                const currentRank = ranks[currentId];
+                filteredLinks.forEach(link => {
+                    let neighborId = null;
+                    const sourceId = link.source.id || link.source;
+                    const targetId = link.target.id || link.target;
+
+                    if (sourceId === currentId) neighborId = targetId;
+                    else if (targetId === currentId) neighborId = sourceId;
+
+                    if (neighborId && ranks[neighborId] === undefined) {
+                        ranks[neighborId] = currentRank + 1;
+                        queue.push(neighborId);
+                    }
+                });
+            }
+
+            // Default rank for disconnected nodes
+            filteredNodes.forEach(n => { if (ranks[n.id] === undefined) ranks[n.id] = 3; });
+
+            const nodesByRank = {};
+            filteredNodes.forEach(n => { const rank = ranks[n.id]; if (!nodesByRank[rank]) nodesByRank[rank] = []; nodesByRank[rank].push(n); });
+
+            Object.entries(nodesByRank).forEach(([rank, rankNodes]) => {
+                const r = parseInt(rank);
+                const radius = r === 0 ? 0 : 100 + (r * 100); // Rank 0 at center, others expanding
+                rankNodes.forEach((node, idx) => {
+                    if (r === 0 && rankNodes.length === 1) {
+                        node.fx = width / 2;
+                        node.fy = height / 2;
+                    } else {
+                        const angle = (idx / rankNodes.length) * 2 * Math.PI;
+                        node.fx = width / 2 + Math.cos(angle) * radius;
+                        node.fy = height / 2 + Math.sin(angle) * radius;
+                    }
+                });
+            });
+        }
+
+        function applyLocationMap(filteredNodes, filteredLinks) {
+            let hasCoordinates = false;
+            filteredNodes.forEach(node => {
+                if (node.properties && node.properties.coordinates) {
+                    const { x, y } = node.properties.coordinates;
+                    if (x !== undefined && y !== undefined) { node.fx = x * width; node.fy = y * height; hasCoordinates = true; }
+                }
+            });
+            if (!hasCoordinates) { console.warn('No coordinates found, using force layout'); simulation.force("link", d3.forceLink(filteredLinks).id(d => d.id).distance(200)); }
+        }
+
+        function toggleEntityType(type) { if (activeEntityTypes.has(type)) activeEntityTypes.delete(type); else activeEntityTypes.add(type); updateGraph(); }
+        function toggleRelType(type) { if (activeRelTypes.has(type)) activeRelTypes.delete(type); else activeRelTypes.add(type); updateGraph(); }
+        function updateLayout() { currentLayout = document.getElementById("layoutSelect").value; updateGraph(); }
+        function handleTimeChange(value) { currentTime = parseInt(value); document.getElementById('timeDisplay').innerText = `Sequence: ${currentTime}`; updateGraph(); }
+        function updateStats(nodeCount, linkCount) { document.getElementById('stats').innerHTML = `<strong>Visible:</strong><br>Nodes: ${nodeCount}<br>Links: ${linkCount}<br><br><strong>Total:</strong><br>Nodes: ${nodes.length}<br>Links: ${links.length}`; }
+        function dragstarted(event, d) { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; }
+        function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
+        function dragended(event, d) { if (!event.active) simulation.alphaTarget(0); }
+        function handleSearch() {
+            const term = document.getElementById("search").value.toLowerCase();
+            const nodes = g.selectAll("circle");
+            const labels = g.selectAll("text");
+            const links = g.selectAll("line");
+            if (!term) { nodes.style("opacity", 1); labels.style("opacity", 1); links.style("opacity", 0.6); return; }
+            const matched = new Set();
+            nodes.each(d => { if (d.name.toLowerCase().includes(term) || d.type.toLowerCase().includes(term)) matched.add(d.id); });
+            nodes.style("opacity", d => matched.has(d.id) ? 1 : 0.1);
+            labels.style("opacity", d => matched.has(d.id) ? 1 : 0.1);
+            links.style("opacity", d => (matched.has(d.source.id) || matched.has(d.target.id)) ? 0.6 : 0.05);
+        }
+        function exportSVG() { const svgData = document.getElementById('graph').outerHTML; const blob = new Blob([svgData], { type: 'image/svg+xml' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'graph.svg'; link.click(); }
+        function exportPNG() { const svgElement = document.getElementById('graph'); const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); const svgString = new XMLSerializer().serializeToString(svgElement); const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }); const url = URL.createObjectURL(blob); const img = new Image(); img.onload = function () { ctx.drawImage(img, 0, 0); canvas.toBlob(function (blob) { const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'graph.png'; link.click(); }); }; img.src = url; }
+    </script>
+</body>
+
+</html>

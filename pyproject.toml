@@ -1,0 +1,6 @@
+[project]
+name = "writeros"
+version = "0.1.0"
+description = "AI-Powered Creative Writing Assistant"
+[tool.setuptools.packages.find]
+where = ["src"]

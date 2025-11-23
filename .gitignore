@@ -60,3 +60,10 @@ logs/
 
 # Output directory
 output/
+
+# Data directories (keep structure, ignore contents)
+data/outputs/*
+!data/outputs/.gitkeep
+
+data/cache/*
+!data/cache/.gitkeep
