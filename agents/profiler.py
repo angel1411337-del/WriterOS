@@ -4,7 +4,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from .base import BaseAgent, logger
-from .schema import EntityType, RelationType, Entity, Relationship
+from src.writeros.schema import EntityType, RelationType, Entity, Relationship
 from sqlmodel import Session, select
 from sqlalchemy import text
 from utils.db import engine

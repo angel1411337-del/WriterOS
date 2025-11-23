@@ -8,7 +8,7 @@ from typing import List, Optional, Any
 # --- DATABASE IMPORTS ---
 from sqlmodel import Session, select
 from utils.db import engine
-from agents.schema import Entity, Relationship, EntityType, RelationType, CanonLayer
+from src.writeros.schema import Entity, Relationship, EntityType, RelationType, CanonLayer
 
 logger = logging.getLogger(__name__)
 

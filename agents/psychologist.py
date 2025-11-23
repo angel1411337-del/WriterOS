@@ -2,7 +2,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from .base import BaseAgent, logger
-from .schema import Fact
+from src.writeros.schema import Fact
 from sqlmodel import Session, select
 from utils.db import engine
 from utils.embeddings import embedding_service

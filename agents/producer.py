@@ -10,7 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 from .base import BaseAgent, logger
-from .schema import Document, Entity, Fact, Relationship, EntityType
+from src.writeros.schema import Document, Entity, Fact, Relationship, EntityType
 from utils.db import engine
 from utils.embeddings import embedding_service
 

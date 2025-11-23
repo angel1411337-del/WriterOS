@@ -48,56 +48,6 @@ obsidian_plugin/package-lock.json
 *.pyd
 .pytest_cache/
 .coverage
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
-.venv
-
-# Database
-*.db
-*.sqlite
-
-# Environment
-.env
-.env.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Test/Demo files
-*_demo.html
-test_*.py
-test_*.html
-add_*.py
-check_*.py
-fix_*.py
-reset_*.py
-update_*.py
-
-# Node modules (Obsidian plugin)
-obsidian_plugin/node_modules/
-obsidian_plugin/main.js
-obsidian_plugin/package-lock.json
-
-# Build artifacts
-*.pyc
-*.pyo
-*.pyd
-.pytest_cache/
-.coverage
 htmlcov/
 
 # Logs

@@ -7,7 +7,7 @@ from .base import BaseAgent, logger
 from sqlmodel import Session, select
 from utils.db import engine
 from utils.embeddings import embedding_service
-from .schema import Document, Event, Anchor, AnchorStatus, Fact, Relationship, Entity
+from src.writeros.schema import Document, Event, Anchor, AnchorStatus, Fact, Relationship, Entity
 
 class ArchitectAgent(BaseAgent):
     def __init__(self, model_name="gpt-5.1"):

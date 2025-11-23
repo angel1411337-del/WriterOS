@@ -9,7 +9,7 @@ from datetime import datetime
 from sqlmodel import Session, select, desc
 from sqlalchemy import func
 
-from agents.schema import Conversation, Message, Document, Entity
+from src.writeros.schema import Conversation, Message, Document, Entity
 from agents.profiler import ProfilerAgent
 from agents.dramatist import DramatistAgent
 from agents.base import BaseAgent

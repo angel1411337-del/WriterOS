@@ -8,7 +8,7 @@ from typing import List, Dict, Any, Optional
 from uuid import UUID
 from sqlmodel import Session, select, delete
 
-from agents.schema import Document
+from src.writeros.schema import Document
 from preprocessing.chunker import SemanticChunker
 from utils.db import engine
 from utils.embeddings import EmbeddingService

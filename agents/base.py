@@ -5,7 +5,7 @@ from langchain_openai import ChatOpenAI
 
 # Import the new Universal Schema
 # This ensures all Agents have access to Entity, Relationship, etc.
-from .schema import Entity, Relationship, Fact, EntityType, CanonInfo
+from src.writeros.schema import Entity, Relationship, Fact, EntityType, CanonInfo
 
 # Setup Environment
 load_dotenv()
