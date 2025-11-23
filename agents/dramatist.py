@@ -16,7 +16,7 @@ from utils.db import engine
 class DramatistAgent(BaseAgent):
     """Analyzes tension, emotion, and pacing in narrative scenes"""
     
-    def __init__(self, model_name="gpt-4o"):
+    def __init__(self, model_name="gpt-5.1"):
         super().__init__(model_name)
         logger.info("🎭 Dramatist Agent initialized")
         

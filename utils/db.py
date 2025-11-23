@@ -24,7 +24,7 @@ def init_db():
     max_retries = 5
     for i in range(max_retries):
         try:
-            print(f"🔌 Connecting to Database (Attempt {i+1})...")
+            print(f"Connecting to Database (Attempt {i+1})...")
 
             # 1. Enable Vector Extension
             with Session(engine) as session:
@@ -38,15 +38,15 @@ def init_db():
             # 3. Create Tables
             SQLModel.metadata.create_all(engine)
 
-            print("✅ PostgreSQL Database Initialized (Tables + Vector).")
+            print("PostgreSQL Database Initialized (Tables + Vector).")
             return
         except Exception as e:
-            print(f"⚠️ Error: {e}")
+            print(f"Error: {e}")
             if i < max_retries - 1:
                 print("   Retrying in 2 seconds...")
                 time.sleep(2)
             else:
-                print("❌ FATAL: Initialization failed.")
+                print("FATAL: Initialization failed.")
 
 def get_session():
     """FastAPI Dependency"""

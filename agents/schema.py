@@ -100,11 +100,9 @@ class Entity(SQLModel, table=True):
 
     # Canon Info
     canon: Dict[str, Any] = Field(default_factory=lambda: {"layer": "primary", "status": "active"}, sa_column=Column(JSONB))
-
+    
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-
-    # Vector Embedding
     embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(1536)))
 
 class Relationship(SQLModel, table=True):
@@ -112,21 +110,24 @@ class Relationship(SQLModel, table=True):
 
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
     vault_id: UUID = Field(index=True)
-
     from_entity_id: UUID = Field(index=True)
     to_entity_id: UUID = Field(index=True)
     rel_type: RelationType = Field(index=True)
-
-    description: Optional[str] = None # For Drift
-
+    description: Optional[str] = None
+    
     properties: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
     relationship_metadata: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
-    canon: Dict[str, Any] = Field(default_factory=lambda: {"layer": "primary"}, sa_column=Column(JSONB))
+    
+    # Temporal Data
+    effective_from: Optional[Dict[str, int]] = Field(default=None, sa_column=Column(JSONB))
+    effective_until: Optional[Dict[str, int]] = Field(default=None, sa_column=Column(JSONB))
 
+    canon: Dict[str, Any] = Field(default_factory=lambda: {"layer": "primary"}, sa_column=Column(JSONB))
+    
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Fact(SQLModel, table=True):
-    """Granular facts for Canon Resolver (The 'Atomic Truths')"""
     __tablename__ = "facts"
 
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
@@ -134,13 +135,11 @@ class Fact(SQLModel, table=True):
 
     fact_type: FactType = Field(index=True)
     content: str
-
     source: Optional[str] = None
     confidence: float = 1.0
 
     canon: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    # Facts have embeddings so we can search "Find fears related to fire"
     embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(1536)))
 
 class Event(SQLModel, table=True):
@@ -242,6 +241,31 @@ class CharacterArc(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 # ============================================
+# CHAT & PERSISTENCE (Tables)
+# ============================================
+
+class Conversation(SQLModel, table=True):
+    __tablename__ = "conversations"
+
+    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
+    vault_id: UUID = Field(index=True)
+    title: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class Message(SQLModel, table=True):
+    __tablename__ = "messages"
+
+    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
+    conversation_id: UUID = Field(index=True)
+    role: str # user, assistant, system
+    content: str
+    agent: Optional[str] = None # which agent responded
+    
+    context_used: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+# ============================================
 # LOGGING (Table)
 # ============================================
 
@@ -257,19 +281,6 @@ class InteractionEvent(SQLModel, table=True):
     context: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
 
     timestamp: datetime = Field(default_factory=datetime.utcnow)
-
-# ============================================
-# NON-DB MODELS (Just for API Validation)
-# ============================================
-
-class ValidationIssue(SQLModel):
-    severity: str
-    agent: str
-    issue_type: str
-    message: str
-    location: Optional[str] = None
-    suggestions: List[str] = []
-    citations: List[str] = []
 
 class CanonInfo(SQLModel):
     layer: CanonLayer = CanonLayer.PRIMARY

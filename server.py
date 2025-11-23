@@ -1,179 +1,95 @@
-import os
-from pathlib import Path
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+"""
+WriterOS API Server
+FastAPI server for handling chat, RAG, and vault analysis.
+"""
+import uvicorn
+from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import List, Optional, Dict
-from dotenv import load_dotenv
+from typing import Optional, List
+from uuid import UUID
+import json
+import asyncio
 
-from agents import AgentSwarm
-from utils.vault_reader import VaultRegistry
-from utils.writer import ObsidianWriter
+from agents.orchestrator import OrchestratorAgent
+from utils.indexer import VaultIndexer
+from utils.db import init_db
 
-load_dotenv()
-app = FastAPI(title="WriterOS v3.0 API")
+app = FastAPI(title="WriterOS API")
 
-# --- CORS ---
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Global Agent Instance (Lazy loaded)
+orchestrator: Optional[OrchestratorAgent] = None
 
-VAULT_PATH = Path(os.getenv("OBSIDIAN_VAULT_PATH", "./output"))
-swarm = None
-vault = None
-writer = None
+class ChatRequest(BaseModel):
+    message: str
+    vault_id: UUID
+    conversation_id: Optional[UUID] = None
 
-# --- Models ---
-class ChapterDraft(BaseModel):
-    text: str
-    chapter_title: Optional[str] = "Untitled"
+class AnalyzeRequest(BaseModel):
+    vault_path: str
+    vault_id: UUID
 
-class CritiqueResponse(BaseModel):
-    critique: str
-    context_used: List[str]
-
-class UpdateResponse(BaseModel):
-    status: str
-    updates_made: List[str]
-
-class ProducerQuery(BaseModel):
-    query: str
-    mode: str = "local" # local, global, drift, sql, traversal
-    # Optional params for advanced modes
-    sql_params: Optional[Dict[str, str]] = None
-    traversal_nodes: Optional[List[str]] = None
-
-# --- Lifecycle ---
 @app.on_event("startup")
 async def startup_event():
-    global swarm, vault, writer
-    print("🚀 WriterOS Server Starting...")
+    global orchestrator
+    print("Initializing Database...")
+    init_db()
+    print("Loading Orchestrator Agent...")
+    orchestrator = OrchestratorAgent()
+    print("WriterOS Server Ready!")
 
-    swarm = AgentSwarm()
-    print("🤖 Swarm Active.")
-
-    vault = VaultRegistry(str(VAULT_PATH))
-    print("🧠 Super Fan Context Loaded.")
-
-    writer = ObsidianWriter(VAULT_PATH)
-    print("✍️ Obsidian Writer Ready.")
-
-@app.get("/")
-def health_check():
-    return {"status": "WriterOS is online", "phase": "Execution Mode"}
-
-@app.post("/refresh")
-async def refresh_vault():
-    vault.refresh_index()
-    return {"status": "Vault Index Refreshed"}
-
-# --- ENDPOINT 1: ARCHITECT (Story/Plot) ---
-@app.post("/analyze/chapter", response_model=CritiqueResponse)
-async def analyze_chapter(draft: ChapterDraft):
-    if not swarm or not vault: raise HTTPException(503, "Initializing...")
-
-    context_str = vault.get_relevant_context(draft.text)
-    result = await swarm.architect.critique_draft(draft.text, context_str)
-
+@app.get("/health")
+async def health_check():
+    """
+    Health check endpoint for Obsidian plugin discovery.
+    """
     return {
-        "critique": result,
-        "context_used": list(vault.entities.keys())
+        "status": "ok", 
+        "agents_loaded": orchestrator is not None,
+        "service": "writeros"
     }
 
-# --- ENDPOINT 2: STYLIST (Prose/Line Edit) ---
-@app.post("/analyze/style", response_model=CritiqueResponse)
-async def analyze_style(draft: ChapterDraft):
-    if not swarm: raise HTTPException(503, "Initializing...")
+@app.post("/chat/stream")
+async def chat_stream(request: ChatRequest):
+    """
+    Stream chat response using Server-Sent Events (SSE).
+    """
+    if not orchestrator:
+        raise HTTPException(status_code=503, detail="Agents not initialized")
 
-    craft_str = vault.get_craft_context()
-    result = await swarm.stylist.critique_prose(draft.text, craft_str)
+    async def generate():
+        try:
+            async for chunk in orchestrator.process_chat(
+                user_message=request.message,
+                vault_id=request.vault_id,
+                conversation_id=request.conversation_id
+            ):
+                # SSE format: data: <json>\n\n
+                yield f"data: {json.dumps({'content': chunk})}\n\n"
+            
+            yield "data: [DONE]\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
-    return {
-        "critique": result,
-        "context_used": []
-    }
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream"
+    )
 
-# --- ENDPOINT 3: STATE UPDATER (Chapter Digester) ---
-@app.post("/update/state", response_model=UpdateResponse)
-async def update_state(draft: ChapterDraft):
-    if not swarm or not writer: raise HTTPException(503, "Initializing...")
-
-    print(f"🔄 Processing State Update for: {draft.chapter_title}")
-    updates = []
-
-    context_str = vault.get_relevant_context(draft.text)
-
-    # 1. Run Profiler
-    try:
-        lore_data = await swarm.profiler.run(draft.text, context_str, draft.chapter_title)
-        if lore_data:
-            writer.update_story_bible(lore_data, draft.chapter_title)
-            updates.append(f"Profiler: Extracted {len(lore_data.characters)} characters")
-    except Exception as e:
-        print(f"❌ Profiler Error: {e}")
-
-    # 2. Run Navigator
-    try:
-        nav_data = await swarm.navigator.run(draft.text, context_str, draft.chapter_title)
-        if nav_data:
-            writer.update_navigation_data(nav_data, draft.chapter_title)
-            updates.append(f"Navigator: Extracted {len(nav_data.locations)} locations")
-    except Exception as e:
-        print(f"❌ Navigator Error: {e}")
-
-    # 3. Run Psychologist
-    try:
-        psych_data = await swarm.psychologist.run(draft.text, context_str, draft.chapter_title)
-        if psych_data:
-            writer.update_psych_profiles(psych_data)
-            updates.append(f"Psychologist: Analyzed {len(psych_data.profiles)} profiles")
-    except Exception as e:
-        print(f"❌ Psychologist Error: {e}")
-
-    vault.refresh_index()
-
-    return {
-        "status": "Success",
-        "updates_made": updates
-    }
-
-# --- ENDPOINT 4: PRODUCER (Chat/Drift/SQL) ---
-@app.post("/consult/producer")
-async def consult_producer(request: ProducerQuery):
-    if not swarm: raise HTTPException(503, "Initializing...")
-
-    response = ""
-
-    if request.mode == "sql":
-        if not request.sql_params: return {"response": "Error: Missing sql_params"}
-        response = await swarm.producer.structured_query(request.sql_params, vault)
-
-    elif request.mode == "traversal":
-        if not request.traversal_nodes or len(request.traversal_nodes) != 2:
-            return {"response": "Error: Traversal requires [start, end]."}
-        response = await swarm.producer.agentic_traversal(
-            request.traversal_nodes[0], request.traversal_nodes[1], vault
-        )
-
-    elif request.mode == "global":
-        context = vault.get_global_context()
-        response = await swarm.producer.global_view(request.query, context)
-
-    elif request.mode == "drift":
-        context = vault.get_local_context(request.query)
-        response = await swarm.producer.drift_search(request.query, context)
-
-    else:
-        # Standard Chat
-        context = vault.get_local_context(request.query)
-        response = await swarm.producer.consult(request.query, context)
-
-    return {"response": response}
+@app.post("/analyze")
+async def analyze_vault(request: AnalyzeRequest, background_tasks: BackgroundTasks):
+    """
+    Trigger vault indexing in background.
+    """
+    indexer = VaultIndexer(
+        vault_path=request.vault_path,
+        vault_id=request.vault_id
+    )
+    
+    # Run indexing in background
+    background_tasks.add_task(indexer.index_vault)
+    
+    return {"status": "accepted", "message": "Vault analysis started in background"}
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

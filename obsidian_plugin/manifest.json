@@ -1,0 +1,10 @@
+{
+	"id": "writeros",
+	"name": "WriterOS",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "AI-powered creative writing assistant and world-building tool.",
+	"author": "WriterOS",
+	"authorUrl": "",
+	"isDesktopOnly": true
+}

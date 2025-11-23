@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{{TITLE}}</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+
+        #graph {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Controls Panel */
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 280px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h4 {
+            margin: 15px 0 10px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Form Elements */
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #34495e;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+
+        button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 0.9em;
+        }
+
+        button:hover {
+            background-color: #34495e;
+        }
+
+        /* Stats */
+        #stats {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Graph Elements */
+        .node {
+            cursor: grab;
+            transition: opacity 0.3s;
+        }
+
+        .node:active {
+            cursor: grabbing;
+        }
+
+        .link {
+            stroke: #bdc3c7;
+            stroke-opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .node-label {
+            font-size: 10px;
+            pointer-events: none;
+            fill: #2c3e50;
+            text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+        }
+
+        /* Highlight Classes */
+        .dimmed {
+            opacity: 0.1;
+        }
+
+        .highlighted {
+            stroke: #2c3e50;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <h3>{{TITLE}}</h3>
+
+        <!-- Search -->
+        <div class="control-group">
+            <input type="text" id="search" placeholder="Search entities..." onkeyup="handleSearch()">
+        </div>
+
+        <!-- Layout Selector -->
+        <div class="control-group">
+            <h4>Layout</h4>
+            <select id="layoutSelect" onchange="updateLayout()">
+                <option value="force">Force Directed</option>
+                <option value="radial">Radial (by Type)</option>
+                <option value="grid">Grid (Alphabetical)</option>
+            </select>
+        </div>
+
+        <!-- Time Slider -->
+        <div class="control-group">
+            <h4>Timeline</h4>
+            <input type="range" id="timeSlider" min="0" max="100" value="0" oninput="handleTimeChange(this.value)">
+            <div id="timeDisplay" style="font-size: 0.8em; color: #7f8c8d; text-align: right;">Start</div>
+        </div>
+
+        <!-- Entity Filters -->
+        <div class="control-group">
+            <h4>Entity Types</h4>
+            <div id="entityFilters"></div>
+        </div>
+
+        <!-- Relationship Filters -->
+        <div class="control-group">
+            <h4>Relationship Types</h4>
+            <div id="relFilters"></div>
+        </div>
+
+        <!-- Export -->
+        <div class="control-group">
+            <h4>Export</h4>
+            <button onclick="exportSVG()">SVG</button>
+            <button onclick="exportPNG()">PNG</button>
+        </div>
+
+        <div id="stats"></div>
+    </div>
+
+    <svg id="graph"></svg>
+
+    <script>
+        // --- Data Initialization ---
+        const rawData = {{ GRAPH_DATA }};
+        let nodes = rawData.nodes.map(d => ({ ...d }));
+        let links = rawData.links.map(d => ({ ...d }));
+
+        // State
+        let activeEntityTypes = new Set(nodes.map(d => d.type));
+        let activeRelTypes = new Set(links.map(d => d.type));
+        let currentLayout = "force";
+        let simulation = null;
+        let currentTime = 0;
+
+        // --- Configuration ---
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const colors = {
+            "character": "#4A90E2",
+            "location": "#50C878",
+            "faction": "#E74C3C",
+            "item": "#F39C12",
+            "event": "#9B59B6",
+            "default": "#95a5a6"
+        };
+
+        // --- Setup SVG ---
+        const svg = d3.select("#graph")
+            .attr("width", width)
+            .attr("height", height);
+
+        const g = svg.append("g");
+
+        // Zoom behavior
+        const zoom = d3.zoom()
+        const eTypes = Array.from(new Set(rawData.nodes.map(d => d.type))).sort();
+        const eContainer = document.getElementById("entityFilters");
+
+        eTypes.forEach(type => {
+            const div = document.createElement("div");
+            div.innerHTML = `
+                    <label>
+                        <input type="checkbox" checked onchange="toggleEntityType('${type}')">
+                        <span style="color:${colors[type] || colors.default}">●</span> ${type}
+                    </label>
+                `;
+            eContainer.appendChild(div);
+        });
+
+        // Relationship Types
+        const rTypes = Array.from(new Set(rawData.links.map(d => d.type))).sort();
+        const rContainer = document.getElementById("relFilters");
+
+        rTypes.forEach(type => {
+            const div = document.createElement("div");
+            div.innerHTML = `
+                    <label>
+                        <input type="checkbox" checked onchange="toggleRelType('${type}')">
+                        ${type}
+                    </label>
+                `;
+            rContainer.appendChild(div);
+        });
+        }
+
+        function updateGraph() {
+            // Filter nodes
+            const filteredNodes = nodes.filter(d => activeEntityTypes.has(d.type));
+            const nodeIds = new Set(filteredNodes.map(d => d.id));
+
+            // Filter links
+            const filteredLinks = links.filter(d =>
+                activeRelTypes.has(d.type) &&
+                nodeIds.has(d.source.id || d.source) &&
+                nodeIds.has(d.target.id || d.target) &&
+                checkTemporal(d)
+            );
+
+            // Update Visuals
+            render(filteredNodes, filteredLinks);
+        }
+
+        function checkTemporal(link) {
+            // If no temporal data, always show
+            if (!link.effective_from && !link.effective_until) return true;
+
+            // Simple sequence check (assuming sequence numbers for now)
+            // In a real app, you'd parse the JSONB structure more carefully
+            const start = link.effective_from ? (link.effective_from.sequence || 0) : 0;
+            const end = link.effective_until ? (link.effective_until.sequence || 999999) : 999999;
+
+            return currentTime >= start && currentTime <= end;
+        }
+
+        function render(filteredNodes, filteredLinks) {
+            // Clear existing
+            g.selectAll("*").remove();
+
+            // Links
+            const link = g.append("g")
+                .selectAll("line")
+                .data(filteredLinks)
+                .join("line")
+                .attr("class", "link")
+                .attr("stroke-width", 2);
+
+            // Nodes
+            const node = g.append("g")
+                .selectAll("circle")
+                .data(filteredNodes, d => d.id)
+                .join("circle")
+                .attr("class", "node")
+                .attr("r", 8)
+                .attr("fill", d => colors[d.type] || colors.default)
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            // Labels
+            const label = g.append("g")
+                .selectAll("text")
+                .data(filteredNodes)
+                .join("text")
+                .attr("class", "node-label")
+                .text(d => d.name)
+                .attr("x", 12)
+                .attr("y", 4);
+
+            // Tooltips
+            node.append("title")
+                .text(d => `${d.name} (${d.type})\n${d.description}`);
+
+            // Simulation
+            if (simulation) simulation.stop();
+
+            simulation = d3.forceSimulation(filteredNodes)
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collide", d3.forceCollide(20));
+
+            if (currentLayout === "force") {
+                simulation.force("link", d3.forceLink(filteredLinks).id(d => d.id).distance(100));
+            } else if (currentLayout === "radial") {
+                const types = Array.from(activeEntityTypes).sort();
+                simulation.force("link", d3.forceLink(filteredLinks).id(d => d.id).strength(0.1));
+                simulation.force("radial", d3.forceRadial(
+                    d => {
+                        const index = types.indexOf(d.type);
+                        return index === -1 ? 0 : 100 + (index * 80);
+                    },
+                    width / 2,
+                    height / 2
+                ).strength(0.8));
+            } else if (currentLayout === "grid") {
+                const cols = Math.ceil(Math.sqrt(filteredNodes.length));
+                const spacing = 120;
+                simulation.force("x", d3.forceX(d => {
+                    const i = filteredNodes.indexOf(d);
+                    return (width / 2 - (cols * spacing) / 2) + (i % cols) * spacing;
+                }).strength(1));
+                simulation.force("y", d3.forceY(d => {
+                    const i = filteredNodes.indexOf(d);
+                    return (height / 2 - (cols * spacing) / 2) + Math.floor(i / cols) * spacing;
+                }).strength(1));
+            }
+
+            simulation.on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node
+                    .attr("cx", d => d.x)
+                    .attr("cy", d => d.y);
+
+                label
+                    .attr("x", d => d.x + 12)
+                    .attr("y", d => d.y + 4);
+            });
+
+            updateStats(filteredNodes.length, filteredLinks.length);
+        }
+
+        // --- Interaction Handlers ---
+        function toggleEntityType(type) {
+            if (activeEntityTypes.has(type)) {
+                activeEntityTypes.delete(type);
+            } else {
+                activeEntityTypes.add(type);
+            }
+            updateGraph();
+        }
+
+        function toggleRelType(type) {
+            if (activeRelTypes.has(type)) {
+                activeRelTypes.delete(type);
+            } else {
+                activeRelTypes.add(type);
+            }
+            updateGraph();
+        }
+
+        function handleSearch() {
+            const term = document.getElementById("search").value.toLowerCase();
+            const nodes = g.selectAll(".node");
+            const labels = g.selectAll(".node-label");
+            const links = g.selectAll(".link");
+
+            if (!term) {
+                nodes.classed("dimmed", false).classed("highlighted", false);
+                labels.classed("dimmed", false);
+                links.classed("dimmed", false);
+                return;
+            }
+
+            const matched = new Set();
+            nodes.each(d => {
+                if (d.name.toLowerCase().includes(term) || d.type.toLowerCase().includes(term)) {
+                    matched.add(d.id);
+                }
+            });
+
+            nodes.classed("dimmed", d => !matched.has(d.id))
+                .classed("highlighted", d => matched.has(d.id));
+
+            labels.classed("dimmed", d => !matched.has(d.id));
+
+            links.classed("dimmed", d =>
+                !matched.has(d.source.id) && !matched.has(d.target.id)
+            );
+        }
+
+        function handleTimeChange(val) {
+            currentTime = parseInt(val);
+            document.getElementById("timeDisplay").innerText = `Sequence: ${currentTime}`;
+            updateGraph();
+        }
+
+        function updateLayout() {
+            currentLayout = document.getElementById("layoutSelect").value;
+            updateGraph();
+        }
+
+        function updateStats(nodeCount, linkCount) {
+            document.getElementById("stats").innerHTML = `
+                <p><strong>Visible Nodes:</strong> ${nodeCount}</p>
+                <p><strong>Visible Links:</strong> ${linkCount}</p>
+            `;
+        }
+
+        function exportSVG() {
+            const svgData = document.getElementById("graph").outerHTML;
+            const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "graph.svg";
+            link.click();
+        }
+
+        function exportPNG() {
+            const svg = document.getElementById("graph");
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+
+            const data = (new XMLSerializer()).serializeToString(svg);
+            const DOMURL = window.URL || window.webkitURL || window;
+            const img = new Image();
+            const svgBlob = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
+            const url = DOMURL.createObjectURL(svgBlob);
+
+            img.onload = function () {
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, width, height);
+                ctx.drawImage(img, 0, 0);
+                DOMURL.revokeObjectURL(url);
+
+                const imgURI = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                const link = document.createElement("a");
+                link.href = imgURI;
+                link.download = "graph.png";
+                link.click();
+            };
+            img.src = url;
+        }
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+    </script>
+</body>
+
+</html>

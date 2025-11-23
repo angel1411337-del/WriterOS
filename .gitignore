@@ -1,99 +1,112 @@
-# ============================================
-# CRITICAL - NEVER COMMIT THESE
-# ============================================
-
-# Environment variables & API keys
-.env
-.env.*
-*.env
-!.env.example
-api_keys.txt
-secrets/
-config/local.py
-
-# ============================================
 # Python
-# ============================================
-
-# Byte-compiled / optimized
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-*.dylib
 .Python
-
-# Virtual environments
 venv/
 env/
 ENV/
-.venv/
-virtualenv/
+.venv
 
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-.eggs/
-
-# ============================================
-# IDE / Editors
-# ============================================
-
-# PyCharm
-.idea/
-*.iml
-
-# VS Code
-.vscode/
-*.code-workspace
-
-# Other editors
-*.swp
-*.swo
-*~
-
-# ============================================
 # Database
-# ============================================
 *.db
 *.sqlite
-*.sqlite3
-postgres-data/
-pgdata/
 
-# ============================================
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test/Demo files
+*_demo.html
+test_*.py
+test_*.html
+add_*.py
+check_*.py
+fix_*.py
+reset_*.py
+update_*.py
+
+# Node modules (Obsidian plugin)
+obsidian_plugin/node_modules/
+obsidian_plugin/main.js
+obsidian_plugin/package-lock.json
+
+# Build artifacts
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Database
+*.db
+*.sqlite
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test/Demo files
+*_demo.html
+test_*.py
+test_*.html
+add_*.py
+check_*.py
+fix_*.py
+reset_*.py
+update_*.py
+
+# Node modules (Obsidian plugin)
+obsidian_plugin/node_modules/
+obsidian_plugin/main.js
+obsidian_plugin/package-lock.json
+
+# Build artifacts
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
 # Logs
-# ============================================
 *.log
 logs/
 
-# ============================================
-# OS Files
-# ============================================
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# ============================================
-# Project Specific
-# ============================================
-
-# Your personal writing/content
-output/
-
 # Temporary files
-temp/
-tmp/
-*.backup
-*.bak
 *.tmp
+*.bak
 
-# Test outputs
-test_output/
-sandbox/
-
-# Large binaries (optional - uncomment if not needed)
-ffmpeg.exe
-ffplay.exe
-ffprobe.exe
+# Output directory
+output/
