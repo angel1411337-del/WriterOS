@@ -229,10 +229,17 @@ class ProducerAgent(BaseAgent):
         ])
         chain = prompt | self.llm | StrOutputParser()
         result = await chain.ainvoke({})
-        try: 
+        try:
             clean_result = result.replace("```json", "").replace("```", "").strip()
             return json.loads(clean_result)
-        except: 
+        except (json.JSONDecodeError, AttributeError, KeyError) as e:
+            logger.warning(
+                "structured_query_parse_failed",
+                error=str(e),
+                error_type=type(e).__name__,
+                raw_result=result[:200] if result else None,
+                returning_default=True
+            )
             return {"type": "character", "key": "role", "value": "unknown"}
     
     async def _parse_traversal_query(self, question: str) -> Dict[str, str]:
@@ -243,10 +250,17 @@ class ProducerAgent(BaseAgent):
         ])
         chain = prompt | self.llm | StrOutputParser()
         result = await chain.ainvoke({})
-        try: 
+        try:
             clean_result = result.replace("```json", "").replace("```", "").strip()
             return json.loads(clean_result)
-        except: 
+        except (json.JSONDecodeError, AttributeError, KeyError) as e:
+            logger.warning(
+                "traversal_query_parse_failed",
+                error=str(e),
+                error_type=type(e).__name__,
+                raw_result=result[:200] if result else None,
+                returning_default=True
+            )
             return {"start": "Unknown", "end": "Unknown"}
 
     # ============================================

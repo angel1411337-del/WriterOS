@@ -31,8 +31,16 @@ class ObsidianWriter:
     def _load_history(self) -> List[str]:
         if self.history_file.exists():
             try:
-                with open(self.history_file, 'r') as f: return json.load(f)
-            except: return []
+                with open(self.history_file, 'r') as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, IOError) as e:
+                logger.error(
+                    "history_load_failed",
+                    file=str(self.history_file),
+                    error=str(e),
+                    error_type=type(e).__name__
+                )
+                return []
         return []
 
     def mark_as_processed(self, video_id: str):
@@ -100,7 +108,13 @@ class ObsidianWriter:
                         # Map string type to Enum if possible, else default
                         try:
                             enum_type = RelationType(rel_type.lower())
-                        except:
+                        except (ValueError, AttributeError) as e:
+                            logger.warning(
+                                "invalid_relationship_type",
+                                rel_type=rel_type,
+                                error=str(e),
+                                defaulting_to="RELATED_TO"
+                            )
                             enum_type = RelationType.RELATED_TO
 
                         rel = Relationship(
