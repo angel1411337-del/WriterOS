@@ -59,17 +59,18 @@ async def async_db_engine():
     Create async engine for integration tests.
     Requires Docker PostgreSQL to be running.
     """
+    from sqlalchemy import text
     engine = create_async_engine(TEST_ASYNC_DATABASE_URL, echo=False)
-    
+
     # Create tables
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.drop_all)
         await conn.run_sync(SQLModel.metadata.create_all)
         # Enable vector extension
-        await conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
-        
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+
     yield engine
-    
+
     # Cleanup
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.drop_all)
@@ -77,20 +78,20 @@ async def async_db_engine():
 
 
 @pytest.fixture
-async def db_session(async_db_engine) -> AsyncGenerator[AsyncSession, None]:
+async def async_db_session(async_db_engine) -> AsyncGenerator[AsyncSession, None]:
     """
-    Creates a new async session for each test.
-    Renamed to 'db_session' to match the argument used in test_vector_search.py
+    Creates a new async session for each async test.
+    Use this fixture for async test methods.
     """
     connection = await async_db_engine.connect()
     transaction = await connection.begin()
-    
+
     session_factory = sessionmaker(
         bind=connection, class_=AsyncSession, expire_on_commit=False
     )
     async with session_factory() as session:
         yield session
-        
+
     await transaction.rollback()
     await connection.close()
 
@@ -105,14 +106,19 @@ def mock_embedding_service(mocker):
     Mock EmbeddingService to return deterministic vectors.
     Avoids OpenAI API calls during tests.
     """
-    mock = mocker.patch("src.writeros.utils.embeddings.EmbeddingService")
+    mock = mocker.patch("writeros.utils.embeddings.EmbeddingService")
     service = MagicMock()
-    
+
     # Return a fake vector (1536 dims for text-embedding-3-small)
     fake_vector = [0.1] * 1536
     service.embed_query.return_value = fake_vector
     service.embed_documents.return_value = [fake_vector, fake_vector]
-    
+
+    # Add async method for async compatibility
+    async def mock_get_embeddings(texts):
+        return [[0.1] * 1536 for _ in texts]
+    service.get_embeddings = AsyncMock(side_effect=mock_get_embeddings)
+
     mock.return_value = service
     return service
 
@@ -123,7 +129,7 @@ def mock_llm_client(mocker):
     Mock LLM client to avoid API costs.
     Returns deterministic structured outputs.
     """
-    mock = mocker.patch("src.writeros.agents.base.ChatOpenAI")
+    mock = mocker.patch("writeros.agents.base.ChatOpenAI")
     client = MagicMock()
     
     # Mock structured output
@@ -148,7 +154,7 @@ def sample_vault_id() -> UUID:
 @pytest.fixture
 def sample_entities(sample_vault_id):
     """Create sample entity data for testing."""
-    from src.writeros.schema import Entity, EntityType
+    from writeros.schema import Entity, EntityType
     
     return [
         Entity(
@@ -184,7 +190,7 @@ def sample_entities(sample_vault_id):
 @pytest.fixture
 def sample_relationships(sample_entities):
     """Create sample relationship data."""
-    from src.writeros.schema import Relationship, RelationType
+    from writeros.schema import Relationship, RelationType
     
     return [
         Relationship(
@@ -193,8 +199,8 @@ def sample_relationships(sample_entities):
             from_entity_id=sample_entities[0].id,
             to_entity_id=sample_entities[2].id,
             rel_type=RelationType.ENEMY,
-            strength=0.9,
-            details="Aria is actively fighting against The Syndicate"
+            description="Aria is actively fighting against The Syndicate",
+            properties={"strength": 0.9}
         ),
         Relationship(
             id=uuid4(),
@@ -202,8 +208,8 @@ def sample_relationships(sample_entities):
             from_entity_id=sample_entities[0].id,
             to_entity_id=sample_entities[1].id,
             rel_type=RelationType.LOCATED_IN,
-            strength=1.0,
-            details="Aria lives in Neo Tokyo"
+            description="Aria lives in Neo Tokyo",
+            properties={"strength": 1.0}
         ),
     ]
 
@@ -211,7 +217,7 @@ def sample_relationships(sample_entities):
 @pytest.fixture
 def sample_documents(sample_vault_id):
     """Create sample document data."""
-    from src.writeros.schema import Document
+    from writeros.schema import Document
     
     return [
         Document(

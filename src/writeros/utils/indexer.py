@@ -8,10 +8,10 @@ from typing import List, Dict, Any, Optional
 from uuid import UUID
 from sqlmodel import Session, select, delete
 
-from src.writeros.schema import Document
-from src.writeros.preprocessing.chunker import SemanticChunker
-from src.writeros.utils.db import engine
-from src.writeros.utils.embeddings import EmbeddingService
+from writeros.schema import Document
+from writeros.preprocessing.chunker import SemanticChunker
+from writeros.utils.db import engine
+from writeros.utils.embeddings import EmbeddingService
 
 class VaultIndexer:
     def __init__(
@@ -84,7 +84,7 @@ class VaultIndexer:
         # 3. Chunking
         # If very short, treat as single chunk
         if len(content.split()) < 50:
-            embedding = await self.embedder.get_embedding(content)
+            embedding = self.embedder.embed_query(content)
             chunks = [{
                 "content": content,
                 "embedding": embedding,

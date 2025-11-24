@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.writeros.utils.vault_reader import VaultRegistry
+from writeros.utils.vault_reader import VaultRegistry
 
 
 def build_sample_vault(tmp_path: Path, include_project: bool = False, include_writing: bool = True) -> Path:

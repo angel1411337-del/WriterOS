@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from src.writeros.core.logging import setup_logging, get_logger
-from src.writeros import __version__
+from writeros.core.logging import setup_logging, get_logger
+from writeros import __version__
 
 # Initialize logging before app creation
 setup_logging()

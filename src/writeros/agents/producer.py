@@ -10,9 +10,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 from .base import BaseAgent, logger
-from src.writeros.schema import Document, Entity, Fact, Relationship, EntityType
-from src.writeros.utils.db import engine
-from src.writeros.utils.embeddings import embedding_service
+from writeros.schema import Document, Entity, Fact, Relationship, EntityType
+from writeros.utils.db import engine
+from writeros.utils.embeddings import embedding_service
 
 class ProducerAgent(BaseAgent):
     def __init__(self, model_name="gpt-4o", vault_root: Optional[str] = None):

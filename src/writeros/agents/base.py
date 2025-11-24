@@ -10,13 +10,13 @@ from langchain_openai import ChatOpenAI
 
 # Import the new Universal Schema
 # This ensures all Agents have access to Entity, Relationship, etc.
-from src.writeros.schema import Entity, Relationship, Fact, EntityType, CanonInfo
+from writeros.schema import Entity, Relationship, Fact, EntityType, CanonInfo
 
 # Setup Environment
 load_dotenv()
 
 # Setup Logging
-from src.writeros.core.logging import get_logger
+from writeros.core.logging import get_logger
 logger = get_logger(__name__)
 
 class BaseAgent:

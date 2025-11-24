@@ -1,7 +1,7 @@
 import json
 from uuid import UUID
 
-from src.writeros.utils.vault_config import (
+from writeros.utils.vault_config import (
     ensure_graph_directory,
     get_or_create_vault_id,
     get_vault_config,

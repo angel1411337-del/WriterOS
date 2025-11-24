@@ -1,5 +1,5 @@
 import typer
-from src.writeros.core.logging import setup_logging, get_logger
+from writeros.core.logging import setup_logging, get_logger
 
 # Initialize logging before anything else
 setup_logging()
@@ -17,7 +17,7 @@ def serve():
 @app.command()
 def version():
     """Show version."""
-    from src.writeros import __version__
+    from writeros import __version__
     print(f"WriterOS v{__version__}")
 
 if __name__ == "__main__":
@@ -33,8 +33,8 @@ def generate_graph(
     import asyncio
     from pathlib import Path
     from uuid import UUID
-    from src.writeros.agents.profiler import ProfilerAgent
-    from src.writeros.utils.db import get_or_create_vault_id # We might need to move this or import it
+    from writeros.agents.profiler import ProfilerAgent
+    from writeros.utils.db import get_or_create_vault_id # We might need to move this or import it
     
     # Quick fix for get_or_create_vault_id if it's not in utils.db yet
     # It was in utils.vault_config in the legacy script.

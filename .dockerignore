@@ -10,6 +10,9 @@ venv/
 .gitignore
 .idea/
 .vscode/
-docker/
 tests/
 obsidian-plugin/
+*.md
+.coverage
+htmlcov/
+.pytest_cache/

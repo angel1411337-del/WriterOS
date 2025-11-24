@@ -7,8 +7,8 @@ from typing import List, Optional, Any
 
 # --- DATABASE IMPORTS ---
 from sqlmodel import Session, select
-from src.writeros.utils.db import engine
-from src.writeros.schema import Entity, Relationship, EntityType, RelationType, CanonLayer
+from writeros.utils.db import engine
+from writeros.schema import Entity, Relationship, EntityType, RelationType, CanonLayer
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ Tests singleton pattern, embedding generation, and error handling.
 """
 import pytest
 from unittest.mock import MagicMock, patch
-from src.writeros.utils.embeddings import EmbeddingService
+from writeros.utils.embeddings import EmbeddingService
 
 
 class TestEmbeddingService:
@@ -18,8 +18,8 @@ class TestEmbeddingService:
         
         assert service1 is service2
     
-    @patch("src.writeros.utils.embeddings.OpenAIEmbeddings")
-    @patch("src.writeros.utils.embeddings.os.getenv")
+    @patch("writeros.utils.embeddings.OpenAIEmbeddings")
+    @patch("writeros.utils.embeddings.os.getenv")
     def test_initialization_with_api_key(self, mock_getenv, mock_openai_embeddings):
         """Test successful initialization with API key."""
         mock_getenv.return_value = "test-api-key"
@@ -35,7 +35,7 @@ class TestEmbeddingService:
             openai_api_key="test-api-key"
         )
     
-    @patch("src.writeros.utils.embeddings.os.getenv")
+    @patch("writeros.utils.embeddings.os.getenv")
     def test_initialization_without_api_key(self, mock_getenv):
         """Test that initialization fails without API key."""
         mock_getenv.return_value = None
@@ -46,8 +46,8 @@ class TestEmbeddingService:
         with pytest.raises(ValueError, match="OPENAI_API_KEY is missing"):
             EmbeddingService()
     
-    @patch("src.writeros.utils.embeddings.OpenAIEmbeddings")
-    @patch("src.writeros.utils.embeddings.os.getenv")
+    @patch("writeros.utils.embeddings.OpenAIEmbeddings")
+    @patch("writeros.utils.embeddings.os.getenv")
     def test_embed_query(self, mock_getenv, mock_openai_embeddings):
         """Test single query embedding."""
         mock_getenv.return_value = "test-api-key"
@@ -66,8 +66,8 @@ class TestEmbeddingService:
         assert result == [0.1, 0.2, 0.3]
         mock_embedder.embed_query.assert_called_once_with("test query")
     
-    @patch("src.writeros.utils.embeddings.OpenAIEmbeddings")
-    @patch("src.writeros.utils.embeddings.os.getenv")
+    @patch("writeros.utils.embeddings.OpenAIEmbeddings")
+    @patch("writeros.utils.embeddings.os.getenv")
     def test_embed_documents(self, mock_getenv, mock_openai_embeddings):
         """Test batch document embedding."""
         mock_getenv.return_value = "test-api-key"
@@ -91,8 +91,8 @@ class TestEmbeddingService:
         assert result[1] == [0.4, 0.5, 0.6]
         mock_embedder.embed_documents.assert_called_once_with(["doc1", "doc2"])
     
-    @patch("src.writeros.utils.embeddings.OpenAIEmbeddings")
-    @patch("src.writeros.utils.embeddings.os.getenv")
+    @patch("writeros.utils.embeddings.OpenAIEmbeddings")
+    @patch("writeros.utils.embeddings.os.getenv")
     def test_embed_empty_string(self, mock_getenv, mock_openai_embeddings):
         """Test embedding of empty string."""
         mock_getenv.return_value = "test-api-key"
@@ -109,8 +109,8 @@ class TestEmbeddingService:
         
         assert len(result) == 1536
     
-    @patch("src.writeros.utils.embeddings.OpenAIEmbeddings")
-    @patch("src.writeros.utils.embeddings.os.getenv")
+    @patch("writeros.utils.embeddings.OpenAIEmbeddings")
+    @patch("writeros.utils.embeddings.os.getenv")
     def test_embed_documents_empty_list(self, mock_getenv, mock_openai_embeddings):
         """Test embedding of empty document list."""
         mock_getenv.return_value = "test-api-key"
@@ -131,8 +131,8 @@ class TestEmbeddingService:
 class TestEmbeddingServiceIntegration:
     """Integration tests for EmbeddingService."""
     
-    @patch("src.writeros.utils.embeddings.OpenAIEmbeddings")
-    @patch("src.writeros.utils.embeddings.os.getenv")
+    @patch("writeros.utils.embeddings.OpenAIEmbeddings")
+    @patch("writeros.utils.embeddings.os.getenv")
     def test_multiple_calls_use_same_instance(self, mock_getenv, mock_openai_embeddings):
         """Test that multiple calls use the same singleton instance."""
         mock_getenv.return_value = "test-api-key"

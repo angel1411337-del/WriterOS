@@ -30,7 +30,7 @@ class SemanticChunker:
     @property
     def embedder(self):
         if self._embedder is None:
-            from src.writeros.utils.embeddings import EmbeddingService
+            from writeros.utils.embeddings import EmbeddingService
             self._embedder = EmbeddingService()
         return self._embedder
 

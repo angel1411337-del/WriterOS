@@ -7,7 +7,7 @@ and edge cases.
 import pytest
 import numpy as np
 from unittest.mock import AsyncMock, MagicMock, patch
-from src.writeros.preprocessing.chunker import SemanticChunker, Chunk
+from writeros.preprocessing.chunker import SemanticChunker, Chunk
 
 
 class TestSemanticChunker:
@@ -35,7 +35,7 @@ class TestSemanticChunker:
         mock_service.get_embeddings = AsyncMock(side_effect=mock_get_embeddings)
         
         # Patch where it's imported
-        mocker.patch("src.writeros.utils.embeddings.EmbeddingService", return_value=mock_service)
+        mocker.patch("writeros.utils.embeddings.EmbeddingService", return_value=mock_service)
         
         return mock_service
     

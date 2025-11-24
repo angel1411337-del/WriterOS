@@ -9,12 +9,12 @@ from datetime import datetime
 from sqlmodel import Session, select, desc
 from sqlalchemy import func
 
-from src.writeros.schema import Conversation, Message, Document, Entity
-from src.writeros.agents.profiler import ProfilerAgent
-from src.writeros.agents.dramatist import DramatistAgent
-from src.writeros.agents.base import BaseAgent
-from src.writeros.utils.embeddings import EmbeddingService
-from src.writeros.utils.db import engine
+from writeros.schema import Conversation, Message, Document, Entity
+from writeros.agents.profiler import ProfilerAgent
+from writeros.agents.dramatist import DramatistAgent
+from writeros.agents.base import BaseAgent
+from writeros.utils.embeddings import EmbeddingService
+from writeros.utils.db import engine
 
 class OrchestratorAgent(BaseAgent):
     def __init__(self):
@@ -96,7 +96,7 @@ class OrchestratorAgent(BaseAgent):
         """
         Retrieve relevant documents and entities using vector search.
         """
-        query_embedding = await self.embedder.get_embedding(query)
+        query_embedding = self.embedder.embed_query(query)
         
         with Session(engine) as session:
             # Search Documents

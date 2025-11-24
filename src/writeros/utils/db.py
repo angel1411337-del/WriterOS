@@ -1,11 +1,12 @@
-from src.writeros.core.logging import get_logger
+from writeros.core.logging import get_logger
 from sqlmodel import create_engine, SQLModel, Session, text
 import time
+import os
 
 logger = get_logger(__name__)
 
-# Connection string
-DATABASE_URL = "postgresql://writer:password@localhost:5432/writeros"
+# Connection string - read from environment or use default for local dev
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://writer:password@localhost:5432/writeros")
 
 # Create the Engine
 engine = create_engine(DATABASE_URL, echo=False)
@@ -24,8 +25,8 @@ def init_db():
                 session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
                 session.commit()
 
-            # 2. Register Tables  
-            from src.writeros import schema
+            # 2. Register Tables
+            from writeros import schema
 
             # 3. Create Tables
             SQLModel.metadata.create_all(engine)

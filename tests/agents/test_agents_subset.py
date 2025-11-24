@@ -34,7 +34,7 @@ fake_structlog = types.SimpleNamespace(
 )
 sys.modules.setdefault("structlog", fake_structlog)
 
-from src.writeros.agents import base, chronologist, mechanic, navigator, stylist
+from writeros.agents import base, chronologist, mechanic, navigator, stylist
 
 
 class FakeChain:

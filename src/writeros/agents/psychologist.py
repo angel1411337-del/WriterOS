@@ -2,10 +2,10 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from .base import BaseAgent, logger
-from src.writeros.schema import Fact
+from writeros.schema import Fact
 from sqlmodel import Session, select
-from src.writeros.utils.db import engine
-from src.writeros.utils.embeddings import embedding_service
+from writeros.utils.db import engine
+from writeros.utils.embeddings import embedding_service
 
 # --- V2 EXTRACTION SCHEMAS ---
 

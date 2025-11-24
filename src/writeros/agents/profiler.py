@@ -4,11 +4,11 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from .base import BaseAgent, logger
-from src.writeros.schema import EntityType, RelationType, Entity, Relationship
+from writeros.schema import EntityType, RelationType, Entity, Relationship
 from sqlmodel import Session, select
 from sqlalchemy import text
-from src.writeros.utils.db import engine
-from src.writeros.utils.embeddings import embedding_service
+from writeros.utils.db import engine
+from writeros.utils.embeddings import embedding_service
 
 # --- V2 INTERFACE SCHEMAS ---
 

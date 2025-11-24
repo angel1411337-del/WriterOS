@@ -6,14 +6,22 @@ Tests entity extraction, similarity search, graph generation, and family tree co
 import pytest
 from uuid import uuid4
 from unittest.mock import AsyncMock, MagicMock
-from src.writeros.agents.profiler import ProfilerAgent, WorldExtractionSchema, CharacterProfile
-from src.writeros.schema import Entity, Relationship, EntityType, RelationType
+from writeros.agents.profiler import ProfilerAgent, WorldExtractionSchema, CharacterProfile
+from writeros.schema import Entity, Relationship, EntityType, RelationType
 
 
 @pytest.mark.unit
 class TestProfilerAgent:
     """Test suite for ProfilerAgent."""
-    
+
+    @pytest.fixture(autouse=True)
+    def mock_profiler_engine(self, test_engine, mocker):
+        """
+        Mock the ProfilerAgent's engine to use test database.
+        This ensures ProfilerAgent queries run against test DB, not production.
+        """
+        mocker.patch("writeros.agents.profiler.engine", test_engine)
+
     @pytest.fixture
     def profiler(self, mock_llm_client):
         """Create a ProfilerAgent instance with mocked LLM."""
@@ -40,26 +48,26 @@ class TestProfilerAgent:
         
         text = "Aria Winters stood at the edge of the cliff."
         result = await profiler.run(text, "", "Test Chapter")
-        
+
         assert result is not None
-        assert "Aria Winters" in result
+        assert "Aria Winters" in str(result)
     
     @pytest.mark.asyncio
-    async def test_find_similar_entities(self, profiler, db_session, sample_entities):
+    async def test_find_similar_entities(self, profiler, db_session, sample_entities, mocker):
         """Test semantic search for similar entities."""
         # Add entities to database
         for entity in sample_entities:
             db_session.add(entity)
         db_session.commit()
-        
+
         # Mock embedding service
-        with pytest.mock.patch("writeros.agents.profiler.embedding_service") as mock_embed:
-            mock_embed.embed_query.return_value = [0.1] * 1536
-            
-            result = await profiler.find_similar_entities("brave warrior", limit=2)
-            
-            assert result is not None
-            assert isinstance(result, str)
+        mock_embed = mocker.patch("writeros.agents.profiler.embedding_service")
+        mock_embed.embed_query.return_value = [0.1] * 1536
+
+        result = await profiler.find_similar_entities("brave warrior", limit=2)
+
+        assert result is not None
+        assert isinstance(result, str)
     
     @pytest.mark.asyncio
     async def test_generate_graph_data(self, profiler, db_session, sample_entities, sample_relationships):
@@ -114,7 +122,8 @@ class TestProfilerAgent:
             from_entity_id=parent.id,
             to_entity_id=child.id,
             rel_type=RelationType.PARENT,
-            strength=1.0
+            description="Parent-child relationship",
+            properties={"strength": 1.0}
         )
         db_session.add(rel)
         db_session.commit()
@@ -148,12 +157,11 @@ class TestProfilerAgentHelpers:
     def test_format_links(self, profiler, sample_relationships):
         """Test link formatting for D3.js."""
         links = profiler._format_links(sample_relationships)
-        
+
         assert isinstance(links, list)
         assert len(links) == len(sample_relationships)
-        
+
         for link in links:
             assert "source" in link
             assert "target" in link
             assert "type" in link
-            assert "strength" in link

@@ -18,6 +18,7 @@ dependencies = [
     "langchain-openai>=0.0.5",
     "openai>=1.10.0",
     "pydantic>=2.5.0",
+    "pydantic-settings>=2.0.0",
     "python-dotenv>=1.0.0",
     "structlog>=24.1.0",
     "typer>=0.9.0",
@@ -36,6 +37,9 @@ dev = [
     "vcrpy>=5.1.0",
     "faker>=22.0.0",
 ]
+
+[project.scripts]
+writeros = "writeros.cli.main:app"
 
 [tool.setuptools.packages.find]
 where = ["src"]

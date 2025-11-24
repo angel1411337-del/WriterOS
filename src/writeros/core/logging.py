@@ -1,7 +1,7 @@
 import sys
 import logging
 import structlog
-from src.writeros.config import settings
+from writeros.config import settings
 
 def setup_logging():
     """

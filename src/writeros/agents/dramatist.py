@@ -9,8 +9,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 from .base import BaseAgent, logger
-from src.writeros.schema import Document
-from src.writeros.utils.db import engine
+from writeros.schema import Document
+from writeros.utils.db import engine
 
 
 class DramatistAgent(BaseAgent):

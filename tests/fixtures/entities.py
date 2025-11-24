@@ -3,7 +3,7 @@ Entity fixtures for WriterOS tests.
 Provides sample characters, locations, and factions.
 """
 from uuid import uuid4
-from src.writeros.schema import Entity, EntityType, CanonInfo
+from writeros.schema import Entity, EntityType, CanonInfo
 
 
 def create_character(name: str, description: str, vault_id=None):
