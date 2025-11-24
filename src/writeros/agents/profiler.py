@@ -154,9 +154,11 @@ class ProfilerAgent(BaseAgent):
         self.log.info("generating_graph_data", vault_id=str(vault_id), graph_type=graph_type)
         
         with Session(engine) as session:
-            # Optimized query: prioritize connected nodes
+            # ✅ FIXED N+1 QUERY: Use raw SQL to get IDs, then load entities in single query
+            # Before: session.get(Entity, row.id) called N times (N+1 problem)
+            # After: Load all entities at once with WHERE IN
             query = text("""
-                SELECT e.*, COUNT(r.id) as connection_count
+                SELECT e.id, COUNT(r.id) as connection_count
                 FROM entities e
                 LEFT JOIN relationships r ON (r.from_entity_id = e.id OR r.to_entity_id = e.id)
                 WHERE e.vault_id = :vault_id
@@ -166,23 +168,35 @@ class ProfilerAgent(BaseAgent):
                 ORDER BY connection_count DESC
                 LIMIT :max_nodes
             """)
-            
+
             result = session.execute(query, {
                 'vault_id': str(vault_id),
                 'canon_layer': canon_layer,
                 'max_nodes': max_nodes * 2  # Fetch extra for filtering
             })
-            
-            all_entities = []
-            for row in result:
-                entity = session.get(Entity, row.id)
-                if entity:
-                    # Apply entity type filter
-                    if entity_types and entity.type not in entity_types:
-                        continue
-                    all_entities.append(entity)
-                    if len(all_entities) >= max_nodes:
-                        break
+
+            # Extract IDs from result
+            entity_ids = [row.id for row in result]
+
+            if not entity_ids:
+                return {
+                    'nodes': [],
+                    'links': [],
+                    'clusters': {},
+                    'total_hidden': 0
+                }
+
+            # ✅ Load ALL entities in ONE query (no loop!)
+            all_entities = session.exec(
+                select(Entity).where(Entity.id.in_(entity_ids))
+            ).all()
+
+            # Apply entity type filter
+            if entity_types:
+                all_entities = [e for e in all_entities if e.type in entity_types]
+
+            # Limit to max_nodes
+            all_entities = all_entities[:max_nodes]
             
             if not all_entities:
                 return {
@@ -233,21 +247,30 @@ class ProfilerAgent(BaseAgent):
                     'canon_layer': canon_layer
                 })
             
+            # ✅ FIXED N+1 QUERY: Extract IDs, then load all relationships in one query
+            # Before: session.get(Relationship, row.id) called M times (M+1 problem)
+            # After: Load all relationships at once with WHERE IN
+            rel_ids = [row.id for row in rel_result]
+
             relationships = []
-            for row in rel_result:
-                rel = session.get(Relationship, row.id)
-                if rel:
+            if rel_ids:
+                # Load ALL relationships in ONE query
+                all_rels = session.exec(
+                    select(Relationship).where(Relationship.id.in_(rel_ids))
+                ).all()
+
+                for rel in all_rels:
                     # Apply additional relationship type filter if specified
                     if relationship_types and str(rel.rel_type) not in relationship_types:
                         continue
-                    
+
                     # Apply temporal filter
                     if current_story_time is not None:
                         start = rel.effective_from.get("sequence", 0) if rel.effective_from else 0
                         end = rel.effective_until.get("sequence", 999999) if rel.effective_until else 999999
                         if not (start <= current_story_time <= end):
                             continue
-                            
+
                     relationships.append(rel)
             
             # Format for D3.js
