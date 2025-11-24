@@ -2,7 +2,7 @@ from typing import List, Dict, Any, Optional
 from uuid import UUID
 from datetime import datetime
 from sqlmodel import Field
-from sqlalchemy import Column
+from sqlalchemy import Column, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from pgvector.sqlalchemy import Vector
 
@@ -11,6 +11,9 @@ from .enums import EntityType, RelationType, FactType
 
 class Entity(UUIDMixin, TimestampMixin, table=True):
     __tablename__ = "entities"
+    __table_args__ = (
+        Index("ix_entities_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
     vault_id: UUID = Field(index=True)
 
     type: EntityType = Field(index=True)
@@ -45,6 +48,9 @@ class Relationship(UUIDMixin, TimestampMixin, table=True):
 
 class Fact(UUIDMixin, table=True):
     __tablename__ = "facts"
+    __table_args__ = (
+        Index("ix_facts_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
     entity_id: UUID = Field(index=True, foreign_key="entities.id")
 
     fact_type: FactType = Field(index=True)
@@ -58,6 +64,9 @@ class Fact(UUIDMixin, table=True):
 
 class Event(UUIDMixin, table=True):
     __tablename__ = "events"
+    __table_args__ = (
+        Index("ix_events_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
     vault_id: UUID = Field(index=True)
     name: str
     description: Optional[str] = None

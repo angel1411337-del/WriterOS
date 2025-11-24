@@ -2,7 +2,7 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 from uuid import UUID
 from sqlmodel import Field, Relationship
-from sqlalchemy import Column
+from sqlalchemy import Column, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from pgvector.sqlalchemy import Vector
 
@@ -95,6 +95,9 @@ class Scene(UUIDMixin, TimestampMixin, table=True):
     Enables tension arcs and pacing analysis.
     """
     __tablename__ = "scenes"
+    __table_args__ = (
+        Index("ix_scenes_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
     vault_id: UUID = Field(index=True)
     
     # Hierarchy
@@ -132,6 +135,9 @@ class Document(UUIDMixin, TimestampMixin, table=True):
     Generic storage for Notes, Craft Advice, or loose drafts.
     """
     __tablename__ = "documents"
+    __table_args__ = (
+        Index("ix_documents_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
     vault_id: UUID = Field(index=True)
 
     title: str
