@@ -5,7 +5,7 @@ from .base import BaseAgent, logger
 from writeros.schema import Fact
 from sqlmodel import Session, select
 from writeros.utils.db import engine
-from writeros.utils.embeddings import embedding_service
+from writeros.utils.embeddings import get_embedding_service
 
 # --- V2 EXTRACTION SCHEMAS ---
 
@@ -72,7 +72,7 @@ class PsychologistAgent(BaseAgent):
         """
         self.log.info("searching_similar_states", query=query)
         
-        embedding = embedding_service.embed_query(query)
+        embedding = get_embedding_service().embed_query(query)
         
         with Session(engine) as session:
             # Search Facts (could filter by fact_type if needed, but semantic search handles it well)

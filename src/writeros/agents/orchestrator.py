@@ -13,13 +13,13 @@ from writeros.schema import Conversation, Message, Document, Entity
 from writeros.agents.profiler import ProfilerAgent
 from writeros.agents.dramatist import DramatistAgent
 from writeros.agents.base import BaseAgent
-from writeros.utils.embeddings import EmbeddingService
+from writeros.utils.embeddings import get_embedding_service
 from writeros.utils.db import engine
 
 class OrchestratorAgent(BaseAgent):
     def __init__(self):
         super().__init__(model_name="gpt-5.1")
-        self.embedder = EmbeddingService()
+        self.embedder = get_embedding_service()
         
         # Sub-agents
         self.profiler = ProfilerAgent()

@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import Callable, List
 from langchain_openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 import logging
@@ -8,6 +8,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 load_dotenv()
+
+# Factory used to create or return the embedding service singleton. This indirection
+# allows tests to swap in mocks without triggering API calls at import time.
+_embedding_service_factory: Callable[[], "EmbeddingService"]
 
 class EmbeddingService:
     _instance = None
@@ -42,5 +46,27 @@ class EmbeddingService:
         """Async wrapper for embed_documents (for compatibility with async chunker)."""
         return self.embed_documents(texts)
 
-# Global instance
-embedding_service = EmbeddingService()
+
+def set_embedding_service_factory(factory: Callable[[], "EmbeddingService"]):
+    """Override the factory used to create EmbeddingService instances."""
+    global _embedding_service_factory
+    _embedding_service_factory = factory
+
+
+def reset_embedding_service_singleton():
+    """Reset the singleton instance (useful for tests)."""
+    EmbeddingService._instance = None
+
+
+def reset_embedding_service_factory():
+    """Reset the embedding service factory to the default singleton creator."""
+    set_embedding_service_factory(EmbeddingService)
+
+
+def get_embedding_service() -> EmbeddingService:
+    """Get the embedding service via the current factory."""
+    return _embedding_service_factory()
+
+
+# Initialize the default factory
+reset_embedding_service_factory()

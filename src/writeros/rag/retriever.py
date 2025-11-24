@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 from writeros.schema import Document, Entity, Fact
 from writeros.utils.db import engine
-from writeros.utils.embeddings import EmbeddingService
+from writeros.utils.embeddings import EmbeddingService, get_embedding_service
 
 
 @dataclass
@@ -28,7 +28,7 @@ class RAGRetriever:
     """
 
     def __init__(self, embedding_service: Optional[EmbeddingService] = None):
-        self.embedder = embedding_service or EmbeddingService()
+        self.embedder = embedding_service or get_embedding_service()
 
     async def retrieve(
         self,

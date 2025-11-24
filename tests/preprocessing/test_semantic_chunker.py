@@ -8,10 +8,22 @@ import pytest
 import numpy as np
 from unittest.mock import AsyncMock, MagicMock, patch
 from writeros.preprocessing.chunker import SemanticChunker, Chunk
+from writeros.utils.embeddings import (
+    reset_embedding_service_factory,
+    reset_embedding_service_singleton,
+)
 
 
 class TestSemanticChunker:
     """Test suite for SemanticChunker."""
+
+    @pytest.fixture(autouse=True)
+    def reset_embedding_service_state(self):
+        reset_embedding_service_singleton()
+        reset_embedding_service_factory()
+        yield
+        reset_embedding_service_singleton()
+        reset_embedding_service_factory()
     
     @pytest.fixture
     def chunker(self):

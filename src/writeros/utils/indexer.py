@@ -16,7 +16,7 @@ from sqlmodel import Session, select, delete
 from writeros.schema import Document
 from writeros.preprocessing import UnifiedChunker, ChunkingStrategy
 from writeros.utils.db import engine
-from writeros.utils.embeddings import EmbeddingService
+from writeros.utils.embeddings import get_embedding_service
 from writeros.core.logging import get_logger
 
 logger = get_logger(__name__)
@@ -44,7 +44,7 @@ class VaultIndexer:
         )
 
         # Helper for single embeddings if needed
-        self.embedder = EmbeddingService()
+        self.embedder = get_embedding_service()
 
         logger.info(
             "vault_indexer_initialized",

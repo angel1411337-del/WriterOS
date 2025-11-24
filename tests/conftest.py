@@ -7,6 +7,10 @@ from typing import AsyncGenerator, List
 from pathlib import Path
 from uuid import uuid4, UUID
 from unittest.mock import MagicMock, AsyncMock
+from writeros.utils.embeddings import (
+    reset_embedding_service_factory,
+    reset_embedding_service_singleton,
+)
 from sqlmodel import SQLModel, create_engine, Session
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
@@ -106,6 +110,9 @@ def mock_embedding_service(mocker):
     Mock EmbeddingService to return deterministic vectors.
     Avoids OpenAI API calls during tests.
     """
+    reset_embedding_service_singleton()
+    reset_embedding_service_factory()
+
     mock = mocker.patch("writeros.utils.embeddings.EmbeddingService")
     service = MagicMock()
 
@@ -120,7 +127,10 @@ def mock_embedding_service(mocker):
     service.get_embeddings = AsyncMock(side_effect=mock_get_embeddings)
 
     mock.return_value = service
-    return service
+    yield service
+
+    reset_embedding_service_singleton()
+    reset_embedding_service_factory()
 
 
 @pytest.fixture
