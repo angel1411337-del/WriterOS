@@ -1,0 +1,69 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+tests/services/test_embedding_service.py::TestEmbeddingService::test_singleton_pattern PASSED [ 12%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_with_api_key PASSED [ 25%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_without_api_key PASSED [ 37%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_query PASSED [ 50%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_documents PASSED [ 62%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_empty_string PASSED [ 75%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_documents_empty_list PASSED [ 87%]
+tests/services/test_embedding_service.py::TestEmbeddingServiceIntegration::test_multiple_calls_use_same_instance PASSED [100%]
+
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                  Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------
+src\writeros\__init__.py                  1      0   100%
+src\writeros\agents\__init__.py          22     22     0%   1-23
+src\writeros\agents\architect.py        123    123     0%   2-303
+src\writeros\agents\base.py              22     22     0%   1-44
+src\writeros\agents\chronologist.py      22     22     0%   1-57
+src\writeros\agents\dramatist.py        136    136     0%   4-286
+src\writeros\agents\mechanic.py          31     31     0%   1-68
+src\writeros\agents\navigator.py         26     26     0%   1-59
+src\writeros\agents\orchestrator.py      68     68     0%   5-149
+src\writeros\agents\producer.py         201    201     0%   1-368
+src\writeros\agents\profiler.py         124    124     0%   1-322
+src\writeros\agents\psychologist.py      40     40     0%   1-92
+src\writeros\agents\stylist.py           14     14     0%   2-49
+src\writeros\agents\theorist.py          34     34     0%   1-65
+src\writeros\agents\tools.py             31     31     0%   5-76
+src\writeros\api\__init__.py              0      0   100%
+src\writeros\api\app.py                  12     12     0%   1-21
+src\writeros\cli\__init__.py              0      0   100%
+src\writeros\cli\main.py                 41     41     0%   1-83
+src\writeros\config.py                   10     10     0%   1-13
+src\writeros\core\__init__.py             0      0   100%
+src\writeros\core\logging.py             13     13     0%   1-51
+src\writeros\graphs\__init__.py           0      0   100%
+src\writeros\rag\__init__.py              0      0   100%
+src\writeros\schema\__init__.py          15     15     0%   1-19
+src\writeros\schema\api.py               22     22     0%   1-26
+src\writeros\schema\base.py              12     12     0%   1-16
+src\writeros\schema\enums.py             88     88     0%   1-99
+src\writeros\schema\graph.py             16     16     0%   1-19
+src\writeros\schema\library.py           72     72     0%   1-147
+src\writeros\schema\logistics.py         17     17     0%   1-22
+src\writeros\schema\mechanics.py         18     18     0%   1-35
+src\writeros\schema\narrative.py         19     19     0%   1-35
+src\writeros\schema\project.py           10     10     0%   1-11
+src\writeros\schema\prose.py             14     14     0%   1-19
+src\writeros\schema\psychology.py        36     36     0%   1-57
+src\writeros\schema\session.py           27     27     0%   1-35
+src\writeros\schema\theme.py             17     17     0%   1-20
+src\writeros\schema\world.py             53     53     0%   1-74
+src\writeros\services\__init__.py         0      0   100%
+src\writeros\tasks\__init__.py            0      0   100%
+src\writeros\utils\embeddings.py         26      0   100%
+-------------------------------------------------------------------
+TOTAL                                  1433   1406     2%
+Coverage HTML written to dir htmlcov
+============================== 8 passed in 3.76s ==============================

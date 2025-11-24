@@ -27,15 +27,17 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Test/Demo files
+# Test/Demo files in root (but allow tests/ directory)
 *_demo.html
-test_*.py
 test_*.html
 add_*.py
 check_*.py
 fix_*.py
 reset_*.py
 update_*.py
+
+# Allow test files in tests/ directory
+!tests/**/test_*.py
 
 # Node modules (Obsidian plugin)
 obsidian_plugin/node_modules/

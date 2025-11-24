@@ -37,6 +37,10 @@ class EmbeddingService:
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         """Embed a list of documents."""
         return self.embeddings.embed_documents(texts)
+    
+    async def get_embeddings(self, texts: List[str]) -> List[List[float]]:
+        """Async wrapper for embed_documents (for compatibility with async chunker)."""
+        return self.embed_documents(texts)
 
 # Global instance
 embedding_service = EmbeddingService()
