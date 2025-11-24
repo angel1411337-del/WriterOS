@@ -36,35 +36,19 @@ def init_db():
             # for nearest-neighbor vector searches compared to sequential scans
             logger.info("creating_vector_indexes")
             with Session(engine) as session:
-                # Entities table - semantic entity search
-                session.exec(text("""
-                    CREATE INDEX IF NOT EXISTS entities_embedding_hnsw_idx
-                    ON entities USING hnsw (embedding vector_cosine_ops)
-                """))
+                vector_indexes = (
+                    ("entities_embedding_hnsw_idx", "entities"),
+                    ("documents_embedding_hnsw_idx", "documents"),
+                    ("facts_embedding_hnsw_idx", "facts"),
+                    ("scenes_embedding_hnsw_idx", "scenes"),
+                    ("events_embedding_hnsw_idx", "events"),
+                )
 
-                # Documents table - semantic document search
-                session.exec(text("""
-                    CREATE INDEX IF NOT EXISTS documents_embedding_hnsw_idx
-                    ON documents USING hnsw (embedding vector_cosine_ops)
-                """))
-
-                # Facts table - semantic fact search
-                session.exec(text("""
-                    CREATE INDEX IF NOT EXISTS facts_embedding_hnsw_idx
-                    ON facts USING hnsw (embedding vector_cosine_ops)
-                """))
-
-                # Scenes table - semantic scene search
-                session.exec(text("""
-                    CREATE INDEX IF NOT EXISTS scenes_embedding_hnsw_idx
-                    ON scenes USING hnsw (embedding vector_cosine_ops)
-                """))
-
-                # Events table - semantic event search
-                session.exec(text("""
-                    CREATE INDEX IF NOT EXISTS events_embedding_hnsw_idx
-                    ON events USING hnsw (embedding vector_cosine_ops)
-                """))
+                for index_name, table_name in vector_indexes:
+                    session.exec(text(f"""
+                        CREATE INDEX IF NOT EXISTS {index_name}
+                        ON {table_name} USING hnsw (embedding vector_cosine_ops)
+                    """))
 
                 session.commit()
                 logger.info("vector_indexes_created", status="success")
