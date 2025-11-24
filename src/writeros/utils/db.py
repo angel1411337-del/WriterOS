@@ -13,7 +13,7 @@ engine = create_engine(DATABASE_URL, echo=False)
 
 def init_db():
     """
-    Initializes the database.
+    Initializes the database with tables and high-performance vector indexes.
     """
     max_retries = 5
     for i in range(max_retries):
@@ -30,6 +30,32 @@ def init_db():
 
             # 3. Create Tables
             SQLModel.metadata.create_all(engine)
+
+            # 4. Create High-Performance Vector Indexes
+            # HNSW (Hierarchical Navigable Small World) indexes provide 100x-1000x speedup
+            # for nearest-neighbor vector searches compared to sequential scans
+            logger.info("creating_vector_indexes")
+            with Session(engine) as session:
+                # Entities table - semantic entity search
+                session.exec(text("""
+                    CREATE INDEX IF NOT EXISTS entities_embedding_hnsw_idx
+                    ON entities USING hnsw (embedding vector_cosine_ops)
+                """))
+
+                # Documents table - semantic document search
+                session.exec(text("""
+                    CREATE INDEX IF NOT EXISTS documents_embedding_hnsw_idx
+                    ON documents USING hnsw (embedding vector_cosine_ops)
+                """))
+
+                # Facts table - semantic fact search
+                session.exec(text("""
+                    CREATE INDEX IF NOT EXISTS facts_embedding_hnsw_idx
+                    ON facts USING hnsw (embedding vector_cosine_ops)
+                """))
+
+                session.commit()
+                logger.info("vector_indexes_created", status="success")
 
             logger.info("database_initialized", status="success")
             return
