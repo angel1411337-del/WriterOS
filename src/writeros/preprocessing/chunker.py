@@ -19,7 +19,7 @@ class SemanticChunker:
         min_chunk_size: int = 50,
         max_chunk_size: int = 400,
         embedding_model: str = "text-embedding-3-small",
-        embedder_factory: Optional[Callable[[], Any]] = None
+        embedder_factory: Optional[Callable[[Optional[str]], Any]] = None
     ):
         self.min_chunk_size = min_chunk_size
         self.max_chunk_size = max_chunk_size
@@ -35,7 +35,7 @@ class SemanticChunker:
             from writeros.utils.embeddings import get_embedding_service
 
             factory = self._embedder_factory or get_embedding_service
-            self._embedder = factory()
+            self._embedder = factory(self.embedding_model)
         return self._embedder
 
     async def chunk_document(self, text: str, document_type: str = "default") -> List[Dict[str, Any]]:

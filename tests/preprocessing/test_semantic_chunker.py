@@ -139,3 +139,25 @@ class TestSemanticChunker:
         assert isinstance(coherence, float)
         assert coherence == pytest.approx(2 / 3, rel=1e-6)
         assert 0.0 < coherence < 1.0
+
+    def test_embedder_factory_receives_embedding_model(self, mocker):
+        """Ensure a provided embedder factory receives the requested model."""
+        received_model = {}
+
+        def factory(model):
+            received_model["model"] = model
+            service = MagicMock()
+            service.get_embeddings = AsyncMock(return_value=[[0.0]])
+            return service
+
+        chunker = SemanticChunker(
+            min_chunk_size=10,
+            max_chunk_size=20,
+            embedding_model="custom-model",
+            embedder_factory=factory,
+        )
+
+        # Trigger creation
+        _ = chunker.embedder
+
+        assert received_model["model"] == "custom-model"
