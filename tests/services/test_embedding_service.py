@@ -6,6 +6,7 @@ Tests singleton pattern, embedding generation, and error handling.
 import pytest
 from unittest.mock import MagicMock, patch
 from writeros.utils.embeddings import (
+    DEFAULT_EMBEDDING_MODEL,
     EmbeddingService,
     reset_embedding_service_factory,
     reset_embedding_service_singleton,
@@ -25,25 +26,46 @@ def reset_embedding_service_state():
 class TestEmbeddingService:
     """Test suite for EmbeddingService."""
     
-    def test_singleton_pattern(self):
-        """Test that EmbeddingService is a singleton."""
+    def test_singleton_pattern_same_model(self):
+        """Test that EmbeddingService is a singleton per model."""
         service1 = EmbeddingService()
-        service2 = EmbeddingService()
-        
+        service2 = EmbeddingService(DEFAULT_EMBEDDING_MODEL)
+
         assert service1 is service2
+
+    def test_different_models_create_distinct_instances(self):
+        """Different embedding models should yield different instances."""
+        default_service = EmbeddingService()
+        other_service = EmbeddingService("text-embedding-3-large")
+
+        assert default_service is not other_service
     
     @patch("writeros.utils.embeddings.OpenAIEmbeddings")
     @patch("writeros.utils.embeddings.os.getenv")
     def test_initialization_with_api_key(self, mock_getenv, mock_openai_embeddings):
         """Test successful initialization with API key."""
         mock_getenv.return_value = "test-api-key"
-        
+
         service = EmbeddingService()
-        
+
         assert service is not None
         mock_openai_embeddings.assert_called_once_with(
             model="text-embedding-3-small",
             openai_api_key="test-api-key"
+        )
+
+    @patch("writeros.utils.embeddings.OpenAIEmbeddings")
+    @patch("writeros.utils.embeddings.os.getenv")
+    def test_initialization_with_custom_model(self, mock_getenv, mock_openai_embeddings):
+        """Test initialization honors a custom embedding model."""
+        mock_getenv.return_value = "test-api-key"
+
+        service = EmbeddingService("text-embedding-3-large")
+
+        assert service is not None
+        mock_openai_embeddings.assert_called_once_with(
+            model="text-embedding-3-large",
+            openai_api_key="test-api-key",
         )
     
     @patch("writeros.utils.embeddings.os.getenv")

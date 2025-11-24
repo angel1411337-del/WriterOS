@@ -1,5 +1,5 @@
 import os
-from typing import Callable, List
+from typing import Callable, List, Optional
 from langchain_openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 import logging
@@ -9,30 +9,37 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
+DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small"
+
 # Factory used to create or return the embedding service singleton. This indirection
 # allows tests to swap in mocks without triggering API calls at import time.
-_embedding_service_factory: Callable[[], "EmbeddingService"]
+_embedding_service_factory: Callable[[Optional[str]], "EmbeddingService"]
 
 class EmbeddingService:
-    _instance = None
+    _instances = {}
 
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(EmbeddingService, cls).__new__(cls)
-            cls._instance._initialize()
-        return cls._instance
+    def __new__(cls, model: Optional[str] = None):
+        embedding_model = model or DEFAULT_EMBEDDING_MODEL
 
-    def _initialize(self):
+        if embedding_model not in cls._instances:
+            instance = super(EmbeddingService, cls).__new__(cls)
+            instance._initialize(embedding_model)
+            cls._instances[embedding_model] = instance
+
+        return cls._instances[embedding_model]
+
+    def _initialize(self, model: str):
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             logger.error("❌ OPENAI_API_KEY not found in environment variables.")
             raise ValueError("OPENAI_API_KEY is missing.")
-        
+
         self.embeddings = OpenAIEmbeddings(
-            model="text-embedding-3-small",
+            model=model,
             openai_api_key=api_key
         )
-        logger.info("🧠 Embedding Service initialized (text-embedding-3-small)")
+        self.model = model
+        logger.info("🧠 Embedding Service initialized (%s)", model)
 
     def embed_query(self, text: str) -> List[float]:
         """Embed a single query string."""
@@ -47,7 +54,7 @@ class EmbeddingService:
         return self.embed_documents(texts)
 
 
-def set_embedding_service_factory(factory: Callable[[], "EmbeddingService"]):
+def set_embedding_service_factory(factory: Callable[[Optional[str]], "EmbeddingService"]):
     """Override the factory used to create EmbeddingService instances."""
     global _embedding_service_factory
     _embedding_service_factory = factory
@@ -55,7 +62,7 @@ def set_embedding_service_factory(factory: Callable[[], "EmbeddingService"]):
 
 def reset_embedding_service_singleton():
     """Reset the singleton instance (useful for tests)."""
-    EmbeddingService._instance = None
+    EmbeddingService._instances = {}
 
 
 def reset_embedding_service_factory():
@@ -63,9 +70,9 @@ def reset_embedding_service_factory():
     set_embedding_service_factory(EmbeddingService)
 
 
-def get_embedding_service() -> EmbeddingService:
+def get_embedding_service(embedding_model: Optional[str] = None) -> EmbeddingService:
     """Get the embedding service via the current factory."""
-    return _embedding_service_factory()
+    return _embedding_service_factory(embedding_model)
 
 
 # Initialize the default factory
