@@ -2,7 +2,7 @@
 Cluster Semantic Chunker
 Splits text into chunks based on semantic similarity using embeddings.
 """
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Callable
 import numpy as np
 from dataclasses import dataclass
 import re
@@ -18,20 +18,24 @@ class SemanticChunker:
         self,
         min_chunk_size: int = 50,
         max_chunk_size: int = 400,
-        embedding_model: str = "text-embedding-3-small"
+        embedding_model: str = "text-embedding-3-small",
+        embedder_factory: Optional[Callable[[], Any]] = None
     ):
         self.min_chunk_size = min_chunk_size
         self.max_chunk_size = max_chunk_size
         self.embedding_model = embedding_model
-        
+
         # Initialize embedding service (lazy load)
         self._embedder = None
+        self._embedder_factory = embedder_factory
 
     @property
     def embedder(self):
         if self._embedder is None:
-            from writeros.utils.embeddings import EmbeddingService
-            self._embedder = EmbeddingService()
+            from writeros.utils.embeddings import get_embedding_service
+
+            factory = self._embedder_factory or get_embedding_service
+            self._embedder = factory()
         return self._embedder
 
     async def chunk_document(self, text: str, document_type: str = "default") -> List[Dict[str, Any]]:

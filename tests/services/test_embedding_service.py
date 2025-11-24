@@ -5,7 +5,21 @@ Tests singleton pattern, embedding generation, and error handling.
 """
 import pytest
 from unittest.mock import MagicMock, patch
-from writeros.utils.embeddings import EmbeddingService
+from writeros.utils.embeddings import (
+    EmbeddingService,
+    reset_embedding_service_factory,
+    reset_embedding_service_singleton,
+)
+
+
+@pytest.fixture(autouse=True)
+def reset_embedding_service_state():
+    """Ensure the singleton and factory are clean between tests."""
+    reset_embedding_service_singleton()
+    reset_embedding_service_factory()
+    yield
+    reset_embedding_service_singleton()
+    reset_embedding_service_factory()
 
 
 class TestEmbeddingService:
@@ -24,9 +38,6 @@ class TestEmbeddingService:
         """Test successful initialization with API key."""
         mock_getenv.return_value = "test-api-key"
         
-        # Reset singleton
-        EmbeddingService._instance = None
-        
         service = EmbeddingService()
         
         assert service is not None
@@ -40,9 +51,6 @@ class TestEmbeddingService:
         """Test that initialization fails without API key."""
         mock_getenv.return_value = None
         
-        # Reset singleton
-        EmbeddingService._instance = None
-        
         with pytest.raises(ValueError, match="OPENAI_API_KEY is missing"):
             EmbeddingService()
     
@@ -51,9 +59,6 @@ class TestEmbeddingService:
     def test_embed_query(self, mock_getenv, mock_openai_embeddings):
         """Test single query embedding."""
         mock_getenv.return_value = "test-api-key"
-        
-        # Reset singleton
-        EmbeddingService._instance = None
         
         # Mock the embeddings object
         mock_embedder = MagicMock()
@@ -71,9 +76,6 @@ class TestEmbeddingService:
     def test_embed_documents(self, mock_getenv, mock_openai_embeddings):
         """Test batch document embedding."""
         mock_getenv.return_value = "test-api-key"
-        
-        # Reset singleton
-        EmbeddingService._instance = None
         
         # Mock the embeddings object
         mock_embedder = MagicMock()
@@ -97,9 +99,6 @@ class TestEmbeddingService:
         """Test embedding of empty string."""
         mock_getenv.return_value = "test-api-key"
         
-        # Reset singleton
-        EmbeddingService._instance = None
-        
         mock_embedder = MagicMock()
         mock_embedder.embed_query.return_value = [0.0] * 1536
         mock_openai_embeddings.return_value = mock_embedder
@@ -114,9 +113,6 @@ class TestEmbeddingService:
     def test_embed_documents_empty_list(self, mock_getenv, mock_openai_embeddings):
         """Test embedding of empty document list."""
         mock_getenv.return_value = "test-api-key"
-        
-        # Reset singleton
-        EmbeddingService._instance = None
         
         mock_embedder = MagicMock()
         mock_embedder.embed_documents.return_value = []
@@ -136,9 +132,6 @@ class TestEmbeddingServiceIntegration:
     def test_multiple_calls_use_same_instance(self, mock_getenv, mock_openai_embeddings):
         """Test that multiple calls use the same singleton instance."""
         mock_getenv.return_value = "test-api-key"
-        
-        # Reset singleton
-        EmbeddingService._instance = None
         
         mock_embedder = MagicMock()
         mock_openai_embeddings.return_value = mock_embedder

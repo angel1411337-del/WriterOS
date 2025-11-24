@@ -61,8 +61,8 @@ class TestProfilerAgent:
         db_session.commit()
 
         # Mock embedding service
-        mock_embed = mocker.patch("writeros.agents.profiler.embedding_service")
-        mock_embed.embed_query.return_value = [0.1] * 1536
+        mock_embed = mocker.patch("writeros.agents.profiler.get_embedding_service")
+        mock_embed.return_value.embed_query.return_value = [0.1] * 1536
 
         result = await profiler.find_similar_entities("brave warrior", limit=2)
 

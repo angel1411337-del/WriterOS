@@ -8,7 +8,7 @@ from writeros.schema import EntityType, RelationType, Entity, Relationship
 from sqlmodel import Session, select
 from sqlalchemy import text
 from writeros.utils.db import engine
-from writeros.utils.embeddings import embedding_service
+from writeros.utils.embeddings import get_embedding_service
 
 # --- V2 INTERFACE SCHEMAS ---
 
@@ -100,7 +100,7 @@ class ProfilerAgent(BaseAgent):
         """
         self.log.info("searching_similar_entities", trait=trait)
         
-        embedding = embedding_service.embed_query(trait)
+        embedding = get_embedding_service().embed_query(trait)
         
         with Session(engine) as session:
             results = session.exec(

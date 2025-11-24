@@ -6,7 +6,7 @@ from langchain_core.output_parsers import StrOutputParser
 from .base import BaseAgent, logger
 from sqlmodel import Session, select
 from writeros.utils.db import engine
-from writeros.utils.embeddings import embedding_service
+from writeros.utils.embeddings import get_embedding_service
 from writeros.schema import Document, Event, Anchor, AnchorStatus, Fact, Relationship, Entity
 
 class ArchitectAgent(BaseAgent):
@@ -258,7 +258,7 @@ class ArchitectAgent(BaseAgent):
         """
         self.log.info("searching_similar_scenes", description=description)
         
-        embedding = embedding_service.embed_query(description)
+        embedding = get_embedding_service().embed_query(description)
         
         with Session(engine) as session:
             # Search Documents (assuming doc_type='scene' or similar)
@@ -284,7 +284,7 @@ class ArchitectAgent(BaseAgent):
         """
         self.log.info("searching_related_plot_points", query=query)
         
-        embedding = embedding_service.embed_query(query)
+        embedding = get_embedding_service().embed_query(query)
         
         with Session(engine) as session:
             results = session.exec(

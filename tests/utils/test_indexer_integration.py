@@ -218,7 +218,7 @@ class TestVaultIndexerChunkingStrategies:
         """Test indexing with cluster semantic strategy."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -237,7 +237,7 @@ class TestVaultIndexerChunkingStrategies:
         """Test indexing with greedy semantic strategy."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -256,7 +256,7 @@ class TestVaultIndexerChunkingStrategies:
         """Test indexing with fixed size strategy."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -275,7 +275,7 @@ class TestVaultIndexerChunkingStrategies:
         """Test AUTO strategy selects appropriate strategy based on file size."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -317,7 +317,7 @@ class TestVaultIndexerCaching:
         mock_service = Mock()
         mock_service.embed_query = counting_embed
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -339,7 +339,7 @@ class TestVaultIndexerCaching:
         """Test cache clearing functionality."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -376,7 +376,7 @@ class TestVaultIndexerFullIndexing:
         """Test indexing entire vault across all directories."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -401,7 +401,7 @@ class TestVaultIndexerFullIndexing:
         """Test indexing specific directories only."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -420,7 +420,7 @@ class TestVaultIndexerFullIndexing:
         """Test that indexing handles missing directories gracefully."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -447,7 +447,7 @@ class TestVaultIndexerStatistics:
         """Test that statistics are properly tracked during indexing."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -471,7 +471,7 @@ class TestVaultIndexerStatistics:
         """Test that chunking stats are included in index_vault results."""
         vault_id = uuid4()
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -504,7 +504,7 @@ class TestVaultIndexerErrorHandling:
         bad_file = temp_vault / "Story_Bible" / "Characters" / "bad_encoding.md"
         bad_file.write_bytes(b"Test with \xe9 special char")
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),
@@ -524,7 +524,7 @@ class TestVaultIndexerErrorHandling:
         empty_file = temp_vault / "Story_Bible" / "Characters" / "empty.md"
         empty_file.write_text("")
 
-        with patch('writeros.utils.indexer.EmbeddingService', return_value=mock_embedding_service):
+        with patch('writeros.utils.indexer.get_embedding_service', return_value=mock_embedding_service):
             with patch('writeros.utils.indexer.Session'):
                 indexer = VaultIndexer(
                     vault_path=str(temp_vault),

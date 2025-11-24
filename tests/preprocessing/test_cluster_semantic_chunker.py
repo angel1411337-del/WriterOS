@@ -481,8 +481,8 @@ class TestClusterSemanticChunkerRealEmbeddings:
     def real_embedding_function(self):
         """Get real embedding function from EmbeddingService."""
         try:
-            from writeros.utils.embeddings import embedding_service
-            return embedding_service.embed_query
+            from writeros.utils.embeddings import get_embedding_service
+            return get_embedding_service().embed_query
         except Exception as e:
             pytest.skip(f"EmbeddingService not available: {e}")
 

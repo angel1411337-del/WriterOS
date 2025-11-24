@@ -394,11 +394,11 @@ def chunk_text(
         ChunkedDocument with chunks and metadata
 
     Example:
-        from writeros.utils.embeddings import embedding_service
+        from writeros.utils.embeddings import get_embedding_service
         result = chunk_text(
             text="Long document...",
             strategy="cluster_semantic",
-            embedding_function=embedding_service.embed_query
+            embedding_function=get_embedding_service().embed_query
         )
     """
     chunker = UnifiedChunker(strategy=strategy, **kwargs)

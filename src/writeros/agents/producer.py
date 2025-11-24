@@ -12,7 +12,7 @@ from langchain_core.output_parsers import StrOutputParser
 from .base import BaseAgent, logger
 from writeros.schema import Document, Entity, Fact, Relationship, EntityType
 from writeros.utils.db import engine
-from writeros.utils.embeddings import embedding_service
+from writeros.utils.embeddings import get_embedding_service
 
 class ProducerAgent(BaseAgent):
     def __init__(self, model_name="gpt-4o", vault_root: Optional[str] = None):
@@ -162,7 +162,7 @@ class ProducerAgent(BaseAgent):
         """Semantic search over Facts and Documents using vector similarity."""
         self.log.info("running_local_vector_search", query=query)
 
-        embedding = embedding_service.embed_query(query)
+        embedding = get_embedding_service().embed_query(query)
 
         with Session(engine) as session:
             facts = session.exec(
