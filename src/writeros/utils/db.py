@@ -54,6 +54,18 @@ def init_db():
                     ON facts USING hnsw (embedding vector_cosine_ops)
                 """))
 
+                # Scenes table - semantic scene search
+                session.exec(text("""
+                    CREATE INDEX IF NOT EXISTS scenes_embedding_hnsw_idx
+                    ON scenes USING hnsw (embedding vector_cosine_ops)
+                """))
+
+                # Events table - semantic event search
+                session.exec(text("""
+                    CREATE INDEX IF NOT EXISTS events_embedding_hnsw_idx
+                    ON events USING hnsw (embedding vector_cosine_ops)
+                """))
+
                 session.commit()
                 logger.info("vector_indexes_created", status="success")
 
