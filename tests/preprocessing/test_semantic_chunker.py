@@ -97,8 +97,33 @@ class TestSemanticChunker:
         """Test that coherence scores are calculated."""
         text = "First sentence. Second sentence. Third sentence."
         chunks = await chunker.chunk_document(text)
-        
+
         for chunk in chunks:
             assert "coherence_score" in chunk
             assert isinstance(chunk["coherence_score"], float)
             assert 0.0 <= chunk["coherence_score"] <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_coherence_score_varied_similarity(self, chunker, mocker):
+        """Ensure coherence reflects mixed segment similarity."""
+        text = (
+            "Vector one points on x. Vector two points on negative x. "
+            "Vector three points on y."
+        )
+
+        diverse_embeddings = [
+            [1.0, 0.0],
+            [-1.0, 0.0],
+            [0.0, 1.0],
+        ]
+
+        mock_service = MagicMock()
+        mock_service.get_embeddings = AsyncMock(return_value=diverse_embeddings)
+        mocker.patch("writeros.utils.embeddings.EmbeddingService", return_value=mock_service)
+
+        chunks = await chunker.chunk_document(text)
+
+        coherence = chunks[0]["coherence_score"]
+        assert isinstance(coherence, float)
+        assert coherence == pytest.approx(2 / 3, rel=1e-6)
+        assert 0.0 < coherence < 1.0

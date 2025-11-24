@@ -112,14 +112,30 @@ class SemanticChunker:
     def _finalize_chunk(self, chunks: List[Chunk], segments: List[str], embeddings: List[List[float]]):
         if not segments:
             return
-            
+
         content = " ".join(segments)
         # Calculate centroid embedding for the chunk
-        avg_embedding = np.mean(embeddings, axis=0).tolist()
-        
+        avg_embedding_np = np.mean(embeddings, axis=0)
+        avg_embedding = avg_embedding_np.tolist()
+
         # Calculate coherence (avg similarity to centroid)
-        coherence = 1.0 # Placeholder
-        
+        centroid_norm = np.linalg.norm(avg_embedding_np)
+        similarities = []
+
+        for emb in embeddings:
+            emb_np = np.array(emb)
+            emb_norm = np.linalg.norm(emb_np)
+
+            if centroid_norm == 0 or emb_norm == 0:
+                similarities.append(0.0)
+                continue
+
+            sim = float(np.dot(emb_np, avg_embedding_np) / (centroid_norm * emb_norm))
+            similarities.append(sim)
+
+        mean_similarity = float(np.mean(similarities)) if similarities else 0.0
+        coherence = float(np.clip((mean_similarity + 1) / 2, 0.0, 1.0))
+
         chunks.append(Chunk(
             content=content,
             embedding=avg_embedding,
