@@ -157,8 +157,15 @@ class ProfilerAgent(BaseAgent):
             # Add edge with relationship type
             G.add_edge(from_id, to_id, rel_type=rel.rel_type)
 
-            # For SIBLING and FAMILY, add reverse edge (bidirectional)
-            if rel.rel_type in [RelationType.SIBLING, RelationType.FAMILY]:
+            # Add reverse edges to make graph symmetric
+            if rel.rel_type == RelationType.PARENT:
+                # Parent -[PARENT]-> Child, so add Child -[CHILD]-> Parent
+                G.add_edge(to_id, from_id, rel_type=RelationType.CHILD)
+            elif rel.rel_type == RelationType.CHILD:
+                # Child -[CHILD]-> Parent, so add Parent -[PARENT]-> Child
+                G.add_edge(to_id, from_id, rel_type=RelationType.PARENT)
+            elif rel.rel_type in [RelationType.SIBLING, RelationType.FAMILY]:
+                # For SIBLING and FAMILY, add reverse edge (bidirectional, same type)
                 G.add_edge(to_id, from_id, rel_type=rel.rel_type)
 
         # Step 4: Calculate generations using BFS
