@@ -81,17 +81,194 @@ class ProfilerAgent(BaseAgent):
 
     async def build_family_tree(self, character_id: UUID) -> Dict[str, Any]:
         """
-        Builds a family tree visualization using recursive SQL queries.
-        Traverses blood relationships to find all family members and their generation levels.
-        
+        Builds a family tree visualization using NetworkX graph traversal.
+        Traverses family relationships to find all family members and their generation levels.
+
+        Uses NetworkX for graph analysis, enabling future features like:
+        - Political influence pathfinding
+        - Alliance mapping
+        - Chemistry/relationship strength calculation
+
         Returns a hierarchical structure with:
-        - All family members
+        - All family members with their properties
         - Generation levels (negative = ancestors, positive = descendants, 0 = same generation)
-        - Relationship paths
+        - Total member count and generation range
+
+        Args:
+            character_id: UUID of the character to build the tree from
+
+        Returns:
+            Dict containing:
+                - total_members: int
+                - generation_range: {"min": int, "max": int}
+                - generations: {generation_level: [{"id": str, "name": str, "type": str, "properties": dict}]}
         """
+        import networkx as nx
+        from collections import deque
+
         self.log.info("building_family_tree", character_id=str(character_id))
-        # Implementation placeholder
-        return {}
+
+        # Step 1: Fetch the root entity to get vault_id
+        with Session(engine) as session:
+            root_entity = session.get(Entity, character_id)
+            if not root_entity:
+                self.log.error("entity_not_found", character_id=str(character_id))
+                return {
+                    "total_members": 0,
+                    "generation_range": {"min": 0, "max": 0},
+                    "generations": {}
+                }
+
+            vault_id = root_entity.vault_id
+
+            # Step 2: Fetch all entities and relationships for this vault (single query)
+            # This is more efficient than recursive queries
+            all_entities = session.exec(
+                select(Entity).where(Entity.vault_id == vault_id)
+            ).all()
+
+            all_relationships = session.exec(
+                select(Relationship).where(
+                    Relationship.vault_id == vault_id,
+                    Relationship.rel_type.in_([
+                        RelationType.PARENT,
+                        RelationType.CHILD,
+                        RelationType.SIBLING,
+                        RelationType.FAMILY
+                    ])
+                )
+            ).all()
+
+            # Convert to dicts for easier access
+            entity_map = {str(e.id): e for e in all_entities}
+
+        # Step 3: Build NetworkX graph
+        G = nx.DiGraph()
+
+        # Add all entities as nodes with their properties
+        for entity_id, entity in entity_map.items():
+            G.add_node(entity_id, entity=entity)
+
+        # Add edges with relationship type metadata
+        for rel in all_relationships:
+            from_id = str(rel.from_entity_id)
+            to_id = str(rel.to_entity_id)
+
+            # Add edge with relationship type
+            G.add_edge(from_id, to_id, rel_type=rel.rel_type)
+
+            # For SIBLING and FAMILY, add reverse edge (bidirectional)
+            if rel.rel_type in [RelationType.SIBLING, RelationType.FAMILY]:
+                G.add_edge(to_id, from_id, rel_type=rel.rel_type)
+
+        # Step 4: Calculate generations using BFS
+        target_id = str(character_id)
+
+        if target_id not in G:
+            self.log.error("entity_not_in_graph", character_id=target_id)
+            return {
+                "total_members": 0,
+                "generation_range": {"min": 0, "max": 0},
+                "generations": {}
+            }
+
+        # BFS to find all reachable family members and their generations
+        visited = {target_id: 0}  # {entity_id: generation}
+        queue = deque([(target_id, 0)])  # (entity_id, generation)
+        max_depth = 15  # Limit to prevent infinite loops
+
+        while queue:
+            current_id, current_gen = queue.popleft()
+
+            # Check depth limit
+            if abs(current_gen) > max_depth:
+                self.log.warning("max_depth_reached", entity_id=current_id, generation=current_gen)
+                continue
+
+            # Get all neighbors (both outgoing AND incoming edges)
+            # Outgoing edges: relationships where current is the source
+            for neighbor_id in G.neighbors(current_id):
+                if neighbor_id in visited:
+                    continue
+
+                edge_data = G[current_id][neighbor_id]
+                rel_type = edge_data.get('rel_type')
+
+                if rel_type == RelationType.PARENT:
+                    # Current → PARENT → Neighbor means neighbor is current's child
+                    neighbor_gen = current_gen + 1
+                elif rel_type == RelationType.CHILD:
+                    # Current → CHILD → Neighbor means neighbor is current's parent
+                    neighbor_gen = current_gen - 1
+                elif rel_type in [RelationType.SIBLING, RelationType.FAMILY]:
+                    # Same generation
+                    neighbor_gen = current_gen
+                else:
+                    neighbor_gen = current_gen
+
+                visited[neighbor_id] = neighbor_gen
+                queue.append((neighbor_id, neighbor_gen))
+
+            # Incoming edges: relationships where current is the target
+            for predecessor_id in G.predecessors(current_id):
+                if predecessor_id in visited:
+                    continue
+
+                edge_data = G[predecessor_id][current_id]
+                rel_type = edge_data.get('rel_type')
+
+                if rel_type == RelationType.PARENT:
+                    # Predecessor -[PARENT]→ Current means predecessor is current's parent
+                    predecessor_gen = current_gen - 1
+                elif rel_type == RelationType.CHILD:
+                    # Predecessor -[CHILD]→ Current means predecessor is current's child
+                    predecessor_gen = current_gen + 1
+                elif rel_type in [RelationType.SIBLING, RelationType.FAMILY]:
+                    # Same generation
+                    predecessor_gen = current_gen
+                else:
+                    predecessor_gen = current_gen
+
+                visited[predecessor_id] = predecessor_gen
+                queue.append((predecessor_id, predecessor_gen))
+
+        # Step 5: Group by generation and build result
+        generations = {}
+        for entity_id, generation in visited.items():
+            if generation not in generations:
+                generations[generation] = []
+
+            entity = entity_map.get(entity_id)
+            if entity:
+                generations[generation].append({
+                    "id": str(entity.id),
+                    "name": entity.name,
+                    "type": entity.type,
+                    "properties": entity.properties
+                })
+
+        # Sort members within each generation by name
+        for gen in generations:
+            generations[gen] = sorted(generations[gen], key=lambda x: x['name'])
+
+        # Calculate statistics
+        total_members = len(visited)
+        gen_values = list(generations.keys())
+        gen_min = min(gen_values) if gen_values else 0
+        gen_max = max(gen_values) if gen_values else 0
+
+        self.log.info(
+            "family_tree_built",
+            character_id=target_id,
+            total_members=total_members,
+            generation_range={"min": gen_min, "max": gen_max}
+        )
+
+        return {
+            "total_members": total_members,
+            "generation_range": {"min": gen_min, "max": gen_max},
+            "generations": generations
+        }
 
     async def find_similar_entities(self, trait: str, limit: int = 5) -> str:
         """

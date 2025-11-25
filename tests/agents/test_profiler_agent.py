@@ -93,8 +93,8 @@ class TestProfilerAgent:
         assert isinstance(graph_data["links"], list)
     
     @pytest.mark.asyncio
-    async def test_build_family_tree(self, profiler, db_session, sample_vault_id):
-        """Test family tree construction."""
+    async def test_build_family_tree_simple(self, profiler, db_session, sample_vault_id):
+        """Test family tree construction with simple parent-child relationship."""
         # Create a simple family
         parent = Entity(
             id=uuid4(),
@@ -102,6 +102,7 @@ class TestProfilerAgent:
             name="Parent",
             type=EntityType.CHARACTER,
             description="Parent character",
+            properties={"role": "parent"},
             embedding=[0.1] * 1536
         )
         child = Entity(
@@ -110,12 +111,13 @@ class TestProfilerAgent:
             name="Child",
             type=EntityType.CHARACTER,
             description="Child character",
+            properties={"role": "child"},
             embedding=[0.2] * 1536
         )
-        
+
         db_session.add(parent)
         db_session.add(child)
-        
+
         rel = Relationship(
             id=uuid4(),
             vault_id=sample_vault_id,
@@ -127,10 +129,232 @@ class TestProfilerAgent:
         )
         db_session.add(rel)
         db_session.commit()
-        
+
+        # Test from parent's perspective
         tree = await profiler.build_family_tree(parent.id)
-        
+
         assert tree is not None
+        assert tree["total_members"] == 2
+        assert tree["generation_range"]["min"] == 0
+        assert tree["generation_range"]["max"] == 1
+        assert 0 in tree["generations"]  # Parent at gen 0
+        assert 1 in tree["generations"]  # Child at gen 1
+
+        # Verify parent is at generation 0
+        parent_members = [m for m in tree["generations"][0] if m["name"] == "Parent"]
+        assert len(parent_members) == 1
+        assert parent_members[0]["properties"]["role"] == "parent"
+
+        # Verify child is at generation 1
+        child_members = [m for m in tree["generations"][1] if m["name"] == "Child"]
+        assert len(child_members) == 1
+        assert child_members[0]["properties"]["role"] == "child"
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_multi_generation(self, profiler, db_session, sample_vault_id):
+        """Test family tree with multiple generations (grandparent → parent → child)."""
+        # Create multi-generation family
+        grandpa = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Grandpa Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "elder"},
+            embedding=[0.1] * 1536
+        )
+        father = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Ned Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "father"},
+            embedding=[0.2] * 1536
+        )
+        robb = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Robb Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "protagonist"},
+            embedding=[0.3] * 1536
+        )
+
+        db_session.add_all([grandpa, father, robb])
+
+        # Create relationships
+        rel1 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=grandpa.id,
+            to_entity_id=father.id,
+            rel_type=RelationType.PARENT
+        )
+        rel2 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=father.id,
+            to_entity_id=robb.id,
+            rel_type=RelationType.PARENT
+        )
+        db_session.add_all([rel1, rel2])
+        db_session.commit()
+
+        # Test from Robb's perspective (middle of tree)
+        tree = await profiler.build_family_tree(robb.id)
+
+        assert tree["total_members"] == 3
+        assert tree["generation_range"]["min"] == -2  # Grandpa
+        assert tree["generation_range"]["max"] == 0   # Robb
+
+        # Verify generations
+        assert -2 in tree["generations"]  # Grandpa
+        assert -1 in tree["generations"]  # Father
+        assert 0 in tree["generations"]   # Robb
+
+        assert tree["generations"][-2][0]["name"] == "Grandpa Stark"
+        assert tree["generations"][-1][0]["name"] == "Ned Stark"
+        assert tree["generations"][0][0]["name"] == "Robb Stark"
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_with_siblings(self, profiler, db_session, sample_vault_id):
+        """Test family tree with sibling relationships."""
+        # Create siblings
+        robb = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Robb Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "protagonist"},
+            embedding=[0.1] * 1536
+        )
+        sansa = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Sansa Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "sibling"},
+            embedding=[0.2] * 1536
+        )
+        arya = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Arya Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "sibling"},
+            embedding=[0.3] * 1536
+        )
+
+        db_session.add_all([robb, sansa, arya])
+
+        # Create sibling relationships
+        rel1 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=robb.id,
+            to_entity_id=sansa.id,
+            rel_type=RelationType.SIBLING
+        )
+        rel2 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=sansa.id,
+            to_entity_id=arya.id,
+            rel_type=RelationType.SIBLING
+        )
+        db_session.add_all([rel1, rel2])
+        db_session.commit()
+
+        # Test from Robb's perspective
+        tree = await profiler.build_family_tree(robb.id)
+
+        assert tree["total_members"] == 3
+        assert tree["generation_range"]["min"] == 0
+        assert tree["generation_range"]["max"] == 0
+
+        # All siblings should be at generation 0
+        gen_0_members = tree["generations"][0]
+        assert len(gen_0_members) == 3
+        names = {m["name"] for m in gen_0_members}
+        assert names == {"Robb Stark", "Sansa Stark", "Arya Stark"}
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_with_child_relationship(self, profiler, db_session, sample_vault_id):
+        """Test CHILD relationship (inverse of PARENT)."""
+        # Create parent and child
+        child = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Jon Snow",
+            type=EntityType.CHARACTER,
+            properties={"role": "child"},
+            embedding=[0.1] * 1536
+        )
+        parent = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Ned Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "parent"},
+            embedding=[0.2] * 1536
+        )
+
+        db_session.add_all([child, parent])
+
+        # CHILD relationship: from_entity (child) → to_entity (parent)
+        rel = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=child.id,
+            to_entity_id=parent.id,
+            rel_type=RelationType.CHILD
+        )
+        db_session.add(rel)
+        db_session.commit()
+
+        # Test from child's perspective
+        tree = await profiler.build_family_tree(child.id)
+
+        assert tree["total_members"] == 2
+        assert 0 in tree["generations"]   # Child
+        assert -1 in tree["generations"]  # Parent (one generation up)
+
+        assert tree["generations"][0][0]["name"] == "Jon Snow"
+        assert tree["generations"][-1][0]["name"] == "Ned Stark"
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_empty(self, profiler, db_session, sample_vault_id):
+        """Test family tree for entity with no relationships."""
+        # Create isolated entity
+        lonely = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Lonely Character",
+            type=EntityType.CHARACTER,
+            properties={},
+            embedding=[0.1] * 1536
+        )
+        db_session.add(lonely)
+        db_session.commit()
+
+        tree = await profiler.build_family_tree(lonely.id)
+
+        assert tree["total_members"] == 1
+        assert tree["generation_range"]["min"] == 0
+        assert tree["generation_range"]["max"] == 0
+        assert len(tree["generations"][0]) == 1
+        assert tree["generations"][0][0]["name"] == "Lonely Character"
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_nonexistent_entity(self, profiler, db_session):
+        """Test family tree for nonexistent entity."""
+        fake_id = uuid4()
+
+        tree = await profiler.build_family_tree(fake_id)
+
+        assert tree["total_members"] == 0
+        assert tree["generation_range"]["min"] == 0
+        assert tree["generation_range"]["max"] == 0
+        assert tree["generations"] == {}
 
 
 @pytest.mark.unit
