@@ -33,3 +33,7 @@ sqlmodel>=0.0.16
 psycopg2-binary>=2.9.9
 pgvector>=0.2.0
 asyncpg>=0.29.0
+
+# --- PDF Processing (Phase 2.5 - Citadel Pipeline) ---
+PyPDF2>=3.0.0
+reportlab>=4.0.0

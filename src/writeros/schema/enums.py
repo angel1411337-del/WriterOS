@@ -4,6 +4,8 @@ class EntityType(str, Enum):
     CHARACTER = "character"
     LOCATION = "location"
     FACTION = "faction"
+    ORGANIZATION = "organization"  # ⭐ NEW (Phase 2.5): Structured institutions (The Citadel, The Faith)
+    GROUP = "group"  # ⭐ NEW (Phase 2.5): Informal groups (smallfolk, merchants, bandits)
     ITEM = "item"
     ABILITY = "ability"
     MAGIC_SYSTEM = "magic_system"
