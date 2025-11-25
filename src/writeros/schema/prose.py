@@ -4,15 +4,16 @@ from sqlmodel import Field
 from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import JSONB
 
-from .base import UUIDMixin
-from .library import Chapter # Using Chapter/Scene instead of Chunk for now as Chunk wasn't defined in library.py
+from .base import UUIDMixin, TimestampMixin
 
-class StyleReport(UUIDMixin, table=True):
+class StyleReport(UUIDMixin, TimestampMixin, table=True):
     __tablename__ = "style_reports"
+    vault_id: UUID = Field(index=True)
+
     # Linking to Scene or Chapter. Prompt said Chunk, but Chunk isn't in library.py.
     # Assuming Scene is the atomic unit for style analysis for now.
     scene_id: UUID = Field(foreign_key="scenes.id")
-    
+
     readability_score: float
     passive_voice_count: int
     adverb_count: int

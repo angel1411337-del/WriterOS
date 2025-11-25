@@ -1,8 +1,9 @@
 from .base import UUIDMixin, TimestampMixin, CanonInfo
 from .enums import (
-    EntityType, RelationType, CanonLayer, CanonStatus, FactType, 
+    EntityType, EntityStatus, RelationType, CanonLayer, CanonStatus, FactType,
     ArcType, AnchorStatus, PacingType, DraftStatus, UserRating, AgentType
 )
+from .identity import User, Vault, ConnectionType, SubscriptionTier
 from .library import Source, Chapter, Scene, Document
 from .world import Entity, Relationship, Fact, Event
 from .psychology import CharacterState, CharacterArc, TransformationMoment
@@ -18,8 +19,9 @@ from .graph import GraphNode, GraphLink, GraphData
 
 __all__ = [
     "UUIDMixin", "TimestampMixin", "CanonInfo",
-    "EntityType", "RelationType", "CanonLayer", "CanonStatus", "FactType",
+    "EntityType", "EntityStatus", "RelationType", "CanonLayer", "CanonStatus", "FactType",
     "ArcType", "AnchorStatus", "PacingType", "DraftStatus", "UserRating", "AgentType",
+    "User", "Vault", "ConnectionType", "SubscriptionTier",
     "Source", "Chapter", "Scene", "Document",
     "Entity", "Relationship", "Fact", "Event",
     "CharacterState", "CharacterArc", "TransformationMoment",

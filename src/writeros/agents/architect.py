@@ -1,4 +1,3 @@
-# agents/architect.py
 from typing import Optional, List, Dict, Any
 from uuid import UUID
 from langchain_core.prompts import ChatPromptTemplate
@@ -8,10 +7,13 @@ from sqlmodel import Session, select
 from writeros.utils.db import engine
 from writeros.utils.embeddings import get_embedding_service
 from writeros.schema import Document, Event, Anchor, AnchorStatus, Fact, Relationship, Entity
+from writeros.services.conflict_engine import ConflictEngine
+from writeros.schema.enums import ConflictStatus
 
 class ArchitectAgent(BaseAgent):
     def __init__(self, model_name="gpt-5.1"):
         super().__init__(model_name)
+        self.conflict_engine = ConflictEngine()
 
     async def list_anchors(self, status: Optional[AnchorStatus] = None) -> List[Anchor]:
         """
@@ -301,3 +303,25 @@ class ArchitectAgent(BaseAgent):
                 formatted_results.append(f"EVENT: {event.name}\n{event.description}")
                 
             return "\n\n".join(formatted_results)
+
+    async def generate_plot_tasks(self, vault_id: UUID) -> List[str]:
+        """
+        Generates a Long-Term To-Do List based on active conflicts and plot anchors.
+        """
+        self.log.info("generating_plot_tasks", vault_id=str(vault_id))
+        
+        # Fetch Active Conflicts
+        active_conflicts = self.conflict_engine.get_active_conflicts(vault_id)
+        
+        tasks = []
+        
+        # Logic: Check for stalled conflicts
+        for conflict in active_conflicts:
+            if conflict.status == ConflictStatus.RISING_ACTION:
+                # In a real system, we'd check how long it's been in this state
+                # For now, we assume if it's in Rising Action, it needs escalation
+                tasks.append(f"Escalate Conflict '{conflict.name}' to Climax (Current Intensity: {conflict.intensity})")
+            elif conflict.status == ConflictStatus.SETUP:
+                tasks.append(f"Advance Conflict '{conflict.name}' to Inciting Incident")
+                
+        return tasks
