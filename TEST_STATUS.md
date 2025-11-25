@@ -61,6 +61,7 @@ start htmlcov\index.html
 - 100% code coverage
 - All edge cases handled
 - Singleton pattern verified
+- Lazy factory initialization prevents `OPENAI_API_KEY` from being required just to import the module
 
 ✅ **Chunker partially tested**
 - Basic functionality working
