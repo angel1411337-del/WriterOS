@@ -10,7 +10,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 from .base import BaseAgent, logger
 from writeros.schema import Document
-from writeros.utils.db import engine
+from writeros.utils import db as db_utils
 
 from writeros.services.conflict_engine import ConflictEngine
 from writeros.schema.enums import ConflictStatus

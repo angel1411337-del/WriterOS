@@ -16,6 +16,16 @@ from .project import Sprint
 from .mechanics import SystemRule, LimitBreach
 from .api import ChatRequest, ChatResponse, ValidationReport
 from .graph import GraphNode, GraphLink, GraphData
+from .temporal_anchoring import (
+    OrderingConstraint, EraTag, TimeFrame, WorldDate, TemporalAnchor
+)
+from .extended_universe import (
+    POVBoundary, Narrator, FactConflict, ProphecyVision, EntityMergeCandidate,
+    LoreEntry, SceneNarrator
+)
+from .universe_manifest import (
+    UniverseManifest, CanonWork, NarratorReliability
+)
 
 __all__ = [
     "UUIDMixin", "TimestampMixin", "CanonInfo",
@@ -33,5 +43,12 @@ __all__ = [
     "Sprint",
     "SystemRule", "LimitBreach",
     "ChatRequest", "ChatResponse", "ValidationReport",
-    "GraphNode", "GraphLink", "GraphData"
+    "GraphNode", "GraphLink", "GraphData",
+    # Temporal Anchoring (v2.5)
+    "OrderingConstraint", "EraTag", "TimeFrame", "WorldDate", "TemporalAnchor",
+    # Extended Universe (v2.5)
+    "POVBoundary", "Narrator", "FactConflict", "ProphecyVision", "EntityMergeCandidate",
+    "LoreEntry", "SceneNarrator",
+    # Universe Manifest (Phase 2.5)
+    "UniverseManifest", "CanonWork", "NarratorReliability"
 ]

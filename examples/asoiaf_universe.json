@@ -1,0 +1,233 @@
+{
+  "universe_name": "A Song of Ice and Fire",
+  "version": "1.0",
+  "eras": [
+    {
+      "name": "Targaryen Dynasty",
+      "description": "300 years of dragon rule over Westeros",
+      "time_range": {
+        "start_year": 1,
+        "end_year": 300
+      },
+      "color": "#8B0000",
+      "icon": "🐉"
+    },
+    {
+      "name": "Age of Heroes",
+      "description": "Dunk & Egg era - late Targaryen period",
+      "time_range": {
+        "start_year": 196,
+        "end_year": 221
+      },
+      "color": "#FFD700",
+      "icon": "⚔️"
+    },
+    {
+      "name": "War of Five Kings",
+      "description": "Main series timeline",
+      "time_range": {
+        "start_year": 298,
+        "end_year": 303
+      },
+      "color": "#2E86AB",
+      "icon": "👑"
+    }
+  ],
+  "works": [
+    {
+      "title": "Fire & Blood (Part 1)",
+      "source_path": "Story_Bible/Fire_and_Blood",
+      "ingestion_order": 1,
+      "story_time_range": {
+        "start_year": 1,
+        "end_year": 136
+      },
+      "era_name": "Targaryen Dynasty",
+      "era_sequence": 1,
+      "has_unreliable_narrators": true,
+      "default_narrator": "Archmaester Gyldayn",
+      "narrator_reliability": "conflicting",
+      "expected_entities": [
+        {
+          "name": "Aegon I",
+          "type": "character",
+          "era_start_year": 1,
+          "era_end_year": 37,
+          "aliases": ["The Conqueror", "King Aegon", "Aegon the Dragon"]
+        },
+        {
+          "name": "Aegon II",
+          "type": "character",
+          "era_start_year": 120,
+          "era_end_year": 131,
+          "aliases": ["King Aegon", "The Usurper"]
+        },
+        {
+          "name": "Aegon III",
+          "type": "character",
+          "era_start_year": 131,
+          "era_end_year": 157,
+          "aliases": ["The Dragonbane", "The Unlucky"]
+        }
+      ],
+      "canon_layer": "primary",
+      "metadata": {
+        "author": "George R.R. Martin",
+        "publication_year": 2018,
+        "genre": "history",
+        "contains_conflicting_sources": true,
+        "primary_narrators": ["Mushroom", "Septon Eustace", "Grand Maester Munkun"]
+      }
+    },
+    {
+      "title": "The Hedge Knight",
+      "source_path": "Story_Bible/Dunk_and_Egg/01_The_Hedge_Knight",
+      "ingestion_order": 2,
+      "story_time_range": {
+        "start_year": 208,
+        "end_year": 209
+      },
+      "era_name": "Age of Heroes",
+      "era_sequence": 2,
+      "has_unreliable_narrators": false,
+      "default_narrator": "Omniscient Third-Person",
+      "narrator_reliability": "omniscient",
+      "expected_entities": [
+        {
+          "name": "Aegon V",
+          "type": "character",
+          "era_start_year": 208,
+          "era_end_year": 259,
+          "aliases": ["Egg", "Aegon the Unlikely", "King Aegon"]
+        },
+        {
+          "name": "Duncan the Tall",
+          "type": "character",
+          "era_start_year": 192,
+          "era_end_year": 259,
+          "aliases": ["Dunk", "Ser Duncan", "Lord Commander Duncan"]
+        }
+      ],
+      "canon_layer": "primary",
+      "metadata": {
+        "author": "George R.R. Martin",
+        "publication_year": 1998,
+        "genre": "novella",
+        "part_of_series": "Tales of Dunk & Egg"
+      }
+    },
+    {
+      "title": "The Sworn Sword",
+      "source_path": "Story_Bible/Dunk_and_Egg/02_The_Sworn_Sword",
+      "ingestion_order": 3,
+      "story_time_range": {
+        "start_year": 211,
+        "end_year": 212
+      },
+      "era_name": "Age of Heroes",
+      "era_sequence": 2,
+      "has_unreliable_narrators": false,
+      "default_narrator": "Omniscient Third-Person",
+      "narrator_reliability": "omniscient",
+      "expected_entities": [],
+      "canon_layer": "primary",
+      "metadata": {
+        "author": "George R.R. Martin",
+        "publication_year": 2003,
+        "genre": "novella",
+        "part_of_series": "Tales of Dunk & Egg"
+      }
+    },
+    {
+      "title": "The Mystery Knight",
+      "source_path": "Story_Bible/Dunk_and_Egg/03_The_Mystery_Knight",
+      "ingestion_order": 4,
+      "story_time_range": {
+        "start_year": 212,
+        "end_year": 212
+      },
+      "era_name": "Age of Heroes",
+      "era_sequence": 2,
+      "has_unreliable_narrators": false,
+      "default_narrator": "Omniscient Third-Person",
+      "narrator_reliability": "omniscient",
+      "expected_entities": [],
+      "canon_layer": "primary",
+      "metadata": {
+        "author": "George R.R. Martin",
+        "publication_year": 2010,
+        "genre": "novella",
+        "part_of_series": "Tales of Dunk & Egg"
+      }
+    },
+    {
+      "title": "A Game of Thrones",
+      "source_path": "Story_Bible/Main_Series/01_A_Game_of_Thrones",
+      "ingestion_order": 5,
+      "story_time_range": {
+        "start_year": 298,
+        "end_year": 299
+      },
+      "era_name": "War of Five Kings",
+      "era_sequence": 3,
+      "has_unreliable_narrators": false,
+      "default_narrator": "POV Characters",
+      "narrator_reliability": "reliable",
+      "expected_entities": [
+        {
+          "name": "Young Griff",
+          "type": "character",
+          "era_start_year": 280,
+          "era_end_year": 303,
+          "aliases": ["Aegon VI", "Aegon Targaryen", "The Young Dragon"]
+        },
+        {
+          "name": "Eddard Stark",
+          "type": "character",
+          "era_start_year": 263,
+          "era_end_year": 299,
+          "aliases": ["Ned", "Lord Stark", "The Quiet Wolf"]
+        }
+      ],
+      "canon_layer": "primary",
+      "metadata": {
+        "author": "George R.R. Martin",
+        "publication_year": 1996,
+        "genre": "epic_fantasy",
+        "part_of_series": "A Song of Ice and Fire",
+        "book_number": 1,
+        "pov_count": 9
+      }
+    }
+  ],
+  "disambiguation_rules": {
+    "name_patterns": {
+      "Aegon": "Use era_start_year to distinguish: Aegon I (1-37), Aegon II (120-131), Aegon III (131-157), Aegon V (208-259), Aegon VI (280-303)",
+      "The King": "Context-dependent - resolve from scene's story_time",
+      "Bloodraven": "Same as Brynden Rivers - merge entities"
+    },
+    "title_aliases": {
+      "Hand of the King": "Role-based - multiple people hold this title",
+      "Lord Commander": "Role-based - track by organization (Night's Watch vs Kingsguard)"
+    },
+    "merge_on_sight": [
+      {
+        "primary": "Aegon V",
+        "aliases": ["Egg", "Aegon the Unlikely"]
+      },
+      {
+        "primary": "Duncan the Tall",
+        "aliases": ["Dunk", "Ser Duncan"]
+      }
+    ]
+  },
+  "metadata": {
+    "author": "George R.R. Martin",
+    "first_published": 1996,
+    "setting": "Westeros and Essos",
+    "total_eras": 3,
+    "total_works": 5,
+    "ingestion_strategy": "chronological_by_story_time",
+    "notes": "Ingest Fire & Blood first to establish historical entities before main series"
+  }
+}

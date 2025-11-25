@@ -7,7 +7,7 @@ from .base import BaseAgent, logger
 from writeros.schema import EntityType, RelationType, Entity, Relationship
 from sqlmodel import Session, select
 from sqlalchemy import text
-from writeros.utils.db import engine
+from writeros.utils import db as db_utils
 from writeros.utils.embeddings import get_embedding_service
 
 # --- V2 INTERFACE SCHEMAS ---
@@ -109,7 +109,7 @@ class ProfilerAgent(BaseAgent):
         self.log.info("building_family_tree", character_id=str(character_id))
 
         # Step 1: Fetch the root entity to get vault_id
-        with Session(engine) as session:
+        with Session(db_utils.engine) as session:
             root_entity = session.get(Entity, character_id)
             if not root_entity:
                 self.log.error("entity_not_found", character_id=str(character_id))
@@ -283,24 +283,195 @@ class ProfilerAgent(BaseAgent):
         Example: "Honorable warrior" -> Returns characters with those traits.
         """
         self.log.info("searching_similar_entities", trait=trait)
-        
+
         embedding = get_embedding_service().embed_query(trait)
-        
-        with Session(engine) as session:
+
+        with Session(db_utils.engine) as session:
             results = session.exec(
                 select(Entity)
                 .order_by(Entity.embedding.cosine_distance(embedding))
                 .limit(limit)
             ).all()
-            
+
             if not results:
                 return "No similar entities found."
-                
+
             formatted_results = []
             for entity in results:
                 formatted_results.append(f"ENTITY: {entity.name} ({entity.type})\n{entity.description}")
-                
+
             return "\n\n".join(formatted_results)
+
+    async def resolve_entity_by_era(
+        self,
+        name: str,
+        vault_id: UUID,
+        current_story_time: Optional[Dict[str, int]] = None,
+        current_scene_id: Optional[UUID] = None
+    ) -> Optional[Entity]:
+        """
+        Resolve entity by name with temporal disambiguation.
+
+        This is critical for Phase 2.5 (Citadel Pipeline) to prevent creating
+        duplicate entities when the same name appears in different eras.
+
+        Logic:
+        1. Find all entities with matching name in this vault
+        2. If current_story_time is provided:
+           - Check metadata for era_start_year and era_end_year
+           - Return entity whose era contains current_story_time
+        3. If multiple matches or no temporal context:
+           - Return most recently created entity (assume it's current)
+
+        Args:
+            name: Entity name (e.g., "Aegon")
+            vault_id: Vault to search in
+            current_story_time: Current in-universe time (e.g., {"year": 130})
+            current_scene_id: Optional scene context
+
+        Returns:
+            Resolved Entity or None if no match
+        """
+        self.log.info(
+            "resolving_entity_by_era",
+            name=name,
+            story_time=current_story_time
+        )
+
+        with Session(db_utils.engine) as session:
+            # Find all entities with matching name
+            matches = session.exec(
+                select(Entity).where(
+                    Entity.vault_id == vault_id,
+                    Entity.name == name
+                )
+            ).all()
+
+            if not matches:
+                self.log.info("no_entity_match", name=name)
+                return None
+
+            if len(matches) == 1:
+                # Single match - easy case
+                return matches[0]
+
+            # Multiple matches - disambiguate by era
+            if current_story_time and "year" in current_story_time:
+                current_year = current_story_time["year"]
+
+                for entity in matches:
+                    # Check if metadata contains era info
+                    metadata = entity.metadata_ or {}
+                    era_start = metadata.get("era_start_year")
+                    era_end = metadata.get("era_end_year")
+
+                    if era_start is not None and era_end is not None:
+                        if era_start <= current_year <= era_end:
+                            self.log.info(
+                                "entity_resolved_by_era",
+                                name=name,
+                                entity_id=str(entity.id),
+                                era_range=f"{era_start}-{era_end}",
+                                current_year=current_year
+                            )
+                            return entity
+
+            # Fallback: Return most recently created entity
+            # Sort by created_at descending
+            matches_sorted = sorted(matches, key=lambda e: e.created_at, reverse=True)
+            fallback = matches_sorted[0]
+
+            self.log.warning(
+                "entity_disambiguation_fallback",
+                name=name,
+                matched_count=len(matches),
+                selected_id=str(fallback.id)
+            )
+
+            return fallback
+
+    async def find_or_create_entity(
+        self,
+        name: str,
+        entity_type: EntityType,
+        vault_id: UUID,
+        description: Optional[str] = None,
+        override_metadata: Optional[Dict[str, Any]] = None,
+        current_story_time: Optional[Dict[str, int]] = None
+    ) -> Entity:
+        """
+        Find existing entity by name and era, or create a new one.
+
+        This is the MAIN method used during universe ingestion to prevent duplicates.
+
+        Workflow:
+        1. Try to resolve entity by name + era
+        2. If found, return existing entity
+        3. If not found, create new entity with metadata
+
+        Args:
+            name: Entity name
+            entity_type: Type (CHARACTER, LOCATION, etc.)
+            vault_id: Vault ID
+            description: Optional description
+            override_metadata: Metadata from manifest (contains era info)
+            current_story_time: Current in-universe time
+
+        Returns:
+            Existing or newly created Entity
+        """
+        # Step 1: Try to resolve existing entity
+        existing = await self.resolve_entity_by_era(
+            name=name,
+            vault_id=vault_id,
+            current_story_time=current_story_time
+        )
+
+        if existing:
+            self.log.info(
+                "entity_found_reusing",
+                name=name,
+                entity_id=str(existing.id)
+            )
+            return existing
+
+        # Step 2: Create new entity
+        self.log.info(
+            "entity_not_found_creating",
+            name=name,
+            type=entity_type
+        )
+
+        # Merge metadata
+        metadata = override_metadata or {}
+
+        # Generate embedding
+        embedding_text = f"{name}\n{description or ''}"
+        embedding = get_embedding_service().embed_query(embedding_text)
+
+        # Create entity
+        with Session(db_utils.engine) as session:
+            entity = Entity(
+                vault_id=vault_id,
+                name=name,
+                type=entity_type,
+                description=description or f"Auto-created: {name}",
+                embedding=embedding,
+                metadata_=metadata
+            )
+
+            session.add(entity)
+            session.commit()
+            session.refresh(entity)
+
+            self.log.info(
+                "entity_created",
+                name=name,
+                entity_id=str(entity.id),
+                type=entity_type
+            )
+
+            return entity
     
     async def generate_graph_data(
         self,
@@ -337,7 +508,7 @@ class ProfilerAgent(BaseAgent):
         type_filters = GRAPH_TYPE_FILTERS.get(graph_type)
         self.log.info("generating_graph_data", vault_id=str(vault_id), graph_type=graph_type)
         
-        with Session(engine) as session:
+        with Session(db_utils.engine) as session:
             # ✅ FIXED N+1 QUERY: Use raw SQL to get IDs, then load entities in single query
             # Before: session.get(Entity, row.id) called N times (N+1 problem)
             # After: Load all entities at once with WHERE IN
@@ -475,7 +646,58 @@ class ProfilerAgent(BaseAgent):
         return [{"id": str(e.id), "name": e.name, "type": e.type, "properties": e.properties} for e in entities]
 
     def _format_links(self, relationships: List[Relationship]) -> List[Dict[str, Any]]:
-        return [{"source": str(r.from_entity_id), "target": str(r.to_entity_id), "type": r.rel_type} for r in relationships]
+        """
+        Formats links with visual attributes based on RelationType.
+        """
+        formatted = []
+        
+        # Visual Schema Definition
+        VISUAL_STYLES = {
+            # 🔴 HOSTILE (Red)
+            "enemy":    {"color": "#FF4444", "width": 2, "dash": "5,5"},
+            "rival":    {"color": "#FF8800", "width": 1.5, "dash": "3,3"},
+            "betrayed": {"color": "#CC0000", "width": 3, "dash": "2,2"},
+            "killed":   {"color": "#000000", "width": 1, "dash": "1,1"},
+            
+            # 🟢 ALLIED (Green)
+            "ally":     {"color": "#44FF44", "width": 2, "dash": None},
+            "friend":   {"color": "#88FF88", "width": 1.5, "dash": None},
+            "spouse":   {"color": "#00CC00", "width": 3, "dash": None},
+            "leads":    {"color": "#00FFCC", "width": 2, "dash": None},
+            
+            # 🔵 FAMILY (Blue)
+            "parent":   {"color": "#4444FF", "width": 2, "dash": None},
+            "child":    {"color": "#4444FF", "width": 2, "dash": None},
+            "sibling":  {"color": "#8888FF", "width": 1.5, "dash": None},
+            "family":   {"color": "#AAAAFF", "width": 1, "dash": None},
+            
+            # 🟣 MENTORSHIP (Purple)
+            "mentor":   {"color": "#AA00FF", "width": 2, "dash": "5,1"},
+            "mentee":   {"color": "#AA00FF", "width": 1, "dash": "5,1"},
+            
+            # ⚪ DEFAULT (Grey)
+            "default":  {"color": "#999999", "width": 1, "dash": None}
+        }
+
+        for r in relationships:
+            # Normalize type string (handle Enum or str)
+            r_type = str(r.rel_type).lower() if r.rel_type else "default"
+            
+            # Lookup style (fallback to default if new enum not mapped)
+            style = VISUAL_STYLES.get(r_type, VISUAL_STYLES["default"])
+            
+            formatted.append({
+                "source": str(r.from_entity_id),
+                "target": str(r.to_entity_id),
+                "type": r_type,
+                # Injected Visual Attributes
+                "color": style["color"],
+                "strokeWidth": style["width"],
+                "strokeDasharray": style["dash"],
+                "label": r.description or r_type.title() # Tooltip text
+            })
+            
+        return formatted
 
     def generate_graph_html(
         self,

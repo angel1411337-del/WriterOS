@@ -1,0 +1,737 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 11 items
+
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_entity_extraction ERROR [  9%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_find_similar_entities ERROR [ 18%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_generate_graph_data ERROR [ 27%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_simple ERROR [ 36%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_multi_generation ERROR [ 45%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_siblings ERROR [ 54%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_child_relationship ERROR [ 63%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_empty ERROR [ 72%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_nonexistent_entity ERROR [ 81%]
+tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_nodes ERROR [ 90%]
+tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_links ERROR [100%]
+
+=================================== ERRORS ====================================
+_________ ERROR at setup of TestProfilerAgent.test_entity_extraction __________
+
+self = <Coroutine test_entity_extraction>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D65FE70>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+_______ ERROR at setup of TestProfilerAgent.test_find_similar_entities ________
+
+self = <Coroutine test_find_similar_entities>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D65CD70>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+________ ERROR at setup of TestProfilerAgent.test_generate_graph_data _________
+
+self = <Coroutine test_generate_graph_data>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D6866D0>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+______ ERROR at setup of TestProfilerAgent.test_build_family_tree_simple ______
+
+self = <Coroutine test_build_family_tree_simple>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D65E190>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+_ ERROR at setup of TestProfilerAgent.test_build_family_tree_multi_generation _
+
+self = <Coroutine test_build_family_tree_multi_generation>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D687070>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+__ ERROR at setup of TestProfilerAgent.test_build_family_tree_with_siblings ___
+
+self = <Coroutine test_build_family_tree_with_siblings>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D687150>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+_ ERROR at setup of TestProfilerAgent.test_build_family_tree_with_child_relationship _
+
+self = <Coroutine test_build_family_tree_with_child_relationship>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947DB78130>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+______ ERROR at setup of TestProfilerAgent.test_build_family_tree_empty _______
+
+self = <Coroutine test_build_family_tree_empty>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D687070>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+_ ERROR at setup of TestProfilerAgent.test_build_family_tree_nonexistent_entity _
+
+self = <Coroutine test_build_family_tree_nonexistent_entity>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+               ^^^^^^^^^^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D65FCB0>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+________ ERROR at setup of TestProfilerAgentHelpers.test_format_nodes _________
+
+fixturedef = <FixtureDef argname='mock_db_engine_global' scope='function' baseid='tests'>
+request = <SubRequest 'mock_db_engine_global' for <Function test_format_nodes>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+                return (yield)
+            if not _is_coroutine_or_asyncgen(fixturedef.func):
+>               return (yield)
+                        ^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947D65FE70>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+________ ERROR at setup of TestProfilerAgentHelpers.test_format_links _________
+
+fixturedef = <FixtureDef argname='mock_db_engine_global' scope='function' baseid='tests'>
+request = <SubRequest 'mock_db_engine_global' for <Function test_format_links>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+                return (yield)
+            if not _is_coroutine_or_asyncgen(fixturedef.func):
+>               return (yield)
+                        ^^^^^
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_asyncio\plugin.py:730: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\conftest.py:320: in mock_db_engine_global
+    mocker.patch("writeros.agents.dramatist.engine", test_engine)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x000001947DB78910>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.dramatist' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\dramatist.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+============================== warnings summary ===============================
+src\writeros\config.py:4
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                                     Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------
+src\writeros\__init__.py                                     1      0   100%
+src\writeros\agents\__init__.py                             22     10    55%   14-23
+src\writeros\agents\architect.py                           136    116    15%   15-16, 22-27, 36-158, 173-210, 220-251, 261-281, 287-305, 311-327
+src\writeros\agents\base.py                                 19      9    53%   21-39
+src\writeros\agents\chronologist.py                         22      6    73%   25-26, 30-57
+src\writeros\agents\dramatist.py                           150    128    15%   22-27, 38-53, 64-87, 91-114, 118-141, 154-191, 204-248, 252-268, 272-289, 300-317
+src\writeros\agents\mechanic.py                             31      6    81%   39-40, 43-68
+src\writeros\agents\navigator.py                            26      6    77%   34-35, 38-59
+src\writeros\agents\orchestrator.py                         85     64    25%   24-38, 51-103, 109-118, 121-158, 161, 176-203
+src\writeros\agents\producer.py                            203    170    16%   19-27, 30-32, 36-45, 53-63, 67-85, 89-97, 101-110, 114-121, 129-159, 163-199, 207-219, 223-243, 247-264, 272-279, 283-291, 295-305, 313-331, 339-382
+src\writeros\agents\profiler.py                            201    154    23%   54-55, 58-80, 106-274, 285-303, 330-461, 475, 478, 490-529
+src\writeros\agents\psychologist.py                         40     16    60%   38-39, 42-66, 73-92
+src\writeros\agents\stylist.py                              14      7    50%   8, 12-13, 16-49
+src\writeros\agents\theorist.py                             34      6    82%   37-39, 42-65
+src\writeros\agents\tools.py                                31     31     0%   5-76
+src\writeros\agents\tools_registry.py                      129    110    15%   35-39, 56, 276-304, 323-378, 392-437, 451-496, 508-549, 562-577, 589-620, 631-660
+src\writeros\api\__init__.py                                 0      0   100%
+src\writeros\api\app.py                                    228    228     0%   13-616
+src\writeros\cli\__init__.py                                 0      0   100%
+src\writeros\cli\main.py                                    41     41     0%   1-83
+src\writeros\config.py                                      16      2    88%   26, 33
+src\writeros\core\__init__.py                                0      0   100%
+src\writeros\core\logging.py                                13      6    54%   14-42
+src\writeros\graphs\__init__.py                              0      0   100%
+src\writeros\preprocessing\__init__.py                       4      4     0%   7-23
+src\writeros\preprocessing\chunker.py                       78     78     0%   5-143
+src\writeros\preprocessing\cluster_semantic_chunker.py     155    155     0%   10-406
+src\writeros\preprocessing\unified_chunker.py              160    160     0%   14-405
+src\writeros\rag\__init__.py                                 2      2     0%   1-3
+src\writeros\rag\retriever.py                               81     81     0%   6-195
+src\writeros\schema\__init__.py                             18      0   100%
+src\writeros\schema\api.py                                  22      0   100%
+src\writeros\schema\base.py                                 12      0   100%
+src\writeros\schema\enums.py                               132      0   100%
+src\writeros\schema\extended_universe.py                    90      0   100%
+src\writeros\schema\graph.py                                16      0   100%
+src\writeros\schema\identity.py                             41      0   100%
+src\writeros\schema\library.py                              74      9    88%   51-61, 127
+src\writeros\schema\logistics.py                            17      0   100%
+src\writeros\schema\mechanics.py                            20      0   100%
+src\writeros\schema\narrative.py                            19      0   100%
+src\writeros\schema\project.py                              13      0   100%
+src\writeros\schema\prose.py                                14      0   100%
+src\writeros\schema\psychology.py                           37      0   100%
+src\writeros\schema\session.py                              27      0   100%
+src\writeros\schema\temporal_anchoring.py                   54      0   100%
+src\writeros\schema\theme.py                                16      0   100%
+src\writeros\schema\world.py                                80      0   100%
+src\writeros\services\__init__.py                            0      0   100%
+src\writeros\services\conflict_engine.py                    31     21    32%   11-16, 20-44, 48-64
+src\writeros\tasks\__init__.py                               0      0   100%
+src\writeros\utils\db.py                                   143    121    15%   17-23, 70-148, 162-241, 251-252, 262-284, 291-302, 310-325, 336-346
+src\writeros\utils\embeddings.py                            41     18    56%   22-29, 32-42, 46, 50, 54, 65, 75
+src\writeros\utils\llm_client.py                            54     42    22%   24-30, 56-99, 122-135, 152-156, 169
+src\writeros\utils\writer.py                               178    154    13%   17-29, 32-44, 47-49, 52, 55, 58-62, 67-89, 93-130, 135-194, 197-235, 238-266, 269-274, 278-366
+--------------------------------------------------------------------------------------
+TOTAL                                                     3071   1961    36%
+Coverage HTML written to dir htmlcov
+=========================== short test summary info ===========================
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_entity_extraction
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_find_similar_entities
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_generate_graph_data
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_simple
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_multi_generation
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_siblings
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_child_relationship
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_empty
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_nonexistent_entity
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_nodes
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_links
+======================== 1 warning, 11 errors in 6.70s ========================

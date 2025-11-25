@@ -1,0 +1,1316 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 231 items
+
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_entity_extraction PASSED [  0%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_find_similar_entities PASSED [  0%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_generate_graph_data PASSED [  1%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_simple FAILED [  1%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_multi_generation FAILED [  2%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_siblings FAILED [  2%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_child_relationship FAILED [  3%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_empty FAILED [  3%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_nonexistent_entity PASSED [  3%]
+tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_nodes PASSED [  4%]
+tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_links PASSED [  4%]
+tests/agents/test_tool_calling.py::TestToolRegistry::test_tool_registry_initialization PASSED [  5%]
+tests/agents/test_tool_calling.py::TestToolRegistry::test_get_tool_schemas PASSED [  5%]
+tests/agents/test_tool_calling.py::TestToolRegistry::test_execute_unknown_tool PASSED [  6%]
+tests/agents/test_tool_calling.py::TestCreateCharacterTool::test_create_character_success PASSED [  6%]
+tests/agents/test_tool_calling.py::TestCreateCharacterTool::test_create_character_duplicate PASSED [  6%]
+tests/agents/test_tool_calling.py::TestCreateCharacterTool::test_create_character_minimal_args PASSED [  7%]
+tests/agents/test_tool_calling.py::TestCreateLocationTool::test_create_location_success PASSED [  7%]
+tests/agents/test_tool_calling.py::TestUpdateCharacterTool::test_update_character_success PASSED [  8%]
+tests/agents/test_tool_calling.py::TestUpdateCharacterTool::test_update_nonexistent_character PASSED [  8%]
+tests/agents/test_tool_calling.py::TestSearchVaultTool::test_search_vault_finds_matches PASSED [  9%]
+tests/agents/test_tool_calling.py::TestSearchVaultTool::test_search_vault_multiple_results PASSED [  9%]
+tests/agents/test_tool_calling.py::TestSearchVaultTool::test_search_vault_no_results PASSED [  9%]
+tests/agents/test_tool_calling.py::TestCreateRelationshipTool::test_create_relationship PASSED [ 10%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_orchestrator_has_tools PASSED [ 10%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_orchestrator_get_tool_schemas PASSED [ 11%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_execute_tool_call PASSED [ 11%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_execute_tool_with_invalid_args PASSED [ 12%]
+tests/agents/test_tool_calling.py::TestEndToEndToolCalling::test_complete_workflow_create_character FAILED [ 12%]
+tests/agents/test_tool_calling.py::TestToolSafety::test_prevents_duplicate_creation PASSED [ 12%]
+tests/agents/test_tool_calling.py::TestToolSafety::test_update_requires_existing_file PASSED [ 13%]
+tests/agents/test_tool_calling.py::TestToolSafety::test_search_before_create_workflow PASSED [ 13%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_returns_ok PASSED [ 14%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_includes_version PASSED [ 14%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_includes_mode PASSED [ 15%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format FAILED [ 15%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_rejects_invalid_vault_id PASSED [ 16%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_returns_404_for_nonexistent_vault PASSED [ 16%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task FAILED [ 16%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_accepts_plugin_format PASSED [ 17%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_returns_sse_format PASSED [ 17%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_formats_chunks_as_json PASSED [ 18%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_sends_done_marker PASSED [ 18%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_handles_errors_gracefully PASSED [ 19%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_rejects_invalid_vault_id PASSED [ 19%]
+tests/api/test_legacy_compatibility.py::TestPluginIntegration::test_plugin_startup_sequence PASSED [ 19%]
+tests/api/test_legacy_compatibility.py::TestPluginIntegration::test_plugin_can_discover_endpoints PASSED [ 20%]
+tests/integration/test_conflict_integration.py::test_architect_conflict_integration FAILED [ 20%]
+tests/integration/test_conflict_integration.py::test_dramatist_conflict_integration FAILED [ 21%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginStartup::test_server_can_start PASSED [ 21%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginStartup::test_init_db_creates_default_entities PASSED [ 22%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_health_check_responds PASSED [ 22%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_plugin_can_detect_server_running PASSED [ 22%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_analyze_endpoint_accepts_vault PASSED [ 23%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_full_vault_indexing_flow PASSED [ 23%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginChat::test_chat_stream_endpoint PASSED [ 24%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginChat::test_chat_returns_sse_format PASSED [ 24%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginGraphGeneration::test_graph_script_can_execute PASSED [ 25%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginGraphGeneration::test_graph_generation_outputs_path PASSED [ 25%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginCompleteWorkflow::test_complete_plugin_workflow_sequence PASSED [ 25%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginCompleteWorkflow::test_plugin_error_recovery PASSED [ 26%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_vault_id_persists_to_filesystem PASSED [ 26%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_indexed_data_persists PASSED [ 27%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_health_check_is_fast PASSED [ 27%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_indexing_provides_progress_feedback PASSED [ 28%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_full_ingestion_pipeline PASSED [ 28%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_full_retrieval_pipeline PASSED [ 29%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_graphrag_query_with_multi_hop FAILED [ 29%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelinePerformance::test_large_document_chunking PASSED [ 29%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelinePerformance::test_vector_search_performance PASSED [ 30%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_initialization PASSED [ 30%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_split_into_base_segments_simple PASSED [ 31%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_split_into_base_segments_paragraphs PASSED [ 31%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_split_sentences PASSED [ 32%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_build_similarity_matrix PASSED [ 32%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_compute_chunk_reward PASSED [ 32%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_find_optimal_segmentation_simple PASSED [ 33%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_merge_segments PASSED [ 33%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_chunk_empty_text PASSED [ 34%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_chunk_single_segment PASSED [ 34%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_fallback_without_embedding_function PASSED [ 35%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerIntegration::test_chunk_with_topic_shifts PASSED [ 35%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerIntegration::test_chunk_coherent_text PASSED [ 35%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerIntegration::test_metadata_accuracy PASSED [ 36%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_very_long_text PASSED [ 36%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_unicode_text PASSED [ 37%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_text_with_special_characters PASSED [ 37%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_chunk_size_boundaries PASSED [ 38%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerPerformance::test_performance_medium_text PASSED [ 38%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerPerformance::test_similarity_matrix_efficiency PASSED [ 38%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerPerformance::test_performance_large_text PASSED [ 39%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerComparison::test_vs_fixed_size_chunking PASSED [ 39%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerRealEmbeddings::test_chunk_real_document PASSED [ 40%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_split_into_segments_basic PASSED [ 40%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_split_into_segments_empty_text PASSED [ 41%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_split_into_segments_single_sentence PASSED [ 41%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_empty_text PASSED [ 41%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_single_sentence_text PASSED [ 42%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_basic_chunking PASSED [ 42%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_coherence_score_present PASSED [ 43%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_coherence_score_varied_similarity FAILED [ 43%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_embedder_factory_receives_embedding_model PASSED [ 44%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_basic_operations PASSED [ 44%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_miss PASSED [ 45%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_lru_eviction PASSED [ 45%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_stats PASSED [ 45%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_clear PASSED [ 46%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_auto_select_cluster_for_small_docs PASSED [ 46%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_auto_select_greedy_for_medium_docs PASSED [ 47%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_auto_select_fixed_for_large_docs PASSED [ 47%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_explicit_strategy_overrides_auto PASSED [ 48%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_cache_reduces_embedding_calls PASSED [ 48%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_cache_disabled PASSED [ 48%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_get_stats_includes_cache_info PASSED [ 49%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_clear_cache PASSED [ 49%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_cluster_semantic_strategy PASSED [ 50%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_greedy_semantic_strategy PASSED [ 50%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_fixed_size_strategy PASSED [ 51%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_strategies_produce_different_results PASSED [ 51%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStatistics::test_stats_tracking PASSED [ 51%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStatistics::test_strategy_usage_tracking PASSED [ 52%]
+tests/preprocessing/test_unified_chunker.py::TestChunkTextConvenience::test_chunk_text_with_defaults PASSED [ 52%]
+tests/preprocessing/test_unified_chunker.py::TestChunkTextConvenience::test_chunk_text_with_explicit_strategy PASSED [ 53%]
+tests/preprocessing/test_unified_chunker.py::TestChunkTextConvenience::test_chunk_text_with_custom_params PASSED [ 53%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_empty_text PASSED [ 54%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_very_short_text PASSED [ 54%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_unicode_text PASSED [ 54%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_no_embedding_function_with_semantic_strategy PASSED [ 55%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_graph_traversal_basic FAILED [ 55%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_relationship_filtering PASSED [ 56%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_max_hops_limiting PASSED [ 56%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_temporal_filtering FAILED [ 57%]
+tests/rag/test_graph_rag.py::TestFamilyTreeConstruction::test_build_family_tree SKIPPED [ 57%]
+tests/rag/test_graph_rag.py::TestCycleDetection::test_circular_relationship_traversal FAILED [ 58%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_cosine_similarity_search PASSED [ 58%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_l2_distance_search PASSED [ 58%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_filter_by_vault_id PASSED [ 59%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_result_ranking PASSED [ 59%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_empty_result_handling PASSED [ 60%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_limit_parameter PASSED [ 60%]
+tests/rag/test_vector_search.py::TestDocumentVectorSearch::test_document_search PASSED [ 61%]
+tests/rag/test_vector_search.py::TestFactVectorSearch::test_fact_search PASSED [ 61%]
+tests/schema/test_conflict_model.py::test_create_conflict PASSED         [ 61%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_singleton_pattern_same_model PASSED [ 62%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_different_models_create_distinct_instances PASSED [ 62%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_with_api_key PASSED [ 63%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_with_custom_model PASSED [ 63%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_without_api_key PASSED [ 64%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_query PASSED [ 64%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_documents PASSED [ 64%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_empty_string PASSED [ 65%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_documents_empty_list PASSED [ 65%]
+tests/services/test_embedding_service.py::TestEmbeddingServiceIntegration::test_multiple_calls_use_same_instance PASSED [ 66%]
+tests/test_graph_generation.py::TestGraphScriptExistence::test_generate_graph_exists PASSED [ 66%]
+tests/test_graph_generation.py::TestGraphScriptExistence::test_generate_graph_is_python_script PASSED [ 67%]
+tests/test_graph_generation.py::TestGraphScriptExistence::test_generate_graph_has_docstring PASSED [ 67%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_requires_graph_type PASSED [ 67%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_requires_vault_path PASSED [ 68%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_accepts_valid_graph_types PASSED [ 68%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_vault_id_is_optional PASSED [ 69%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_imports_profiler_agent PASSED [ 69%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_calls_generate_graph_data PASSED [ 70%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_calls_generate_graph_html PASSED [ 70%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_uses_async_main PASSED [ 70%]
+tests/test_graph_generation.py::TestGraphScriptOutput::test_script_prints_output_path_to_stdout PASSED [ 71%]
+tests/test_graph_generation.py::TestGraphScriptOutput::test_script_handles_errors_gracefully PASSED [ 71%]
+tests/test_graph_generation.py::TestGraphScriptOutput::test_script_exits_with_error_code_on_failure PASSED [ 72%]
+tests/test_graph_generation.py::TestGraphScriptWithDatabase::test_script_can_query_entities PASSED [ 72%]
+tests/test_graph_generation.py::TestGraphScriptWithDatabase::test_script_generates_html_file PASSED [ 73%]
+tests/test_graph_generation.py::TestGraphScriptDatabaseConnection::test_script_uses_get_or_create_vault_id PASSED [ 73%]
+tests/test_graph_generation.py::TestGraphScriptDatabaseConnection::test_script_initializes_database_connection FAILED [ 74%]
+tests/test_graph_generation.py::TestGraphScriptLogging::test_script_uses_logging PASSED [ 74%]
+tests/test_graph_generation.py::TestGraphScriptLogging::test_script_logs_graph_stats PASSED [ 74%]
+tests/test_graph_generation.py::TestGraphScriptCompatibility::test_script_outputs_absolute_path PASSED [ 75%]
+tests/test_graph_generation.py::TestGraphScriptCompatibility::test_script_creates_writeros_directory PASSED [ 75%]
+tests/test_graph_generation.py::TestGraphScriptCompatibility::test_script_passes_graph_type_to_agent PASSED [ 76%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_py_exists PASSED [ 76%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_py_is_executable PASSED [ 77%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_sets_local_mode PASSED [ 77%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_imports_uvicorn PASSED [ 77%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_adds_src_to_path PASSED [ 78%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_uses_correct_host PASSED [ 78%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_uses_correct_port PASSED [ 79%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_disables_reload PASSED [ 79%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_targets_correct_app PASSED [ 80%]
+tests/test_server_launcher.py::TestServerLauncherErrorHandling::test_server_handles_keyboard_interrupt PASSED [ 80%]
+tests/test_server_launcher.py::TestServerLauncherErrorHandling::test_server_handles_general_exceptions PASSED [ 80%]
+tests/test_server_launcher.py::TestServerLauncherErrorHandling::test_server_exits_with_correct_codes PASSED [ 81%]
+tests/test_server_launcher.py::TestServerLauncherOutput::test_server_prints_startup_banner PASSED [ 81%]
+tests/test_server_launcher.py::TestServerLauncherOutput::test_server_shows_mode_and_port PASSED [ 82%]
+tests/test_server_launcher.py::TestServerLauncherIntegration::test_server_can_be_imported PASSED [ 82%]
+tests/test_server_launcher.py::TestServerLauncherIntegration::test_server_help_output FAILED [ 83%]
+tests/test_server_launcher.py::TestServerLauncherDocumentation::test_server_has_docstring PASSED [ 83%]
+tests/test_server_launcher.py::TestServerLauncherDocumentation::test_server_has_comments PASSED [ 83%]
+tests/test_server_launcher.py::TestServerLauncherDocumentation::test_server_explains_obsidian_purpose PASSED [ 84%]
+tests/test_vault_config.py::test_get_or_create_vault_id_creates_config PASSED [ 84%]
+tests/test_vault_config.py::test_get_or_create_vault_id_reads_existing PASSED [ 85%]
+tests/test_vault_config.py::test_get_vault_config_missing_returns_empty PASSED [ 85%]
+tests/test_vault_config.py::test_update_vault_config_preserves_existing_values PASSED [ 86%]
+tests/test_vault_config.py::test_ensure_graph_directory_creates_structure PASSED [ 86%]
+tests/test_vault_reader.py::test_refresh_index_collects_entities_and_rules PASSED [ 87%]
+tests/test_vault_reader.py::test_get_relevant_context_matches_aliases PASSED [ 87%]
+tests/test_vault_reader.py::test_get_relevant_context_without_matches_returns_default PASSED [ 87%]
+tests/test_vault_reader.py::test_get_craft_context_handles_missing_rules PASSED [ 88%]
+tests/test_vault_reader.py::test_get_global_context_includes_project_and_counts PASSED [ 88%]
+tests/test_vault_reader.py::test_get_global_context_when_project_missing PASSED [ 89%]
+tests/test_vault_reader.py::test_execute_structured_query_filters_by_type_and_value PASSED [ 89%]
+tests/test_vault_reader.py::test_get_neighbors_returns_unique_links PASSED [ 90%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_indexer_initialization PASSED [ 90%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_character PASSED [ 90%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_location PASSED [ 91%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_craft_advice PASSED [ 91%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_manuscript PASSED [ 92%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_cluster_semantic_strategy PASSED [ 92%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_greedy_semantic_strategy PASSED [ 93%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_fixed_size_strategy PASSED [ 93%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_auto_strategy_selection PASSED [ 93%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerCaching::test_cache_improves_performance PASSED [ 94%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerCaching::test_cache_can_be_cleared PASSED [ 94%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerFullIndexing::test_index_vault_all_directories PASSED [ 95%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerFullIndexing::test_index_vault_specific_directories PASSED [ 95%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerFullIndexing::test_index_vault_handles_missing_directories PASSED [ 96%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerStatistics::test_statistics_after_indexing PASSED [ 96%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerStatistics::test_chunking_stats_in_results PASSED [ 96%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerErrorHandling::test_handles_unicode_decode_errors PASSED [ 97%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerErrorHandling::test_handles_empty_files PASSED [ 97%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_creates_tables PASSED [ 98%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_enables_pgvector PASSED [ 98%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_creates_vector_indexes PASSED [ 99%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_full_flow PASSED [ 99%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_is_idempotent PASSED [100%]
+
+================================== FAILURES ===================================
+_______________ TestProfilerAgent.test_build_family_tree_simple _______________
+
+self = <test_profiler_agent.TestProfilerAgent object at 0x000002337F76D810>
+profiler = <writeros.agents.profiler.ProfilerAgent object at 0x000002337FECD940>
+db_session = <sqlmodel.orm.session.Session object at 0x000002337FECE190>
+sample_vault_id = UUID('d2a7e2d0-12a9-4b50-bfb6-01cc806637ea')
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_simple(self, profiler, db_session, sample_vault_id):
+        """Test family tree construction with simple parent-child relationship."""
+        # Create a simple family
+        parent = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Parent",
+            type=EntityType.CHARACTER,
+            description="Parent character",
+            properties={"role": "parent"},
+            embedding=[0.1] * 1536
+        )
+        child = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Child",
+            type=EntityType.CHARACTER,
+            description="Child character",
+            properties={"role": "child"},
+            embedding=[0.2] * 1536
+        )
+    
+        db_session.add(parent)
+        db_session.add(child)
+    
+        rel = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=parent.id,
+            to_entity_id=child.id,
+            rel_type=RelationType.PARENT,
+            description="Parent-child relationship",
+            properties={"strength": 1.0}
+        )
+        db_session.add(rel)
+        db_session.commit()
+    
+        # Test from parent's perspective
+        tree = await profiler.build_family_tree(parent.id)
+    
+        assert tree is not None
+>       assert tree["total_members"] == 2
+E       assert 0 == 2
+
+tests\agents\test_profiler_agent.py:137: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.agents.base:profiler.py:115 [2m2025-11-25T21:13:04.093910Z[0m [[31m[1merror    [0m] [1mentity_not_found              [0m [36magent[0m=[35mProfilerAgent[0m [36mcharacter_id[0m=[35mdb5634bb-3419-4609-b6e7-aefd3fec919f[0m
+__________ TestProfilerAgent.test_build_family_tree_multi_generation __________
+
+self = <test_profiler_agent.TestProfilerAgent object at 0x000002337F6E2C30>
+profiler = <writeros.agents.profiler.ProfilerAgent object at 0x00000233039228B0>
+db_session = <sqlmodel.orm.session.Session object at 0x00000233039BC8D0>
+sample_vault_id = UUID('21f48af7-81b9-4e75-810c-3bbdd9f21843')
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_multi_generation(self, profiler, db_session, sample_vault_id):
+        """Test family tree with multiple generations (grandparent \u2192 parent \u2192 child)."""
+        # Create multi-generation family
+        grandpa = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Grandpa Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "elder"},
+            embedding=[0.1] * 1536
+        )
+        father = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Ned Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "father"},
+            embedding=[0.2] * 1536
+        )
+        robb = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Robb Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "protagonist"},
+            embedding=[0.3] * 1536
+        )
+    
+        db_session.add_all([grandpa, father, robb])
+    
+        # Create relationships
+        rel1 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=grandpa.id,
+            to_entity_id=father.id,
+            rel_type=RelationType.PARENT
+        )
+        rel2 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=father.id,
+            to_entity_id=robb.id,
+            rel_type=RelationType.PARENT
+        )
+        db_session.add_all([rel1, rel2])
+        db_session.commit()
+    
+        # Test from Robb's perspective (middle of tree)
+        tree = await profiler.build_family_tree(robb.id)
+    
+>       assert tree["total_members"] == 3
+E       assert 0 == 3
+
+tests\agents\test_profiler_agent.py:205: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.agents.base:profiler.py:115 [2m2025-11-25T21:13:04.290378Z[0m [[31m[1merror    [0m] [1mentity_not_found              [0m [36magent[0m=[35mProfilerAgent[0m [36mcharacter_id[0m=[35maa906ea0-8134-42d4-85b9-89efa4030bd5[0m
+___________ TestProfilerAgent.test_build_family_tree_with_siblings ____________
+
+self = <test_profiler_agent.TestProfilerAgent object at 0x000002337F7BB240>
+profiler = <writeros.agents.profiler.ProfilerAgent object at 0x00000233038FB530>
+db_session = <sqlmodel.orm.session.Session object at 0x00000233039AD250>
+sample_vault_id = UUID('aa83a368-a9a5-486c-8f9d-be4e046b138b')
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_with_siblings(self, profiler, db_session, sample_vault_id):
+        """Test family tree with sibling relationships."""
+        # Create siblings
+        robb = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Robb Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "protagonist"},
+            embedding=[0.1] * 1536
+        )
+        sansa = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Sansa Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "sibling"},
+            embedding=[0.2] * 1536
+        )
+        arya = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Arya Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "sibling"},
+            embedding=[0.3] * 1536
+        )
+    
+        db_session.add_all([robb, sansa, arya])
+    
+        # Create sibling relationships
+        rel1 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=robb.id,
+            to_entity_id=sansa.id,
+            rel_type=RelationType.SIBLING
+        )
+        rel2 = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=sansa.id,
+            to_entity_id=arya.id,
+            rel_type=RelationType.SIBLING
+        )
+        db_session.add_all([rel1, rel2])
+        db_session.commit()
+    
+        # Test from Robb's perspective
+        tree = await profiler.build_family_tree(robb.id)
+    
+>       assert tree["total_members"] == 3
+E       assert 0 == 3
+
+tests\agents\test_profiler_agent.py:270: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.agents.base:profiler.py:115 [2m2025-11-25T21:13:04.336622Z[0m [[31m[1merror    [0m] [1mentity_not_found              [0m [36magent[0m=[35mProfilerAgent[0m [36mcharacter_id[0m=[35mb4e70fd2-0744-4ca8-ad97-6a51d464926f[0m
+______ TestProfilerAgent.test_build_family_tree_with_child_relationship _______
+
+self = <test_profiler_agent.TestProfilerAgent object at 0x000002337F7BB460>
+profiler = <writeros.agents.profiler.ProfilerAgent object at 0x00000233039BE250>
+db_session = <sqlmodel.orm.session.Session object at 0x0000023303AA0F50>
+sample_vault_id = UUID('ab1a0449-e412-45e4-9657-9e59b6075262')
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_with_child_relationship(self, profiler, db_session, sample_vault_id):
+        """Test CHILD relationship (inverse of PARENT)."""
+        # Create parent and child
+        child = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Jon Snow",
+            type=EntityType.CHARACTER,
+            properties={"role": "child"},
+            embedding=[0.1] * 1536
+        )
+        parent = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Ned Stark",
+            type=EntityType.CHARACTER,
+            properties={"role": "parent"},
+            embedding=[0.2] * 1536
+        )
+    
+        db_session.add_all([child, parent])
+    
+        # CHILD relationship: from_entity (child) \u2192 to_entity (parent)
+        rel = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=child.id,
+            to_entity_id=parent.id,
+            rel_type=RelationType.CHILD
+        )
+        db_session.add(rel)
+        db_session.commit()
+    
+        # Test from child's perspective
+        tree = await profiler.build_family_tree(child.id)
+    
+>       assert tree["total_members"] == 2
+E       assert 0 == 2
+
+tests\agents\test_profiler_agent.py:317: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.agents.base:profiler.py:115 [2m2025-11-25T21:13:04.372781Z[0m [[31m[1merror    [0m] [1mentity_not_found              [0m [36magent[0m=[35mProfilerAgent[0m [36mcharacter_id[0m=[35m5859bed9-8e3a-4984-9e7b-36d51416c01d[0m
+_______________ TestProfilerAgent.test_build_family_tree_empty ________________
+
+self = <test_profiler_agent.TestProfilerAgent object at 0x000002337F75EB50>
+profiler = <writeros.agents.profiler.ProfilerAgent object at 0x00000233039BD150>
+db_session = <sqlmodel.orm.session.Session object at 0x0000023303AA0D70>
+sample_vault_id = UUID('c519fd56-9068-454d-b62f-fd0a06e6ea6b')
+
+    @pytest.mark.asyncio
+    async def test_build_family_tree_empty(self, profiler, db_session, sample_vault_id):
+        """Test family tree for entity with no relationships."""
+        # Create isolated entity
+        lonely = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Lonely Character",
+            type=EntityType.CHARACTER,
+            properties={},
+            embedding=[0.1] * 1536
+        )
+        db_session.add(lonely)
+        db_session.commit()
+    
+        tree = await profiler.build_family_tree(lonely.id)
+    
+>       assert tree["total_members"] == 1
+E       assert 0 == 1
+
+tests\agents\test_profiler_agent.py:341: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.agents.base:profiler.py:115 [2m2025-11-25T21:13:04.403407Z[0m [[31m[1merror    [0m] [1mentity_not_found              [0m [36magent[0m=[35mProfilerAgent[0m [36mcharacter_id[0m=[35m99d13dba-9fef-44b8-bb42-8b558488fcad[0m
+_______ TestEndToEndToolCalling.test_complete_workflow_create_character _______
+
+self = <test_tool_calling.TestEndToEndToolCalling object at 0x000002337F7E96D0>
+setup_environment = WindowsPath('C:/Users/rahme/AppData/Local/Temp/pytest-of-rahme/pytest-42/test_complete_workflow_create_0/test_vault')
+mocker = <pytest_mock.plugin.MockerFixture object at 0x000002330406DF30>
+db_session = <sqlmodel.orm.session.Session object at 0x0000023303B3F5C0>
+sample_vault_id = UUID('2beac4c4-1b5a-4011-8ea1-e0e11de77b99')
+
+    @pytest.mark.integration
+    @pytest.mark.asyncio
+    async def test_complete_workflow_create_character(
+        self,
+        setup_environment,
+        mocker,
+        db_session,
+        sample_vault_id
+    ):
+        """Test complete workflow of creating a character via tool calling."""
+        # Mock embedding service
+        mock_embedder = mocker.patch('writeros.agents.orchestrator.get_embedding_service')
+        mock_embedder.return_value.embed_query.return_value = [0.1] * 1536
+    
+        # Mock LLM to return a tool call
+        mock_llm = mocker.patch('writeros.utils.llm_client.LLMClient')
+        mock_instance = mock_llm.return_value
+    
+        async def mock_stream(*args, **kwargs):
+            # First yield a tool call
+            yield {
+                "type": "tool_call",
+                "id": "call_123",
+                "name": "create_character_file",
+                "arguments": {
+                    "name": "Gandalf",
+                    "description": "A wise wizard",
+                    "role": "supporting"
+                }
+            }
+            # Then yield confirmation text
+            yield "I've created the character file for Gandalf."
+    
+        mock_instance.stream_chat = mock_stream
+    
+        # Create orchestrator
+        orchestrator = OrchestratorAgent()
+    
+        # Mock database queries
+        mocker.patch.object(orchestrator, '_create_conversation', return_value=uuid4())
+        mocker.patch.object(orchestrator, '_save_message')
+        mocker.patch.object(orchestrator, '_retrieve_context', return_value={
+            "documents": [],
+            "entities": []
+        })
+    
+        # Execute chat
+        full_response = ""
+>       async for chunk in orchestrator.process_chat(
+            "Create a character file for Gandalf, a wise wizard",
+            sample_vault_id
+        ):
+
+tests\agents\test_tool_calling.py:419: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\writeros\agents\orchestrator.py:96: in process_chat
+    async for response_chunk in self.llm.stream_chat(messages, tools=tools):
+src\writeros\utils\llm_client.py:84: in stream_chat
+    async for chunk in client.astream(lc_messages):
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\runnables\base.py:5724: in astream
+    async for item in self.bound.astream(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py:651: in astream
+    async for chunk in self._astream(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_openai\chat_models\base.py:2968: in _astream
+    async for chunk in super()._astream(*args, **kwargs):
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_openai\chat_models\base.py:1491: in _astream
+    response = await self.async_client.create(**payload)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\openai\resources\chat\completions\completions.py:2672: in create
+    return await self._post(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\openai\_base_client.py:1794: in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <openai.AsyncOpenAI object at 0x0000023303B3F980>
+cast_to = <class 'openai.types.chat.chat_completion.ChatCompletion'>
+options = FinalRequestOptions(method='post', url='/chat/completions', params={}, headers=NOT_GIVEN, max_retries=NOT_GIVEN, timeo...for', 'enum': ['character', 'location', 'organization', 'scene', 'all']}}, 'required': ['query']}}}]}, extra_json=None)
+
+    async def request(
+        self,
+        cast_to: Type[ResponseT],
+        options: FinalRequestOptions,
+        *,
+        stream: bool = False,
+        stream_cls: type[_AsyncStreamT] | None = None,
+    ) -> ResponseT | _AsyncStreamT:
+        if self._platform is None:
+            # `get_platform` can make blocking IO calls so we
+            # execute it earlier while we are in an async context
+            self._platform = await asyncify(get_platform)()
+    
+        cast_to = self._maybe_override_cast_to(cast_to, options)
+    
+        # create a copy of the options we were given so that if the
+        # options are mutated later & we then retry, the retries are
+        # given the original options
+        input_options = model_copy(options)
+        if input_options.idempotency_key is None and input_options.method.lower() != "get":
+            # ensure the idempotency key is reused between requests
+            input_options.idempotency_key = self._idempotency_key()
+    
+        response: httpx.Response | None = None
+        max_retries = input_options.get_max_retries(self.max_retries)
+    
+        retries_taken = 0
+        for retries_taken in range(max_retries + 1):
+            options = model_copy(input_options)
+            options = await self._prepare_options(options)
+    
+            remaining_retries = max_retries - retries_taken
+            request = self._build_request(options, retries_taken=retries_taken)
+            await self._prepare_request(request)
+    
+            kwargs: HttpxSendArgs = {}
+            if self.custom_auth is not None:
+                kwargs["auth"] = self.custom_auth
+    
+            if options.follow_redirects is not None:
+                kwargs["follow_redirects"] = options.follow_redirects
+    
+            log.debug("Sending HTTP Request: %s %s", request.method, request.url)
+    
+            response = None
+            try:
+                response = await self._client.send(
+                    request,
+                    stream=stream or self._should_stream_response_body(request=request),
+                    **kwargs,
+                )
+            except httpx.TimeoutException as err:
+                log.debug("Encountered httpx.TimeoutException", exc_info=True)
+    
+                if remaining_retries > 0:
+                    await self._sleep_for_retry(
+                        retries_taken=retries_taken,
+                        max_retries=max_retries,
+                        options=input_options,
+                        response=None,
+                    )
+                    continue
+    
+                log.debug("Raising timeout error")
+                raise APITimeoutError(request=request) from err
+            except Exception as err:
+                log.debug("Encountered Exception", exc_info=True)
+    
+                if remaining_retries > 0:
+                    await self._sleep_for_retry(
+                        retries_taken=retries_taken,
+                        max_retries=max_retries,
+                        options=input_options,
+                        response=None,
+                    )
+                    continue
+    
+                log.debug("Raising connection error")
+                raise APIConnectionError(request=request) from err
+    
+            log.debug(
+                'HTTP Response: %s %s "%i %s" %s',
+                request.method,
+                request.url,
+                response.status_code,
+                response.reason_phrase,
+                response.headers,
+            )
+            log.debug("request_id: %s", response.headers.get("x-request-id"))
+    
+            try:
+                response.raise_for_status()
+            except httpx.HTTPStatusError as err:  # thrown on 4xx and 5xx status code
+                log.debug("Encountered httpx.HTTPStatusError", exc_info=True)
+    
+                if remaining_retries > 0 and self._should_retry(err.response):
+                    await err.response.aclose()
+                    await self._sleep_for_retry(
+                        retries_taken=retries_taken,
+                        max_retries=max_retries,
+                        options=input_options,
+                        response=response,
+                    )
+                    continue
+    
+                # If the response is streamed then we need to explicitly read the response
+                # to completion before attempting to access the response text.
+                if not err.response.is_closed:
+                    await err.response.aread()
+    
+                log.debug("Re-raising status error")
+>               raise self._make_status_error_from_response(err.response) from None
+E               openai.BadRequestError: Error code: 400 - {'error': {'message': "Invalid parameter: messages with role 'tool' must be a response to a preceeding message with 'tool_calls'.", 'type': 'invalid_request_error', 'param': 'messages.[2].role', 'code': None}}
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\openai\_base_client.py:1594: BadRequestError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.agents.tools_registry:tools_registry.py:297 [2m2025-11-25T21:13:08.581685Z[0m [[31m[1merror    [0m] [1mtool_execution_failed         [0m [36marguments[0m=[35m{}[0m [36merror[0m=[35m"ToolRegistry._search_vault() missing 1 required positional argument: 'query'"[0m [36mtool[0m=[35msearch_vault[0m
+ERROR    writeros.utils.llm_client:llm_client.py:98 [2m2025-11-25T21:13:10.101270Z[0m [[31m[1merror    [0m] [1mllm_stream_failed             [0m [36merror[0m=[35m'Error code: 400 - {\'error\': {\'message\': "Invalid parameter: messages with role \'tool\' must be a response to a preceeding message with \'tool_calls\'.", \'type\': \'invalid_request_error\', \'param\': \'messages.[2].role\', \'code\': None}}'[0m
+___________ TestAnalyzeEndpoint.test_analyze_accepts_plugin_format ____________
+
+self = <test_legacy_compatibility.TestAnalyzeEndpoint object at 0x000002337FA53ED0>
+test_client = <starlette.testclient.TestClient object at 0x000002330441CD60>
+mock_init_db = <MagicMock name='init_db' id='2418135053184'>
+test_vault = Vault(created_at=datetime.datetime(2025, 11, 25, 21, 13, 10, 507491), name='Test Vault', owner_id=UUID('33c05b34-397a-...connection_type=<ConnectionType.LOCAL_OBSIDIAN: 'obsidian_local'>, default_model='gpt-4', entity_count=0, word_count=0)
+mocker = <pytest_mock.plugin.MockerFixture object at 0x0000023305AB41F0>
+
+    def test_analyze_accepts_plugin_format(self, test_client, mock_init_db, test_vault, mocker):
+        """Test that /analyze accepts the plugin's request format."""
+        # Mock VaultIndexer
+        mock_indexer = mocker.patch("writeros.api.app.VaultIndexer")
+    
+        # Mock get_db dependency
+        def override_get_db():
+            from writeros.utils.db import engine
+            with Session(engine) as session:
+                yield session
+    
+        from writeros.api.app import get_db
+        app.dependency_overrides[get_db] = override_get_db
+    
+        request_data = {
+            "vault_path": "C:\\test\\vault",
+            "vault_id": str(test_vault.id)
+        }
+    
+        response = test_client.post("/analyze", json=request_data)
+    
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\api\test_legacy_compatibility.py:114: AssertionError
+__________ TestAnalyzeEndpoint.test_analyze_triggers_background_task __________
+
+self = <test_legacy_compatibility.TestAnalyzeEndpoint object at 0x000002337FA6AC40>
+test_client = <starlette.testclient.TestClient object at 0x0000023304117CE0>
+mock_init_db = <MagicMock name='init_db' id='2418135046464'>
+test_vault = Vault(created_at=datetime.datetime(2025, 11, 25, 21, 13, 10, 564274), name='Test Vault', owner_id=UUID('f51f4f80-dd4c-...connection_type=<ConnectionType.LOCAL_OBSIDIAN: 'obsidian_local'>, default_model='gpt-4', entity_count=0, word_count=0)
+mocker = <pytest_mock.plugin.MockerFixture object at 0x000002330411A1A0>
+
+    def test_analyze_triggers_background_task(self, test_client, mock_init_db, test_vault, mocker):
+        """Test that /analyze triggers background indexing."""
+        mock_indexer = mocker.patch("writeros.api.app.VaultIndexer")
+        mock_background_tasks = mocker.MagicMock()
+    
+        request_data = {
+            "vault_path": "C:\\test\\vault",
+            "vault_id": str(test_vault.id)
+        }
+    
+        with patch("writeros.api.app.BackgroundTasks", return_value=mock_background_tasks):
+            response = test_client.post("/analyze", json=request_data)
+    
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\api\test_legacy_compatibility.py:159: AssertionError
+_____________________ test_architect_conflict_integration _____________________
+
+db_session = <sqlmodel.orm.session.Session object at 0x00000233041294F0>
+
+    @pytest.mark.asyncio
+    async def test_architect_conflict_integration(db_session):
+        # 1. Setup Data
+        vault_id = uuid4()
+    
+        conflict = Conflict(
+            vault_id=vault_id,
+            name="The Long War",
+            conflict_type=ConflictType.PERSON_VS_SOCIETY,
+            status=ConflictStatus.RISING_ACTION,
+            stakes="Freedom",
+            intensity=80
+        )
+        db_session.add(conflict)
+        db_session.commit()
+    
+        # 2. Run Architect
+        architect = ArchitectAgent()
+        tasks = await architect.generate_plot_tasks(vault_id)
+    
+        # 3. Verify
+>       assert len(tasks) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests\integration\test_conflict_integration.py:32: AssertionError
+_____________________ test_dramatist_conflict_integration _____________________
+
+db_session = <sqlmodel.orm.session.Session object at 0x00000233041F8D70>
+
+    @pytest.mark.asyncio
+    async def test_dramatist_conflict_integration(db_session):
+        # 1. Setup Data
+        vault_id = uuid4()
+    
+        hero = Entity(vault_id=vault_id, name="Hero", type=EntityType.CHARACTER)
+        db_session.add(hero)
+        db_session.commit()
+    
+        conflict = Conflict(
+            vault_id=vault_id,
+            name="Nemesis Duel",
+            conflict_type=ConflictType.PERSON_VS_PERSON,
+            status=ConflictStatus.CLIMAX,
+            stakes="Life or Death",
+            intensity=95
+        )
+        db_session.add(conflict)
+        db_session.commit()
+    
+        participant = ConflictParticipant(
+            conflict_id=conflict.id,
+            entity_id=hero.id,
+            role=ConflictRole.PROTAGONIST
+        )
+        db_session.add(participant)
+        db_session.commit()
+    
+        # 2. Run Dramatist
+        dramatist = DramatistAgent()
+        instructions = await dramatist.generate_scene_instructions(vault_id, [str(hero.id)])
+    
+        # 3. Verify
+>       assert len(instructions) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests\integration\test_conflict_integration.py:68: AssertionError
+____________ TestRAGPipelineE2E.test_graphrag_query_with_multi_hop ____________
+
+self = <test_rag_pipeline_e2e.TestRAGPipelineE2E object at 0x000002337FA6B230>
+db_session = <sqlmodel.orm.session.Session object at 0x0000023305590B90>
+sample_vault_id = UUID('99fbb2c8-68d2-4ae7-a396-b35fe5ea7ab8')
+mock_llm_client = <MagicMock name='LLMClient()' id='2418164519936'>
+
+    @pytest.mark.asyncio
+    async def test_graphrag_query_with_multi_hop(
+        self,
+        db_session,
+        sample_vault_id,
+        mock_llm_client
+    ):
+        """Test: GraphRAG query with multi-hop traversal."""
+        # Create a chain of entities: A -> B -> C
+        entity_a = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Entity A",
+            type="CHARACTER",
+            description="First entity",
+            embedding=[0.1] * 1536
+        )
+        entity_b = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Entity B",
+            type="CHARACTER",
+            description="Second entity",
+            embedding=[0.2] * 1536
+        )
+        entity_c = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Entity C",
+            type="CHARACTER",
+            description="Third entity",
+            embedding=[0.3] * 1536
+        )
+    
+        db_session.add(entity_a)
+        db_session.add(entity_b)
+        db_session.add(entity_c)
+    
+        from writeros.schema import Relationship, RelationType
+    
+        rel_ab = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=entity_a.id,
+            to_entity_id=entity_b.id,
+            rel_type=RelationType.FRIEND,
+            properties={"strength": 1.0},
+            canon={"layer": "primary", "status": "active"}
+        )
+        rel_bc = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=entity_b.id,
+            to_entity_id=entity_c.id,
+            rel_type=RelationType.FRIEND,
+            properties={"strength": 1.0},
+            canon={"layer": "primary", "status": "active"}
+        )
+    
+        db_session.add(rel_ab)
+        db_session.add(rel_bc)
+        db_session.commit()
+    
+        # Query with 2-hop traversal
+        profiler = ProfilerAgent()
+        graph_data = await profiler.generate_graph_data(
+            vault_id=sample_vault_id,
+            max_hops=2,
+            max_nodes=10
+        )
+    
+        # Should include all 3 entities
+>       assert len(graph_data["nodes"]) == 3
+E       assert 0 == 3
+E        +  where 0 = len([])
+
+tests\integration\test_rag_pipeline_e2e.py:229: AssertionError
+_________ TestSemanticChunker.test_coherence_score_varied_similarity __________
+
+self = <test_semantic_chunker.TestSemanticChunker object at 0x000002337FA67E50>
+chunker = <writeros.preprocessing.chunker.SemanticChunker object at 0x0000023304271150>
+mocker = <pytest_mock.plugin.MockerFixture object at 0x0000023305D831E0>
+
+    @pytest.mark.asyncio
+    async def test_coherence_score_varied_similarity(self, chunker, mocker):
+        """Ensure coherence reflects mixed segment similarity."""
+        text = (
+            "Vector one points on x. Vector two points on negative x. "
+            "Vector three points on y."
+        )
+    
+        diverse_embeddings = [
+            [1.0, 0.0],
+            [-1.0, 0.0],
+            [0.0, 1.0],
+        ]
+    
+        mock_service = MagicMock()
+        mock_service.get_embeddings = AsyncMock(return_value=diverse_embeddings)
+        mocker.patch("writeros.utils.embeddings.EmbeddingService", return_value=mock_service)
+    
+        chunks = await chunker.chunk_document(text)
+    
+        coherence = chunks[0]["coherence_score"]
+        assert isinstance(coherence, float)
+>       assert coherence == pytest.approx(2 / 3, rel=1e-6)
+E       assert 0.9494570273727556 == 0.6666666666666666 ▒ 6.7e-07
+E         
+E         comparison failed
+E         Obtained: 0.9494570273727556
+E         Expected: 0.6666666666666666 ▒ 6.7e-07
+
+tests\preprocessing\test_semantic_chunker.py:140: AssertionError
+______________ TestGraphRAGTraversal.test_graph_traversal_basic _______________
+
+self = <test_graph_rag.TestGraphRAGTraversal object at 0x000002337FBCC550>
+db_session = <sqlmodel.orm.session.Session object at 0x00000233041299A0>
+sample_graph = {'entities': {'A': Entity(), 'B': Entity(), 'C': Entity(), 'D': Entity(), ...}, 'relationships': [Relationship(), Relationship(), Relationship(), Relationship()], 'vault_id': UUID('a3d28193-e0b4-490b-b868-1a8292bd4791')}
+mock_llm_client = <MagicMock name='LLMClient()' id='2420212711840'>
+
+    @pytest.mark.asyncio
+    async def test_graph_traversal_basic(self, db_session, sample_graph, mock_llm_client):
+        """Test basic graph traversal from a starting node."""
+        profiler = ProfilerAgent()
+        vault_id = sample_graph["vault_id"]
+    
+        # Generate graph data starting from entity A
+        graph_data = await profiler.generate_graph_data(
+            vault_id=vault_id,
+            graph_type="force",
+            max_nodes=10
+        )
+    
+        assert "nodes" in graph_data
+        assert "links" in graph_data
+>       assert len(graph_data["nodes"]) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests\rag\test_graph_rag.py:155: AssertionError
+________________ TestGraphRAGTraversal.test_temporal_filtering ________________
+
+self = <test_graph_rag.TestGraphRAGTraversal object at 0x000002337FB99350>
+db_session = <sqlmodel.orm.session.Session object at 0x000002330412B980>
+sample_vault_id = UUID('3dbe35eb-7980-4598-a007-aa69eb30f2a3')
+mock_llm_client = <MagicMock name='LLMClient()' id='2418156282480'>
+
+    @pytest.mark.asyncio
+    async def test_temporal_filtering(self, db_session, sample_vault_id, mock_llm_client):
+        """Test filtering relationships by story time."""
+        # Create entities
+        entity_a = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Character A",
+            type=EntityType.CHARACTER,
+            description="Test",
+            embedding=[0.1] * 1536
+        )
+        entity_b = Entity(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            name="Character B",
+            type=EntityType.CHARACTER,
+            description="Test",
+            embedding=[0.2] * 1536
+        )
+    
+        db_session.add(entity_a)
+        db_session.add(entity_b)
+    
+        # Relationship active from sequence 10 to 20
+        rel = Relationship(
+            id=uuid4(),
+            vault_id=sample_vault_id,
+            from_entity_id=entity_a.id,
+            to_entity_id=entity_b.id,
+            rel_type=RelationType.FRIEND,
+            properties={"strength": 1.0},
+            effective_from={"sequence": 10},
+            effective_until={"sequence": 20},
+            canon={"layer": "primary", "status": "active"}
+        )
+        db_session.add(rel)
+        db_session.commit()
+    
+        profiler = ProfilerAgent()
+    
+        # Query at sequence 15 (should include relationship)
+        graph_active = await profiler.generate_graph_data(
+            vault_id=sample_vault_id,
+            current_story_time=15,
+            max_nodes=10
+        )
+    
+        # Query at sequence 25 (should exclude relationship)
+        graph_inactive = await profiler.generate_graph_data(
+            vault_id=sample_vault_id,
+            current_story_time=25,
+            max_nodes=10
+        )
+    
+        # Active query should have the relationship
+>       assert len(graph_active["links"]) >= 1
+E       assert 0 >= 1
+E        +  where 0 = len([])
+
+tests\rag\test_graph_rag.py:260: AssertionError
+___________ TestCycleDetection.test_circular_relationship_traversal ___________
+
+self = <test_graph_rag.TestCycleDetection object at 0x000002337FBCC910>
+db_session = <sqlmodel.orm.session.Session object at 0x00000233055919A0>
+circular_graph = {'entities': {'A': Entity(), 'B': Entity(), 'C': Entity()}, 'vault_id': UUID('cabb15ec-956f-4e07-8dab-fef0d76274a2')}
+mock_llm_client = <MagicMock name='LLMClient()' id='2420211601424'>
+
+    @pytest.mark.asyncio
+    async def test_circular_relationship_traversal(self, db_session, circular_graph, mock_llm_client):
+        """Test that circular relationships don't cause infinite loops."""
+        profiler = ProfilerAgent()
+        vault_id = circular_graph["vault_id"]
+    
+        # This should not hang or crash
+        graph_data = await profiler.generate_graph_data(
+            vault_id=vault_id,
+            graph_type="family",
+            max_hops=5,  # Even with many hops, should not infinite loop
+            max_nodes=10
+        )
+    
+        # Should complete successfully
+        assert "nodes" in graph_data
+        assert "links" in graph_data
+    
+        # Should have all 3 entities
+>       assert len(graph_data["nodes"]) == 3
+E       assert 0 == 3
+E        +  where 0 = len([])
+
+tests\rag\test_graph_rag.py:527: AssertionError
+_ TestGraphScriptDatabaseConnection.test_script_initializes_database_connection _
+
+self = <tests.test_graph_generation.TestGraphScriptDatabaseConnection object at 0x000002337FBCE0D0>
+
+    def test_script_initializes_database_connection(self):
+        """Test that script connects to database."""
+        with open(GENERATE_GRAPH_PY, 'r') as f:
+            content = f.read()
+    
+        # Should import database utilities
+>       assert 'from writeros' in content
+E       assert 'from writeros' in '#!/usr/bin/env python3\n"""\nGraph generation script for WriterOS.\nGenerates D3.js visualizations of vault data.\n"""\nimport sys\nimport asyncio\nfrom pathlib import Path\n\n# Add src to path\nsys.path.insert(0, str(Path(__file__).parent))\n\nasync def main():\n    from src.writeros.core.logging import setup_logging, get_logger\n    from src.writeros.agents.profiler import ProfilerAgent\n    from src.writeros.utils.db import get_or_create_vault_id\n    from uuid import UUID\n    import argparse\n    \n    setup_logging()\n    logger = get_logger(__name__)\n    \n    parser = argparse.ArgumentParser(description=\'Generate WriterOS graph\')\n    parser.add_argument(\'--graph-type\', required=True, \n                       choices=[\'force\', \'family\', \'faction\', \'location\'],\n                       help=\'Type of graph to generate\')\n    parser.add_argument(\'--vault-path\', required=True,\n                       help=\'Path to the vault root directory\')\n    parser.add_argument(\'--vault-id\', required=False,\n                       help=\'Vault UUID (optional, will auto-create if not provided)\')\n    \n    args = parser.parse_args()\n    vault_path = Path(args.vault_p...h))\n    \n    logger.info("generating_graph", vault_id=str(vault_id), graph_type=args.graph_type)\n    \n    # Generate graph\n    profiler = ProfilerAgent()\n    \n    graph_data = await profiler.generate_graph_data(\n        vault_id=vault_id,\n        graph_type=args.graph_type,\n        max_nodes=100,\n        canon_layer="primary"\n    )\n    \n    logger.info("graph_data_generated", \n                nodes=graph_data.get(\'stats\', {}).get(\'node_count\', len(graph_data.get(\'nodes\', []))), \n                links=graph_data.get(\'stats\', {}).get(\'link_count\', len(graph_data.get(\'links\', []))))\n    \n    # Save to .writeros/graphs/\n    output_path = profiler.generate_graph_html(\n        graph_data=graph_data,\n        vault_path=vault_path,\n        graph_type=args.graph_type\n    )\n    \n    # Print output path (Obsidian plugin parses this line)\n    print(f"\\nGraph generated successfully!")\n    print(f"Graph HTML generated: {output_path}")\n\nif __name__ == "__main__":\n    try:\n        asyncio.run(main())\n    except Exception as e:\n        print(f"ERROR: {e}", file=sys.stderr)\n        import traceback\n        traceback.print_exc()\n        sys.exit(1)\n'
+
+tests\test_graph_generation.py:283: AssertionError
+____________ TestServerLauncherIntegration.test_server_help_output ____________
+
+self = <tests.test_server_launcher.TestServerLauncherIntegration object at 0x000002337FBCF250>
+
+    @pytest.mark.slow
+    @pytest.mark.skipif(
+        not (PROJECT_ROOT / "src" / "writeros" / "api" / "app.py").exists(),
+        reason="Requires full WriterOS installation"
+    )
+    def test_server_help_output(self):
+        """Test that python server.py can be invoked (will fail without proper args)."""
+        # Just verify the script is valid Python
+>       result = subprocess.run(
+            [sys.executable, str(SERVER_PY), "--help"],
+            capture_output=True,
+            text=True,
+            timeout=2
+        )
+
+tests\test_server_launcher.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:556: in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:1222: in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <Popen: returncode: 1 args: ['C:\\Users\\rahme\\AppData\\Local\\Programs\\Py...>
+input = None, endtime = 97824.9365501, orig_timeout = 2
+
+    def _communicate(self, input, endtime, orig_timeout):
+        # Start reader threads feeding into a list hanging off of this
+        # object, unless they've already been started.
+        if self.stdout and not hasattr(self, "_stdout_buff"):
+            self._stdout_buff = []
+            self.stdout_thread = \
+                    threading.Thread(target=self._readerthread,
+                                     args=(self.stdout, self._stdout_buff))
+            self.stdout_thread.daemon = True
+            self.stdout_thread.start()
+        if self.stderr and not hasattr(self, "_stderr_buff"):
+            self._stderr_buff = []
+            self.stderr_thread = \
+                    threading.Thread(target=self._readerthread,
+                                     args=(self.stderr, self._stderr_buff))
+            self.stderr_thread.daemon = True
+            self.stderr_thread.start()
+    
+        if self.stdin:
+            self._stdin_write(input)
+    
+        # Wait for the reader threads, or time out.  If we time out, the
+        # threads remain reading and the fds left open in case the user
+        # calls communicate again.
+        if self.stdout is not None:
+            self.stdout_thread.join(self._remaining_time(endtime))
+            if self.stdout_thread.is_alive():
+>               raise TimeoutExpired(self.args, orig_timeout)
+E               subprocess.TimeoutExpired: Command '['C:\\Users\\rahme\\AppData\\Local\\Programs\\Python\\Python313\\python.exe', 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\server.py', '--help']' timed out after 2 seconds
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:1646: TimeoutExpired
+============================== warnings summary ===============================
+src\writeros\config.py:4
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+src\writeros\api\app.py:113
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:113: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+src\writeros\api\app.py:128
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:128: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("shutdown")
+
+tests/agents/test_profiler_agent.py: 66 warnings
+tests/agents/test_tool_calling.py: 16 warnings
+tests/api/test_legacy_compatibility.py: 8 warnings
+tests/integration/test_conflict_integration.py: 6 warnings
+tests/integration/test_obsidian_plugin_e2e.py: 16 warnings
+tests/integration/test_rag_pipeline_e2e.py: 222 warnings
+tests/rag/test_graph_rag.py: 72 warnings
+tests/rag/test_vector_search.py: 40 warnings
+tests/schema/test_conflict_model.py: 6 warnings
+tests/test_graph_generation.py: 20 warnings
+tests/utils/test_indexer_integration.py: 114 warnings
+tests/utils/test_init_db.py: 2 warnings
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\pydantic\fields.py:747: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return fac()
+
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_indexing_provides_progress_feedback
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\anyio\_backends\_asyncio.py:976: RuntimeWarning: coroutine 'VaultIndexer.index_vault' was never awaited
+    result = context.run(func, *args)
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_vault_config.py::test_get_or_create_vault_id_creates_config
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\utils\vault_config.py:34: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    'created_at': datetime.utcnow().isoformat(),
+
+tests/test_vault_config.py::test_update_vault_config_preserves_existing_values
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\utils\vault_config.py:98: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    config['updated_at'] = datetime.utcnow().isoformat()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                                     Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------
+src\writeros\__init__.py                                     1      0   100%
+src\writeros\agents\__init__.py                             22     10    55%   14-23
+src\writeros\agents\architect.py                           136    109    20%   22-27, 36-158, 173-210, 220-251, 261-281, 287-305, 320-325
+src\writeros\agents\base.py                                 19      2    89%   28-29
+src\writeros\agents\chronologist.py                         22      6    73%   25-26, 30-57
+src\writeros\agents\dramatist.py                           150    118    21%   38-53, 64-87, 91-114, 118-141, 154-191, 204-248, 252-268, 272-289, 312-315
+src\writeros\agents\mechanic.py                             31      6    81%   39-40, 43-68
+src\writeros\agents\navigator.py                            26      6    77%   34-35, 38-59
+src\writeros\agents\orchestrator.py                        107     33    69%   37-38, 97-106, 118-124, 127-136, 142-157, 168-169, 215, 231, 255-257
+src\writeros\agents\producer.py                            203    170    16%   19-27, 30-32, 36-45, 53-63, 67-85, 89-97, 101-110, 114-121, 129-159, 163-199, 207-219, 223-243, 247-264, 272-279, 283-291, 295-305, 313-331, 339-382
+src\writeros\agents\profiler.py                            201    123    39%   122-274, 299-303, 374-461, 490-529
+src\writeros\agents\psychologist.py                         40     16    60%   38-39, 42-66, 73-92
+src\writeros\agents\stylist.py                              14      7    50%   8, 12-13, 16-49
+src\writeros\agents\theorist.py                             34      6    82%   37-39, 42-65
+src\writeros\agents\tools.py                                31     31     0%   5-76
+src\writeros\agents\tools_registry.py                      129     40    69%   377-378, 396, 436-437, 451-496, 538, 548-549, 576-577, 589-620, 659-660
+src\writeros\api\__init__.py                                 0      0   100%
+src\writeros\api\app.py                                    228    104    54%   54-55, 60-66, 116-125, 131, 220-222, 278, 282-284, 309-356, 417-470, 487-505, 528-587, 597-598, 616
+src\writeros\cli\__init__.py                                 0      0   100%
+src\writeros\cli\main.py                                    41     41     0%   1-83
+src\writeros\config.py                                      16      2    88%   26, 33
+src\writeros\core\__init__.py                                0      0   100%
+src\writeros\core\logging.py                                13      1    92%   32
+src\writeros\graphs\__init__.py                              0      0   100%
+src\writeros\preprocessing\__init__.py                       4      0   100%
+src\writeros\preprocessing\chunker.py                       78      3    96%   118, 134-135
+src\writeros\preprocessing\cluster_semantic_chunker.py     155     10    94%   58-60, 90, 156, 213-216, 252, 283
+src\writeros\preprocessing\unified_chunker.py              160      2    99%   41, 79
+src\writeros\rag\__init__.py                                 2      2     0%   1-3
+src\writeros\rag\retriever.py                               74     74     0%   5-171
+src\writeros\schema\__init__.py                             18      0   100%
+src\writeros\schema\api.py                                  22      0   100%
+src\writeros\schema\base.py                                 12      0   100%
+src\writeros\schema\enums.py                               132      0   100%
+src\writeros\schema\extended_universe.py                    90      0   100%
+src\writeros\schema\graph.py                                16      0   100%
+src\writeros\schema\identity.py                             41      0   100%
+src\writeros\schema\library.py                              74      9    88%   51-61, 127
+src\writeros\schema\logistics.py                            17      0   100%
+src\writeros\schema\mechanics.py                            20      0   100%
+src\writeros\schema\narrative.py                            19      0   100%
+src\writeros\schema\project.py                              13      0   100%
+src\writeros\schema\prose.py                                14      0   100%
+src\writeros\schema\psychology.py                           37      0   100%
+src\writeros\schema\session.py                              27      0   100%
+src\writeros\schema\temporal_anchoring.py                   54      0   100%
+src\writeros\schema\theme.py                                16      0   100%
+src\writeros\schema\world.py                                80      0   100%
+src\writeros\services\__init__.py                            0      0   100%
+src\writeros\services\conflict_engine.py                    31     12    61%   35, 48-64
+src\writeros\tasks\__init__.py                               0      0   100%
+src\writeros\utils\db.py                                   143     32    78%   17-23, 137, 141-148, 236-239, 251-252, 267, 279-281, 294, 313, 323, 336-346
+src\writeros\utils\embeddings.py                            41      0   100%
+src\writeros\utils\indexer.py                               87      5    94%   90-96, 208, 214
+src\writeros\utils\llm_client.py                            54     10    81%   66, 80, 95-96, 133, 152-156
+src\writeros\utils\vault_config.py                          33      2    94%   72, 90
+src\writeros\utils\vault_reader.py                         100      5    95%   57-58, 64-65, 98
+src\writeros\utils\writer.py                               178    133    25%   33-43, 47-49, 52, 58-62, 87-89, 93-130, 135-194, 197-235, 238-266, 269-274, 278-366
+--------------------------------------------------------------------------------------
+TOTAL                                                     3306   1130    66%
+Coverage HTML written to dir htmlcov
+=========================== short test summary info ===========================
+FAILED tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_simple
+FAILED tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_multi_generation
+FAILED tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_siblings
+FAILED tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_child_relationship
+FAILED tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_empty
+FAILED tests/agents/test_tool_calling.py::TestEndToEndToolCalling::test_complete_workflow_create_character
+FAILED tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format
+FAILED tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task
+FAILED tests/integration/test_conflict_integration.py::test_architect_conflict_integration
+FAILED tests/integration/test_conflict_integration.py::test_dramatist_conflict_integration
+FAILED tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_graphrag_query_with_multi_hop
+FAILED tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_coherence_score_varied_similarity
+FAILED tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_graph_traversal_basic
+FAILED tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_temporal_filtering
+FAILED tests/rag/test_graph_rag.py::TestCycleDetection::test_circular_relationship_traversal
+FAILED tests/test_graph_generation.py::TestGraphScriptDatabaseConnection::test_script_initializes_database_connection
+FAILED tests/test_server_launcher.py::TestServerLauncherIntegration::test_server_help_output
+========== 17 failed, 213 passed, 1 skipped, 596 warnings in 42.80s ===========

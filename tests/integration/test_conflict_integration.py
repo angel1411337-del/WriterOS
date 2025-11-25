@@ -8,8 +8,24 @@ from writeros.agents.dramatist import DramatistAgent
 
 
 
+from unittest.mock import MagicMock, patch
+
+@pytest.fixture
+def mock_session(db_session):
+    """
+    Patches Session in conflict_engine to return the test db_session.
+    This ensures the ConflictEngine sees the uncommitted data from the test setup.
+    """
+    with patch("writeros.services.conflict_engine.Session") as mock_session_cls:
+        # When Session(engine) is called, return a context manager that yields db_session
+        mock_ctx = MagicMock()
+        mock_ctx.__enter__.return_value = db_session
+        mock_ctx.__exit__.return_value = None
+        mock_session_cls.return_value = mock_ctx
+        yield mock_session_cls
+
 @pytest.mark.asyncio
-async def test_architect_conflict_integration(db_session):
+async def test_architect_conflict_integration(db_session, mock_session):
     # 1. Setup Data
     vault_id = uuid4()
     
@@ -33,7 +49,7 @@ async def test_architect_conflict_integration(db_session):
     assert "Escalate Conflict 'The Long War'" in tasks[0]
 
 @pytest.mark.asyncio
-async def test_dramatist_conflict_integration(db_session):
+async def test_dramatist_conflict_integration(db_session, mock_session):
     # 1. Setup Data
     vault_id = uuid4()
     

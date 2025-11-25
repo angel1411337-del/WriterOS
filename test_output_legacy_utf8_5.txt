@@ -1,0 +1,135 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 15 items
+
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_returns_ok PASSED [  6%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_includes_version PASSED [ 13%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_includes_mode PASSED [ 20%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format PASSED [ 26%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_rejects_invalid_vault_id PASSED [ 33%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_returns_404_for_nonexistent_vault PASSED [ 40%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task PASSED [ 46%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_accepts_plugin_format PASSED [ 53%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_returns_sse_format PASSED [ 60%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_formats_chunks_as_json PASSED [ 66%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_sends_done_marker PASSED [ 73%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_handles_errors_gracefully PASSED [ 80%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_rejects_invalid_vault_id PASSED [ 86%]
+tests/api/test_legacy_compatibility.py::TestPluginIntegration::test_plugin_startup_sequence PASSED [ 93%]
+tests/api/test_legacy_compatibility.py::TestPluginIntegration::test_plugin_can_discover_endpoints PASSED [100%]
+
+============================== warnings summary ===============================
+src\writeros\config.py:4
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+src\writeros\api\app.py:113
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:113: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+src\writeros\api\app.py:128
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:128: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("shutdown")
+
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\pydantic\fields.py:747: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return fac()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                                     Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------
+src\writeros\__init__.py                                     1      0   100%
+src\writeros\agents\__init__.py                             22     10    55%   14-23
+src\writeros\agents\architect.py                           136    116    15%   15-16, 22-27, 36-158, 173-210, 220-251, 261-281, 287-305, 311-327
+src\writeros\agents\base.py                                 19      9    53%   21-39
+src\writeros\agents\chronologist.py                         22      6    73%   25-26, 30-57
+src\writeros\agents\dramatist.py                           150    128    15%   22-27, 38-53, 64-87, 91-114, 118-141, 154-191, 204-248, 252-268, 272-289, 300-317
+src\writeros\agents\mechanic.py                             31      6    81%   39-40, 43-68
+src\writeros\agents\navigator.py                            26      6    77%   34-35, 38-59
+src\writeros\agents\orchestrator.py                        118     94    20%   24-38, 61-121, 133-139, 142-151, 173-210, 221-230, 233-270, 273, 288-315
+src\writeros\agents\producer.py                            203    170    16%   19-27, 30-32, 36-45, 53-63, 67-85, 89-97, 101-110, 114-121, 129-159, 163-199, 207-219, 223-243, 247-264, 272-279, 283-291, 295-305, 313-331, 339-382
+src\writeros\agents\profiler.py                            207    160    23%   54-55, 58-80, 106-274, 285-303, 330-461, 475, 481-529, 541-580
+src\writeros\agents\psychologist.py                         40     16    60%   38-39, 42-66, 73-92
+src\writeros\agents\stylist.py                              14      7    50%   8, 12-13, 16-49
+src\writeros\agents\theorist.py                             34      6    82%   37-39, 42-65
+src\writeros\agents\tools.py                                31     31     0%   5-76
+src\writeros\agents\tools_registry.py                      129    110    15%   35-39, 56, 276-304, 323-378, 392-437, 451-496, 508-549, 562-577, 589-620, 631-660
+src\writeros\api\__init__.py                                 0      0   100%
+src\writeros\api\app.py                                    242    112    54%   54-55, 60-66, 116-125, 131, 232-234, 259, 262, 266-270, 320, 324-326, 351-398, 422-423, 459-512, 529-547, 570-629, 639-640, 658
+src\writeros\cli\__init__.py                                 0      0   100%
+src\writeros\cli\main.py                                    41     41     0%   1-83
+src\writeros\config.py                                      16      2    88%   26, 33
+src\writeros\core\__init__.py                                0      0   100%
+src\writeros\core\logging.py                                13      1    92%   32
+src\writeros\graphs\__init__.py                              0      0   100%
+src\writeros\preprocessing\__init__.py                       4      0   100%
+src\writeros\preprocessing\chunker.py                       78     61    22%   24-30, 34-39, 46-57, 70-72, 78-114, 117-143
+src\writeros\preprocessing\cluster_semantic_chunker.py     155    134    14%   51-65, 82-130, 150-190, 194-197, 206-218, 233-268, 282-291, 313-362, 370-377, 385-406
+src\writeros\preprocessing\unified_chunker.py              160    124    22%   40-41, 48-52, 56-66, 70-80, 84, 88-91, 101-104, 130-151, 175-224, 236-243, 247-261, 270-279, 290-329, 337-351, 358-368, 372-374, 404-405
+src\writeros\rag\__init__.py                                 2      2     0%   1-3
+src\writeros\rag\retriever.py                              124    124     0%   6-298
+src\writeros\schema\__init__.py                             18      0   100%
+src\writeros\schema\api.py                                  22      0   100%
+src\writeros\schema\base.py                                 12      0   100%
+src\writeros\schema\enums.py                               132      0   100%
+src\writeros\schema\extended_universe.py                    90      0   100%
+src\writeros\schema\graph.py                                16      0   100%
+src\writeros\schema\identity.py                             41      0   100%
+src\writeros\schema\library.py                              74      9    88%   51-61, 127
+src\writeros\schema\logistics.py                            17      0   100%
+src\writeros\schema\mechanics.py                            20      0   100%
+src\writeros\schema\narrative.py                            19      0   100%
+src\writeros\schema\project.py                              13      0   100%
+src\writeros\schema\prose.py                                14      0   100%
+src\writeros\schema\psychology.py                           37      0   100%
+src\writeros\schema\session.py                              27      0   100%
+src\writeros\schema\temporal_anchoring.py                   54      0   100%
+src\writeros\schema\theme.py                                16      0   100%
+src\writeros\schema\world.py                                80      0   100%
+src\writeros\services\__init__.py                            0      0   100%
+src\writeros\services\conflict_engine.py                    31     21    32%   11-16, 20-44, 48-64
+src\writeros\tasks\__init__.py                               0      0   100%
+src\writeros\utils\db.py                                   143    121    15%   17-23, 70-148, 162-241, 251-252, 262-284, 291-302, 310-325, 336-346
+src\writeros\utils\embeddings.py                            41     18    56%   22-29, 32-42, 46, 50, 54, 65, 75
+src\writeros\utils\indexer.py                               87     69    21%   34-49, 64-111, 119-197, 201-214, 223, 227-228
+src\writeros\utils\llm_client.py                            54     42    22%   24-30, 56-99, 122-135, 152-156, 169
+src\writeros\utils\writer.py                               178    154    13%   17-29, 32-44, 47-49, 52, 55, 58-62, 67-89, 93-130, 135-194, 197-235, 238-266, 269-274, 278-366
+--------------------------------------------------------------------------------------
+TOTAL                                                     3254   1910    41%
+Coverage HTML written to dir htmlcov
+======================= 15 passed, 13 warnings in 3.49s =======================

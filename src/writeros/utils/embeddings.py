@@ -22,7 +22,7 @@ class EmbeddingService:
         embedding_model = model or DEFAULT_EMBEDDING_MODEL
 
         if embedding_model not in cls._instances:
-            instance = super(EmbeddingService, cls).__new__(cls)
+            instance = super().__new__(cls)
             instance._initialize(embedding_model)
             cls._instances[embedding_model] = instance
 

@@ -25,18 +25,6 @@ TEST_ASYNC_DATABASE_URL = "postgresql+asyncpg://writer:password@127.0.0.1:5433/w
 
 
 # ============================================================================
-# Event Loop Configuration
-# ============================================================================
-
-@pytest.fixture(scope="session")
-def event_loop():
-    """Create an instance of the default event loop for each test session."""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
-
-
-# ============================================================================
 # Database Fixtures
 # ============================================================================
 
@@ -51,10 +39,16 @@ def test_engine():
 
 @pytest.fixture
 def db_session(test_engine):
-    """Create a database session for a test (synchronous)."""
-    with Session(test_engine) as session:
-        yield session
-        session.rollback()
+    """Create a database session for a test (synchronous) with transaction rollback."""
+    connection = test_engine.connect()
+    transaction = connection.begin()
+    session = Session(bind=connection)
+    
+    yield session
+    
+    session.close()
+    transaction.rollback()
+    connection.close()
 
 
 @pytest.fixture(scope="session")
@@ -99,11 +93,6 @@ async def async_db_session(async_db_engine) -> AsyncGenerator[AsyncSession, None
     await transaction.rollback()
     await connection.close()
 
-
-# ============================================================================
-# Mock Services
-# ============================================================================
-
 @pytest.fixture
 def mock_embedding_service(mocker):
     """
@@ -139,21 +128,21 @@ def mock_llm_client(mocker):
     Mock LLM client to avoid API costs.
     Returns deterministic structured outputs.
     """
-    mock = mocker.patch("writeros.agents.base.ChatOpenAI")
-    client = MagicMock()
+    # Patch LLMClient in the base agent module
+    mock_class = mocker.patch("writeros.agents.base.LLMClient")
+    client_instance = MagicMock()
+    mock_class.return_value = client_instance
     
-    # Mock structured output
-    async def mock_ainvoke(*args, **kwargs):
-        return MagicMock(content="Mocked LLM response")
+    # Mock with_structured_output to return a runnable-like object
+    mock_extractor = MagicMock()
+    mock_extractor.ainvoke = AsyncMock(return_value=MagicMock(content="Mocked LLM response"))
+    client_instance.with_structured_output.return_value = mock_extractor
     
-    client.ainvoke = AsyncMock(side_effect=mock_ainvoke)
-    mock.return_value = client
-    return client
-
-
-# ============================================================================
-# Sample Data Fixtures
-# ============================================================================
+    # Mock chat/ainvoke methods
+    client_instance.ainvoke = AsyncMock(return_value=MagicMock(content="Mocked LLM response"))
+    client_instance.chat = AsyncMock(return_value="Mocked LLM response")
+    
+    return client_instance
 
 @pytest.fixture
 def sample_vault_id() -> UUID:
@@ -313,3 +302,15 @@ def create_test_vault(tmp_path: Path, num_files: int = 3) -> Path:
         char_file.write_text(f"# Character {i}\\n\\nThis is character {i}'s description.")
         
     return vault_root
+
+
+@pytest.fixture(autouse=True)
+def mock_db_engine_global(mocker, test_engine):
+    """
+    Mock the database engine globally for all tests.
+    Ensures agents use the test database instead of the production one.
+    """
+    # Patch the engine in the db utility module
+    mocker.patch("writeros.utils.db.engine", test_engine)
+    
+    return test_engine

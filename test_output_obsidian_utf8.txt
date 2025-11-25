@@ -1,0 +1,287 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 16 items
+
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginStartup::test_server_can_start PASSED [  6%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginStartup::test_init_db_creates_default_entities PASSED [ 12%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_health_check_responds PASSED [ 18%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_plugin_can_detect_server_running PASSED [ 25%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_analyze_endpoint_accepts_vault PASSED [ 31%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_full_vault_indexing_flow FAILED [ 37%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginChat::test_chat_stream_endpoint PASSED [ 43%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginChat::test_chat_returns_sse_format PASSED [ 50%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginGraphGeneration::test_graph_script_can_execute PASSED [ 56%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginGraphGeneration::test_graph_generation_outputs_path PASSED [ 62%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginCompleteWorkflow::test_complete_plugin_workflow_sequence PASSED [ 68%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginCompleteWorkflow::test_plugin_error_recovery PASSED [ 75%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_vault_id_persists_to_filesystem PASSED [ 81%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_indexed_data_persists FAILED [ 87%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_health_check_is_fast PASSED [ 93%]
+pytest : C:\Users\rahme\Ap
+pData\Local\Programs\Pytho
+n\Python313\Lib\site-packa
+ges\pytest_cov\plugin.py:3
+63: CovReportWarning: 
+Failed to generate 
+report: Couldn't use data 
+file 'C:\\Users\\rahme\\Id
+eaProjects\\YouTube 
+Transcript 
+Agent\\.coverage': no 
+such table: tracer
+At line:1 char:80
++ ... eros_test"; pytest t
+ests/integration/test_obsi
+dian_plugin_e2e.py > te 
+...
++                 ~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (C  
+  :\Users\rahme\...h ta   
+ ble: tracer:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+
+  warnings.warn(CovReportW
+arning(message), 
+stacklevel=1)
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_indexing_provides_progress_feedback FAILED [100%]
+WARNING: Failed to generate report: Couldn't use data file 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\.coverage': no such table: tracer
+
+
+
+================================== FAILURES ===================================
+________ TestObsidianPluginVaultAnalysis.test_full_vault_indexing_flow ________
+
+self = <test_obsidian_plugin_e2e.TestObsidianPluginVaultAnalysis object at 0x000001FBA6937C50>
+initialized_database = None
+test_vault_directory = WindowsPath('C:/Users/rahme/AppData/Local/Temp/pytest-of-rahme/pytest-23/obsidian_vault0')
+mock_embedding_service = <MagicMock name='EmbeddingService()' id='2180354750320'>
+
+    @pytest.mark.integration
+    @pytest.mark.slow
+    def test_full_vault_indexing_flow(self, initialized_database, test_vault_directory, mock_embedding_service):
+        """Test complete vault indexing with VaultIndexer."""
+        # Get or create vault
+        with Session(engine) as session:
+            vault = session.exec(select(Vault)).first()
+            if not vault:
+                pytest.skip("No vault available for testing")
+    
+        # Create indexer
+>       indexer = VaultIndexer(
+            vault_path=str(test_vault_directory),
+            vault_id=vault.id,
+            chunking_strategy="auto"
+        )
+
+tests\integration\test_obsidian_plugin_e2e.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\writeros\utils\indexer.py:47: in __init__
+    self.embedder = get_embedding_service()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+src\writeros\utils\embeddings.py:75: in get_embedding_service
+    return _embedding_service_factory(embedding_model)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = <class 'writeros.utils.embeddings.EmbeddingService'>, model = None
+
+    def __new__(cls, model: Optional[str] = None):
+        embedding_model = model or DEFAULT_EMBEDDING_MODEL
+    
+        if embedding_model not in cls._instances:
+>           instance = super(EmbeddingService, cls).__new__(cls)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: super() argument 1 must be a type, not MagicMock
+
+src\writeros\utils\embeddings.py:25: TypeError
+________ TestObsidianPluginDataPersistence.test_indexed_data_persists _________
+
+self = <test_obsidian_plugin_e2e.TestObsidianPluginDataPersistence object at 0x000001FBA6AF4690>
+initialized_database = None
+test_vault_directory = WindowsPath('C:/Users/rahme/AppData/Local/Temp/pytest-of-rahme/pytest-23/obsidian_vault0')
+mock_embedding_service = <MagicMock name='EmbeddingService()' id='2180355779488'>
+
+    @pytest.mark.integration
+    def test_indexed_data_persists(self, initialized_database, test_vault_directory, mock_embedding_service):
+        """Test that indexed documents persist in database."""
+        with Session(engine) as session:
+            vault = session.exec(select(Vault)).first()
+            if not vault:
+                pytest.skip("No vault available")
+    
+        # Index vault
+>       indexer = VaultIndexer(
+            vault_path=str(test_vault_directory),
+            vault_id=vault.id
+        )
+
+tests\integration\test_obsidian_plugin_e2e.py:446: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\writeros\utils\indexer.py:47: in __init__
+    self.embedder = get_embedding_service()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+src\writeros\utils\embeddings.py:75: in get_embedding_service
+    return _embedding_service_factory(embedding_model)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = <class 'writeros.utils.embeddings.EmbeddingService'>, model = None
+
+    def __new__(cls, model: Optional[str] = None):
+        embedding_model = model or DEFAULT_EMBEDDING_MODEL
+    
+        if embedding_model not in cls._instances:
+>           instance = super(EmbeddingService, cls).__new__(cls)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: super() argument 1 must be a type, not MagicMock
+
+src\writeros\utils\embeddings.py:25: TypeError
+___ TestObsidianPluginPerformance.test_indexing_provides_progress_feedback ____
+
+self = <test_obsidian_plugin_e2e.TestObsidianPluginPerformance object at 0x000001FBA6AF4910>
+initialized_database = None
+test_vault_directory = WindowsPath('C:/Users/rahme/AppData/Local/Temp/pytest-of-rahme/pytest-23/obsidian_vault0')
+mock_embedding_service = <MagicMock name='EmbeddingService()' id='2180355771424'>
+
+    @pytest.mark.slow
+    def test_indexing_provides_progress_feedback(self, initialized_database, test_vault_directory, mock_embedding_service):
+        """Test that indexing provides feedback (doesn't freeze Plugin UI)."""
+        with Session(engine) as session:
+            vault = session.exec(select(Vault)).first()
+            if not vault:
+                pytest.skip("No vault available")
+    
+        # The analyze endpoint should return immediately with job_id
+        # Actual indexing happens in background
+    
+        from fastapi.testclient import TestClient
+        from writeros.api.app import app
+    
+        client = TestClient(app)
+    
+        start = time.time()
+        response = client.post("/analyze", json={
+            "vault_path": str(test_vault_directory),
+            "vault_id": str(vault.id)
+        })
+        duration = time.time() - start
+    
+>       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\integration\test_obsidian_plugin_e2e.py:502: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.api.app:app.py:219 [2m2025-11-25T20:25:22.226876Z[0m [[31m[1merror    [0m] [1mplugin_analyze_failed         [0m [36merror[0m=[35m'super() argument 1 must be a type, not MagicMock'[0m
+============================== warnings summary ===============================
+src\writeros\config.py:4
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_health_check_responds
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:113: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_health_check_responds
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_health_check_responds
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_health_check_responds
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:128: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("shutdown")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                                     Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------
+src\writeros\__init__.py                                     1      0   100%
+src\writeros\agents\__init__.py                             22     10    55%   14-23
+src\writeros\agents\architect.py                           136    116    15%   15-16, 22-27, 36-158, 173-210, 220-251, 261-281, 287-305, 311-327
+src\writeros\agents\base.py                                 22      8    64%   25-42
+src\writeros\agents\chronologist.py                         22      6    73%   25-26, 30-57
+src\writeros\agents\dramatist.py                           150    128    15%   22-27, 38-53, 64-87, 91-114, 118-141, 154-191, 204-248, 252-268, 272-289, 300-317
+src\writeros\agents\mechanic.py                             31      6    81%   39-40, 43-68
+src\writeros\agents\navigator.py                            26      6    77%   34-35, 38-59
+src\writeros\agents\orchestrator.py                         68     47    31%   21-26, 38-66, 75-81, 84-93, 99-114, 120-129, 132-146, 149
+src\writeros\agents\producer.py                            203    170    16%   19-27, 30-32, 36-45, 53-63, 67-85, 89-97, 101-110, 114-121, 129-159, 163-199, 207-219, 223-243, 247-264, 272-279, 283-291, 295-305, 313-331, 339-382
+src\writeros\agents\profiler.py                            201    154    23%   54-55, 58-80, 106-274, 285-303, 330-461, 475, 478, 490-529
+src\writeros\agents\psychologist.py                         40     16    60%   38-39, 42-66, 73-92
+src\writeros\agents\stylist.py                              14      7    50%   8, 12-13, 16-49
+src\writeros\agents\theorist.py                             34      6    82%   37-39, 42-65
+src\writeros\agents\tools.py                                31     31     0%   5-76
+src\writeros\api\__init__.py                                 0      0   100%
+src\writeros\api\app.py                                    223    108    52%   60-66, 116-125, 131, 188, 258-261, 272-277, 302-349, 373-374, 410-463, 480-498, 521-580, 590-591, 609
+src\writeros\cli\__init__.py                                 0      0   100%
+src\writeros\cli\main.py                                    41     41     0%   1-83
+src\writeros\config.py                                      16      2    88%   26, 33
+src\writeros\core\__init__.py                                0      0   100%
+src\writeros\core\logging.py                                13      1    92%   32
+src\writeros\graphs\__init__.py                              0      0   100%
+src\writeros\preprocessing\__init__.py                       4      0   100%
+src\writeros\preprocessing\chunker.py                       78     61    22%   24-30, 34-39, 46-57, 70-72, 78-114, 117-143
+src\writeros\preprocessing\cluster_semantic_chunker.py     155    134    14%   51-65, 82-130, 150-190, 194-197, 206-218, 233-268, 282-291, 313-362, 370-377, 385-406
+src\writeros\preprocessing\unified_chunker.py              160    109    32%   40-41, 56-66, 70-80, 84, 88-91, 101-104, 175-224, 236-243, 247-261, 270-279, 290-329, 337-351, 358-368, 372-374, 404-405
+src\writeros\rag\__init__.py                                 2      2     0%   1-3
+src\writeros\rag\retriever.py                               74     74     0%   5-171
+src\writeros\schema\__init__.py                             18      0   100%
+src\writeros\schema\api.py                                  22      0   100%
+src\writeros\schema\base.py                                 12      0   100%
+src\writeros\schema\enums.py                               132      0   100%
+src\writeros\schema\extended_universe.py                    90      0   100%
+src\writeros\schema\graph.py                                16      0   100%
+src\writeros\schema\identity.py                             41      0   100%
+src\writeros\schema\library.py                              74      9    88%   51-61, 127
+src\writeros\schema\logistics.py                            17      0   100%
+src\writeros\schema\mechanics.py                            20      0   100%
+src\writeros\schema\narrative.py                            19      0   100%
+src\writeros\schema\project.py                              13      0   100%
+src\writeros\schema\prose.py                                14      0   100%
+src\writeros\schema\psychology.py                           37      0   100%
+src\writeros\schema\session.py                              27      0   100%
+src\writeros\schema\temporal_anchoring.py                   54      0   100%
+src\writeros\schema\theme.py                                16      0   100%
+src\writeros\schema\world.py                                80      0   100%
+src\writeros\services\__init__.py                            0      0   100%
+src\writeros\services\conflict_engine.py                    31     21    32%   11-16, 20-44, 48-64
+src\writeros\tasks\__init__.py                               0      0   100%
+src\writeros\utils\db.py                                   143     57    60%   17-23, 137, 141-148, 176-187, 207-232, 236-239, 251-252, 267, 279-284, 294, 310-325, 336-346
+src\writeros\utils\embeddings.py                            41     13    68%   26-29, 32-42, 46, 50, 54
+src\writeros\utils\indexer.py                               81     59    27%   49, 64-104, 112-190, 194-207, 216, 220-221
+src\writeros\utils\writer.py                               178    154    13%   17-29, 32-44, 47-49, 52, 55, 58-62, 67-89, 93-130, 135-194, 197-235, 238-266, 269-274, 278-366
+--------------------------------------------------------------------------------------
+TOTAL                                                     2943   1556    47%
+=========================== short test summary info ===========================
+FAILED tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_full_vault_indexing_flow
+FAILED tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_indexed_data_persists
+FAILED tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_indexing_provides_progress_feedback
+================== 3 failed, 13 passed, 5 warnings in 1.92s ===================

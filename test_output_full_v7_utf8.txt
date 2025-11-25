@@ -1,0 +1,2109 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 249 items
+
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_entity_extraction ERROR [  0%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_find_similar_entities ERROR [  0%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_generate_graph_data ERROR [  1%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_simple ERROR [  1%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_multi_generation ERROR [  2%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_siblings ERROR [  2%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_child_relationship ERROR [  2%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_empty ERROR [  3%]
+tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_nonexistent_entity ERROR [  3%]
+tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_nodes ERROR [  4%]
+tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_links ERROR [  4%]
+tests/agents/test_tool_calling.py::TestToolRegistry::test_tool_registry_initialization PASSED [  4%]
+tests/agents/test_tool_calling.py::TestToolRegistry::test_get_tool_schemas PASSED [  5%]
+tests/agents/test_tool_calling.py::TestToolRegistry::test_execute_unknown_tool PASSED [  5%]
+tests/agents/test_tool_calling.py::TestCreateCharacterTool::test_create_character_success PASSED [  6%]
+tests/agents/test_tool_calling.py::TestCreateCharacterTool::test_create_character_duplicate PASSED [  6%]
+tests/agents/test_tool_calling.py::TestCreateCharacterTool::test_create_character_minimal_args PASSED [  6%]
+tests/agents/test_tool_calling.py::TestCreateLocationTool::test_create_location_success PASSED [  7%]
+tests/agents/test_tool_calling.py::TestUpdateCharacterTool::test_update_character_success PASSED [  7%]
+tests/agents/test_tool_calling.py::TestUpdateCharacterTool::test_update_nonexistent_character PASSED [  8%]
+tests/agents/test_tool_calling.py::TestSearchVaultTool::test_search_vault_finds_matches PASSED [  8%]
+tests/agents/test_tool_calling.py::TestSearchVaultTool::test_search_vault_multiple_results PASSED [  8%]
+tests/agents/test_tool_calling.py::TestSearchVaultTool::test_search_vault_no_results PASSED [  9%]
+tests/agents/test_tool_calling.py::TestCreateRelationshipTool::test_create_relationship PASSED [  9%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_orchestrator_has_tools PASSED [ 10%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_orchestrator_get_tool_schemas PASSED [ 10%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_execute_tool_call PASSED [ 10%]
+tests/agents/test_tool_calling.py::TestOrchestratorToolIntegration::test_execute_tool_with_invalid_args PASSED [ 11%]
+tests/agents/test_tool_calling.py::TestEndToEndToolCalling::test_complete_workflow_create_character ERROR [ 11%]
+tests/agents/test_tool_calling.py::TestToolSafety::test_prevents_duplicate_creation PASSED [ 12%]
+tests/agents/test_tool_calling.py::TestToolSafety::test_update_requires_existing_file PASSED [ 12%]
+tests/agents/test_tool_calling.py::TestToolSafety::test_search_before_create_workflow PASSED [ 12%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_returns_ok PASSED [ 13%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_includes_version PASSED [ 13%]
+tests/api/test_legacy_compatibility.py::TestHealthEndpoint::test_health_check_includes_mode PASSED [ 14%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format ERROR [ 14%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_rejects_invalid_vault_id PASSED [ 14%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_returns_404_for_nonexistent_vault FAILED [ 15%]
+tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task ERROR [ 15%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_accepts_plugin_format PASSED [ 16%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_returns_sse_format PASSED [ 16%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_formats_chunks_as_json PASSED [ 16%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_sends_done_marker PASSED [ 17%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_handles_errors_gracefully PASSED [ 17%]
+tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_rejects_invalid_vault_id FAILED [ 18%]
+tests/api/test_legacy_compatibility.py::TestPluginIntegration::test_plugin_startup_sequence PASSED [ 18%]
+tests/api/test_legacy_compatibility.py::TestPluginIntegration::test_plugin_can_discover_endpoints PASSED [ 18%]
+tests/integration/test_conflict_integration.py::test_architect_conflict_integration FAILED [ 19%]
+tests/integration/test_conflict_integration.py::test_dramatist_conflict_integration FAILED [ 19%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginStartup::test_server_can_start PASSED [ 20%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginStartup::test_init_db_creates_default_entities PASSED [ 20%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_health_check_responds PASSED [ 20%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginHealthCheck::test_plugin_can_detect_server_running PASSED [ 21%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_analyze_endpoint_accepts_vault PASSED [ 21%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_full_vault_indexing_flow ERROR [ 22%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginChat::test_chat_stream_endpoint PASSED [ 22%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginChat::test_chat_returns_sse_format PASSED [ 22%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginGraphGeneration::test_graph_script_can_execute PASSED [ 23%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginGraphGeneration::test_graph_generation_outputs_path PASSED [ 23%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginCompleteWorkflow::test_complete_plugin_workflow_sequence ERROR [ 24%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginCompleteWorkflow::test_plugin_error_recovery PASSED [ 24%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_vault_id_persists_to_filesystem PASSED [ 24%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_indexed_data_persists ERROR [ 25%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_health_check_is_fast PASSED [ 25%]
+tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_indexing_provides_progress_feedback ERROR [ 26%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_full_ingestion_pipeline ERROR [ 26%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_full_retrieval_pipeline ERROR [ 26%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_graphrag_query_with_multi_hop ERROR [ 27%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelinePerformance::test_large_document_chunking ERROR [ 27%]
+tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelinePerformance::test_vector_search_performance ERROR [ 28%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_initialization PASSED [ 28%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_split_into_base_segments_simple PASSED [ 28%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_split_into_base_segments_paragraphs PASSED [ 29%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_split_sentences PASSED [ 29%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_build_similarity_matrix PASSED [ 30%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_compute_chunk_reward PASSED [ 30%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_find_optimal_segmentation_simple PASSED [ 30%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_merge_segments PASSED [ 31%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_chunk_empty_text PASSED [ 31%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_chunk_single_segment PASSED [ 32%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerUnit::test_fallback_without_embedding_function PASSED [ 32%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerIntegration::test_chunk_with_topic_shifts PASSED [ 32%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerIntegration::test_chunk_coherent_text PASSED [ 33%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerIntegration::test_metadata_accuracy PASSED [ 33%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_very_long_text PASSED [ 34%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_unicode_text PASSED [ 34%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_text_with_special_characters PASSED [ 34%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerEdgeCases::test_chunk_size_boundaries PASSED [ 35%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerPerformance::test_performance_medium_text PASSED [ 35%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerPerformance::test_similarity_matrix_efficiency PASSED [ 36%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerPerformance::test_performance_large_text PASSED [ 36%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerComparison::test_vs_fixed_size_chunking PASSED [ 36%]
+tests/preprocessing/test_cluster_semantic_chunker.py::TestClusterSemanticChunkerRealEmbeddings::test_chunk_real_document PASSED [ 37%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_split_into_segments_basic PASSED [ 37%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_split_into_segments_empty_text PASSED [ 38%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_split_into_segments_single_sentence PASSED [ 38%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_empty_text PASSED [ 38%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_single_sentence_text PASSED [ 39%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_basic_chunking PASSED [ 39%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_coherence_score_present PASSED [ 40%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_coherence_score_varied_similarity FAILED [ 40%]
+tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_embedder_factory_receives_embedding_model PASSED [ 40%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_basic_operations PASSED [ 41%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_miss PASSED [ 41%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_lru_eviction PASSED [ 42%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_stats PASSED [ 42%]
+tests/preprocessing/test_unified_chunker.py::TestEmbeddingCache::test_cache_clear PASSED [ 42%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_auto_select_cluster_for_small_docs PASSED [ 43%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_auto_select_greedy_for_medium_docs PASSED [ 43%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_auto_select_fixed_for_large_docs PASSED [ 44%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategySelection::test_explicit_strategy_overrides_auto PASSED [ 44%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_cache_reduces_embedding_calls PASSED [ 44%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_cache_disabled PASSED [ 45%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_get_stats_includes_cache_info PASSED [ 45%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerCaching::test_clear_cache PASSED [ 46%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_cluster_semantic_strategy PASSED [ 46%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_greedy_semantic_strategy PASSED [ 46%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_fixed_size_strategy PASSED [ 47%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStrategyComparison::test_strategies_produce_different_results PASSED [ 47%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStatistics::test_stats_tracking PASSED [ 48%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerStatistics::test_strategy_usage_tracking PASSED [ 48%]
+tests/preprocessing/test_unified_chunker.py::TestChunkTextConvenience::test_chunk_text_with_defaults PASSED [ 48%]
+tests/preprocessing/test_unified_chunker.py::TestChunkTextConvenience::test_chunk_text_with_explicit_strategy PASSED [ 49%]
+tests/preprocessing/test_unified_chunker.py::TestChunkTextConvenience::test_chunk_text_with_custom_params PASSED [ 49%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_empty_text PASSED [ 50%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_very_short_text PASSED [ 50%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_unicode_text PASSED [ 51%]
+tests/preprocessing/test_unified_chunker.py::TestUnifiedChunkerEdgeCases::test_no_embedding_function_with_semantic_strategy PASSED [ 51%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_graph_traversal_basic ERROR [ 51%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_relationship_filtering ERROR [ 52%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_max_hops_limiting ERROR [ 52%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_temporal_filtering ERROR [ 53%]
+tests/rag/test_graph_rag.py::TestFamilyTreeConstruction::test_build_family_tree SKIPPED [ 53%]
+tests/rag/test_graph_rag.py::TestCycleDetection::test_circular_relationship_traversal ERROR [ 53%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_cosine_similarity_search PASSED [ 54%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_l2_distance_search PASSED [ 54%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_filter_by_vault_id PASSED [ 55%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_result_ranking PASSED [ 55%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_empty_result_handling PASSED [ 55%]
+tests/rag/test_vector_search.py::TestVectorSearch::test_limit_parameter PASSED [ 56%]
+tests/rag/test_vector_search.py::TestDocumentVectorSearch::test_document_search ERROR [ 56%]
+tests/rag/test_vector_search.py::TestFactVectorSearch::test_fact_search ERROR [ 57%]
+tests/schema/test_conflict_model.py::test_create_conflict PASSED         [ 57%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_singleton_pattern_same_model PASSED [ 57%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_different_models_create_distinct_instances PASSED [ 58%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_with_api_key PASSED [ 58%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_with_custom_model PASSED [ 59%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_initialization_without_api_key PASSED [ 59%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_query PASSED [ 59%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_documents PASSED [ 60%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_empty_string PASSED [ 60%]
+tests/services/test_embedding_service.py::TestEmbeddingService::test_embed_documents_empty_list PASSED [ 61%]
+tests/services/test_embedding_service.py::TestEmbeddingServiceIntegration::test_multiple_calls_use_same_instance PASSED [ 61%]
+tests/test_graph_generation.py::TestGraphScriptExistence::test_generate_graph_exists PASSED [ 61%]
+tests/test_graph_generation.py::TestGraphScriptExistence::test_generate_graph_is_python_script PASSED [ 62%]
+tests/test_graph_generation.py::TestGraphScriptExistence::test_generate_graph_has_docstring PASSED [ 62%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_requires_graph_type PASSED [ 63%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_requires_vault_path PASSED [ 63%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_accepts_valid_graph_types PASSED [ 63%]
+tests/test_graph_generation.py::TestGraphScriptArguments::test_script_vault_id_is_optional PASSED [ 64%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_imports_profiler_agent PASSED [ 64%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_calls_generate_graph_data PASSED [ 65%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_calls_generate_graph_html PASSED [ 65%]
+tests/test_graph_generation.py::TestGraphScriptExecution::test_script_uses_async_main PASSED [ 65%]
+tests/test_graph_generation.py::TestGraphScriptOutput::test_script_prints_output_path_to_stdout PASSED [ 66%]
+tests/test_graph_generation.py::TestGraphScriptOutput::test_script_handles_errors_gracefully PASSED [ 66%]
+tests/test_graph_generation.py::TestGraphScriptOutput::test_script_exits_with_error_code_on_failure PASSED [ 67%]
+tests/test_graph_generation.py::TestGraphScriptWithDatabase::test_script_can_query_entities ERROR [ 67%]
+tests/test_graph_generation.py::TestGraphScriptWithDatabase::test_script_generates_html_file ERROR [ 67%]
+tests/test_graph_generation.py::TestGraphScriptDatabaseConnection::test_script_uses_get_or_create_vault_id PASSED [ 68%]
+tests/test_graph_generation.py::TestGraphScriptDatabaseConnection::test_script_initializes_database_connection FAILED [ 68%]
+tests/test_graph_generation.py::TestGraphScriptLogging::test_script_uses_logging PASSED [ 69%]
+tests/test_graph_generation.py::TestGraphScriptLogging::test_script_logs_graph_stats PASSED [ 69%]
+tests/test_graph_generation.py::TestGraphScriptCompatibility::test_script_outputs_absolute_path PASSED [ 69%]
+tests/test_graph_generation.py::TestGraphScriptCompatibility::test_script_creates_writeros_directory PASSED [ 70%]
+tests/test_graph_generation.py::TestGraphScriptCompatibility::test_script_passes_graph_type_to_agent PASSED [ 70%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_py_exists PASSED [ 71%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_py_is_executable PASSED [ 71%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_sets_local_mode PASSED [ 71%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_imports_uvicorn PASSED [ 72%]
+tests/test_server_launcher.py::TestServerLauncherConfiguration::test_server_adds_src_to_path PASSED [ 72%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_uses_correct_host PASSED [ 73%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_uses_correct_port PASSED [ 73%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_disables_reload PASSED [ 73%]
+tests/test_server_launcher.py::TestServerLauncherUvicornConfig::test_server_targets_correct_app PASSED [ 74%]
+tests/test_server_launcher.py::TestServerLauncherErrorHandling::test_server_handles_keyboard_interrupt PASSED [ 74%]
+tests/test_server_launcher.py::TestServerLauncherErrorHandling::test_server_handles_general_exceptions PASSED [ 75%]
+tests/test_server_launcher.py::TestServerLauncherErrorHandling::test_server_exits_with_correct_codes PASSED [ 75%]
+tests/test_server_launcher.py::TestServerLauncherOutput::test_server_prints_startup_banner PASSED [ 75%]
+tests/test_server_launcher.py::TestServerLauncherOutput::test_server_shows_mode_and_port PASSED [ 76%]
+tests/test_server_launcher.py::TestServerLauncherIntegration::test_server_can_be_imported PASSED [ 76%]
+tests/test_server_launcher.py::TestServerLauncherIntegration::test_server_help_output FAILED [ 77%]
+tests/test_server_launcher.py::TestServerLauncherDocumentation::test_server_has_docstring PASSED [ 77%]
+tests/test_server_launcher.py::TestServerLauncherDocumentation::test_server_has_comments PASSED [ 77%]
+tests/test_server_launcher.py::TestServerLauncherDocumentation::test_server_explains_obsidian_purpose PASSED [ 78%]
+tests/test_vault_config.py::test_get_or_create_vault_id_creates_config PASSED [ 78%]
+tests/test_vault_config.py::test_get_or_create_vault_id_reads_existing PASSED [ 79%]
+tests/test_vault_config.py::test_get_vault_config_missing_returns_empty PASSED [ 79%]
+tests/test_vault_config.py::test_update_vault_config_preserves_existing_values PASSED [ 79%]
+tests/test_vault_config.py::test_ensure_graph_directory_creates_structure PASSED [ 80%]
+tests/test_vault_reader.py::test_refresh_index_collects_entities_and_rules PASSED [ 80%]
+tests/test_vault_reader.py::test_get_relevant_context_matches_aliases PASSED [ 81%]
+tests/test_vault_reader.py::test_get_relevant_context_without_matches_returns_default PASSED [ 81%]
+tests/test_vault_reader.py::test_get_craft_context_handles_missing_rules PASSED [ 81%]
+tests/test_vault_reader.py::test_get_global_context_includes_project_and_counts PASSED [ 82%]
+tests/test_vault_reader.py::test_get_global_context_when_project_missing PASSED [ 82%]
+tests/test_vault_reader.py::test_execute_structured_query_filters_by_type_and_value PASSED [ 83%]
+tests/test_vault_reader.py::test_get_neighbors_returns_unique_links PASSED [ 83%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_indexer_initialization PASSED [ 83%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_character PASSED [ 84%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_location PASSED [ 84%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_craft_advice PASSED [ 85%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerBasic::test_doc_type_inference_manuscript PASSED [ 85%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_cluster_semantic_strategy PASSED [ 85%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_greedy_semantic_strategy PASSED [ 86%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_fixed_size_strategy PASSED [ 86%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerChunkingStrategies::test_auto_strategy_selection PASSED [ 87%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerCaching::test_cache_improves_performance PASSED [ 87%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerCaching::test_cache_can_be_cleared PASSED [ 87%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerFullIndexing::test_index_vault_all_directories PASSED [ 88%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerFullIndexing::test_index_vault_specific_directories PASSED [ 88%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerFullIndexing::test_index_vault_handles_missing_directories PASSED [ 89%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerStatistics::test_statistics_after_indexing PASSED [ 89%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerStatistics::test_chunking_stats_in_results PASSED [ 89%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerErrorHandling::test_handles_unicode_decode_errors PASSED [ 90%]
+tests/utils/test_indexer_integration.py::TestVaultIndexerErrorHandling::test_handles_empty_files PASSED [ 90%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_creates_tables PASSED [ 91%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_enables_pgvector PASSED [ 91%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_creates_vector_indexes PASSED [ 91%]
+tests/utils/test_init_db.py::TestInitDbBasics::test_init_db_respects_mode_setting PASSED [ 92%]
+tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_creates_admin_user_in_local_mode FAILED [ 92%]
+tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_creates_default_vault_in_local_mode FAILED [ 93%]
+tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_does_not_duplicate_admin_user FAILED [ 93%]
+tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_vault_has_owner_link FAILED [ 93%]
+tests/utils/test_init_db.py::TestUUIDPreservation::test_read_uuid_from_filesystem_when_exists PASSED [ 94%]
+tests/utils/test_init_db.py::TestUUIDPreservation::test_read_uuid_from_filesystem_when_missing PASSED [ 94%]
+tests/utils/test_init_db.py::TestUUIDPreservation::test_read_uuid_from_filesystem_with_invalid_format PASSED [ 95%]
+tests/utils/test_init_db.py::TestUUIDPreservation::test_write_uuid_to_filesystem PASSED [ 95%]
+tests/utils/test_init_db.py::TestUUIDPreservation::test_write_uuid_creates_directory PASSED [ 95%]
+tests/utils/test_init_db.py::TestUUIDPreservation::test_ensure_default_vault_preserves_existing_uuid FAILED [ 96%]
+tests/utils/test_init_db.py::TestGetDirectoryName::test_get_directory_name_from_path PASSED [ 96%]
+tests/utils/test_init_db.py::TestGetDirectoryName::test_get_directory_name_handles_special_chars PASSED [ 97%]
+tests/utils/test_init_db.py::TestGetDirectoryName::test_get_directory_name_fallback PASSED [ 97%]
+tests/utils/test_init_db.py::TestGetOrCreateVaultId::test_get_or_create_vault_id_creates_new PASSED [ 97%]
+tests/utils/test_init_db.py::TestGetOrCreateVaultId::test_get_or_create_vault_id_returns_existing PASSED [ 98%]
+tests/utils/test_init_db.py::TestInitDbErrorHandling::test_init_db_retries_on_connection_failure PASSED [ 98%]
+tests/utils/test_init_db.py::TestInitDbErrorHandling::test_init_db_logs_errors PASSED [ 99%]
+tests/utils/test_init_db.py::TestInitDbIntegration::test_init_db_full_flow FAILED [ 99%]
+tests/utils/test_init_db.py::TestInitDbIntegration::test_init_db_is_idempotent PASSED [100%]
+
+=================================== ERRORS ====================================
+_________ ERROR at setup of TestProfilerAgent.test_entity_extraction __________
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 30
+      @pytest.mark.asyncio
+      async def test_entity_extraction(self, profiler, mocker):
+          """Test entity extraction from text."""
+          # Mock the LLM extractor
+          mock_extraction = WorldExtractionSchema(
+              characters=[
+                  CharacterProfile(
+                      name="Aria Winters",
+                      role="Protagonist",
+                      visual_traits=[],
+                      relationships=[]
+                  )
+              ],
+              organizations=[],
+              locations=[]
+          )
+
+          profiler.extractor = AsyncMock(return_value=mock_extraction)
+
+          text = "Aria Winters stood at the edge of the cliff."
+          result = await profiler.run(text, "", "Test Chapter")
+
+          assert result is not None
+          assert "Aria Winters" in str(result)
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+_______ ERROR at setup of TestProfilerAgent.test_find_similar_entities ________
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 55
+      @pytest.mark.asyncio
+      async def test_find_similar_entities(self, profiler, db_session, sample_entities, mocker):
+          """Test semantic search for similar entities."""
+          # Add entities to database
+          for entity in sample_entities:
+              db_session.add(entity)
+          db_session.commit()
+
+          # Mock embedding service
+          mock_embed = mocker.patch("writeros.agents.profiler.get_embedding_service")
+          mock_embed.return_value.embed_query.return_value = [0.1] * 1536
+
+          result = await profiler.find_similar_entities("brave warrior", limit=2)
+
+          assert result is not None
+          assert isinstance(result, str)
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+________ ERROR at setup of TestProfilerAgent.test_generate_graph_data _________
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 72
+      @pytest.mark.asyncio
+      async def test_generate_graph_data(self, profiler, db_session, sample_entities, sample_relationships):
+          """Test graph data generation."""
+          vault_id = sample_entities[0].vault_id
+
+          # Add data to database
+          for entity in sample_entities:
+              db_session.add(entity)
+          for rel in sample_relationships:
+              db_session.add(rel)
+          db_session.commit()
+
+          graph_data = await profiler.generate_graph_data(
+              vault_id=vault_id,
+              graph_type="force",
+              max_nodes=10
+          )
+
+          assert "nodes" in graph_data
+          assert "links" in graph_data
+          assert isinstance(graph_data["nodes"], list)
+          assert isinstance(graph_data["links"], list)
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+______ ERROR at setup of TestProfilerAgent.test_build_family_tree_simple ______
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 95
+      @pytest.mark.asyncio
+      async def test_build_family_tree_simple(self, profiler, db_session, sample_vault_id):
+          """Test family tree construction with simple parent-child relationship."""
+          # Create a simple family
+          parent = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Parent",
+              type=EntityType.CHARACTER,
+              description="Parent character",
+              properties={"role": "parent"},
+              embedding=[0.1] * 1536
+          )
+          child = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Child",
+              type=EntityType.CHARACTER,
+              description="Child character",
+              properties={"role": "child"},
+              embedding=[0.2] * 1536
+          )
+
+          db_session.add(parent)
+          db_session.add(child)
+
+          rel = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=parent.id,
+              to_entity_id=child.id,
+              rel_type=RelationType.PARENT,
+              description="Parent-child relationship",
+              properties={"strength": 1.0}
+          )
+          db_session.add(rel)
+          db_session.commit()
+
+          # Test from parent's perspective
+          tree = await profiler.build_family_tree(parent.id)
+
+          assert tree is not None
+          assert tree["total_members"] == 2
+          assert tree["generation_range"]["min"] == 0
+          assert tree["generation_range"]["max"] == 1
+          assert 0 in tree["generations"]  # Parent at gen 0
+          assert 1 in tree["generations"]  # Child at gen 1
+
+          # Verify parent is at generation 0
+          parent_members = [m for m in tree["generations"][0] if m["name"] == "Parent"]
+          assert len(parent_members) == 1
+          assert parent_members[0]["properties"]["role"] == "parent"
+
+          # Verify child is at generation 1
+          child_members = [m for m in tree["generations"][1] if m["name"] == "Child"]
+          assert len(child_members) == 1
+          assert child_members[0]["properties"]["role"] == "child"
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+_ ERROR at setup of TestProfilerAgent.test_build_family_tree_multi_generation _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 153
+      @pytest.mark.asyncio
+      async def test_build_family_tree_multi_generation(self, profiler, db_session, sample_vault_id):
+          """Test family tree with multiple generations (grandparent \u2192 parent \u2192 child)."""
+          # Create multi-generation family
+          grandpa = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Grandpa Stark",
+              type=EntityType.CHARACTER,
+              properties={"role": "elder"},
+              embedding=[0.1] * 1536
+          )
+          father = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Ned Stark",
+              type=EntityType.CHARACTER,
+              properties={"role": "father"},
+              embedding=[0.2] * 1536
+          )
+          robb = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Robb Stark",
+              type=EntityType.CHARACTER,
+              properties={"role": "protagonist"},
+              embedding=[0.3] * 1536
+          )
+
+          db_session.add_all([grandpa, father, robb])
+
+          # Create relationships
+          rel1 = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=grandpa.id,
+              to_entity_id=father.id,
+              rel_type=RelationType.PARENT
+          )
+          rel2 = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=father.id,
+              to_entity_id=robb.id,
+              rel_type=RelationType.PARENT
+          )
+          db_session.add_all([rel1, rel2])
+          db_session.commit()
+
+          # Test from Robb's perspective (middle of tree)
+          tree = await profiler.build_family_tree(robb.id)
+
+          assert tree["total_members"] == 3
+          assert tree["generation_range"]["min"] == -2  # Grandpa
+          assert tree["generation_range"]["max"] == 0   # Robb
+
+          # Verify generations
+          assert -2 in tree["generations"]  # Grandpa
+          assert -1 in tree["generations"]  # Father
+          assert 0 in tree["generations"]   # Robb
+
+          assert tree["generations"][-2][0]["name"] == "Grandpa Stark"
+          assert tree["generations"][-1][0]["name"] == "Ned Stark"
+          assert tree["generations"][0][0]["name"] == "Robb Stark"
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+__ ERROR at setup of TestProfilerAgent.test_build_family_tree_with_siblings ___
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 218
+      @pytest.mark.asyncio
+      async def test_build_family_tree_with_siblings(self, profiler, db_session, sample_vault_id):
+          """Test family tree with sibling relationships."""
+          # Create siblings
+          robb = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Robb Stark",
+              type=EntityType.CHARACTER,
+              properties={"role": "protagonist"},
+              embedding=[0.1] * 1536
+          )
+          sansa = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Sansa Stark",
+              type=EntityType.CHARACTER,
+              properties={"role": "sibling"},
+              embedding=[0.2] * 1536
+          )
+          arya = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Arya Stark",
+              type=EntityType.CHARACTER,
+              properties={"role": "sibling"},
+              embedding=[0.3] * 1536
+          )
+
+          db_session.add_all([robb, sansa, arya])
+
+          # Create sibling relationships
+          rel1 = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=robb.id,
+              to_entity_id=sansa.id,
+              rel_type=RelationType.SIBLING
+          )
+          rel2 = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=sansa.id,
+              to_entity_id=arya.id,
+              rel_type=RelationType.SIBLING
+          )
+          db_session.add_all([rel1, rel2])
+          db_session.commit()
+
+          # Test from Robb's perspective
+          tree = await profiler.build_family_tree(robb.id)
+
+          assert tree["total_members"] == 3
+          assert tree["generation_range"]["min"] == 0
+          assert tree["generation_range"]["max"] == 0
+
+          # All siblings should be at generation 0
+          gen_0_members = tree["generations"][0]
+          assert len(gen_0_members) == 3
+          names = {m["name"] for m in gen_0_members}
+          assert names == {"Robb Stark", "Sansa Stark", "Arya Stark"}
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+_ ERROR at setup of TestProfilerAgent.test_build_family_tree_with_child_relationship _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 280
+      @pytest.mark.asyncio
+      async def test_build_family_tree_with_child_relationship(self, profiler, db_session, sample_vault_id):
+          """Test CHILD relationship (inverse of PARENT)."""
+          # Create parent and child
+          child = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Jon Snow",
+              type=EntityType.CHARACTER,
+              properties={"role": "child"},
+              embedding=[0.1] * 1536
+          )
+          parent = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Ned Stark",
+              type=EntityType.CHARACTER,
+              properties={"role": "parent"},
+              embedding=[0.2] * 1536
+          )
+
+          db_session.add_all([child, parent])
+
+          # CHILD relationship: from_entity (child) \u2192 to_entity (parent)
+          rel = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=child.id,
+              to_entity_id=parent.id,
+              rel_type=RelationType.CHILD
+          )
+          db_session.add(rel)
+          db_session.commit()
+
+          # Test from child's perspective
+          tree = await profiler.build_family_tree(child.id)
+
+          assert tree["total_members"] == 2
+          assert 0 in tree["generations"]   # Child
+          assert -1 in tree["generations"]  # Parent (one generation up)
+
+          assert tree["generations"][0][0]["name"] == "Jon Snow"
+          assert tree["generations"][-1][0]["name"] == "Ned Stark"
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+______ ERROR at setup of TestProfilerAgent.test_build_family_tree_empty _______
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 324
+      @pytest.mark.asyncio
+      async def test_build_family_tree_empty(self, profiler, db_session, sample_vault_id):
+          """Test family tree for entity with no relationships."""
+          # Create isolated entity
+          lonely = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Lonely Character",
+              type=EntityType.CHARACTER,
+              properties={},
+              embedding=[0.1] * 1536
+          )
+          db_session.add(lonely)
+          db_session.commit()
+
+          tree = await profiler.build_family_tree(lonely.id)
+
+          assert tree["total_members"] == 1
+          assert tree["generation_range"]["min"] == 0
+          assert tree["generation_range"]["max"] == 0
+          assert len(tree["generations"][0]) == 1
+          assert tree["generations"][0][0]["name"] == "Lonely Character"
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+_ ERROR at setup of TestProfilerAgent.test_build_family_tree_nonexistent_entity _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 347
+      @pytest.mark.asyncio
+      async def test_build_family_tree_nonexistent_entity(self, profiler, db_session):
+          """Test family tree for nonexistent entity."""
+          fake_id = uuid4()
+
+          tree = await profiler.build_family_tree(fake_id)
+
+          assert tree["total_members"] == 0
+          assert tree["generation_range"]["min"] == 0
+          assert tree["generation_range"]["max"] == 0
+          assert tree["generations"] == {}
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 25
+      @pytest.fixture
+      def profiler(self, mock_llm_client):
+E       fixture 'mock_llm_client' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:25
+________ ERROR at setup of TestProfilerAgentHelpers.test_format_nodes _________
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 369
+      def test_format_nodes(self, profiler, sample_entities):
+E       fixture 'sample_entities' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:369
+________ ERROR at setup of TestProfilerAgentHelpers.test_format_links _________
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py, line 381
+      def test_format_links(self, profiler, sample_relationships):
+E       fixture 'sample_relationships' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, profiler, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_profiler_agent.py:381
+_ ERROR at setup of TestEndToEndToolCalling.test_complete_workflow_create_character _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_tool_calling.py, line 371
+      @pytest.mark.integration
+      @pytest.mark.asyncio
+      async def test_complete_workflow_create_character(
+          self,
+          setup_environment,
+          mocker,
+          db_session,
+          sample_vault_id
+      ):
+          """Test complete workflow of creating a character via tool calling."""
+          # Mock embedding service
+          mock_embedder = mocker.patch('writeros.agents.orchestrator.get_embedding_service')
+          mock_embedder.return_value.embed_query.return_value = [0.1] * 1536
+
+          # Mock LLM to return a tool call
+          mock_llm = mocker.patch('writeros.utils.llm_client.LLMClient')
+          mock_instance = mock_llm.return_value
+
+          async def mock_stream(*args, **kwargs):
+              # First yield a tool call
+              yield {
+                  "type": "tool_call",
+                  "id": "call_123",
+                  "name": "create_character_file",
+                  "arguments": {
+                      "name": "Gandalf",
+                      "description": "A wise wizard",
+                      "role": "supporting"
+                  }
+              }
+              # Then yield confirmation text
+              yield "I've created the character file for Gandalf."
+
+          mock_instance.stream_chat = mock_stream
+
+          # Create orchestrator
+          orchestrator = OrchestratorAgent()
+
+          # Mock database queries
+          mocker.patch.object(orchestrator, '_create_conversation', return_value=uuid4())
+          mocker.patch.object(orchestrator, '_save_message')
+          mocker.patch.object(orchestrator, '_retrieve_context', return_value={
+              "documents": [],
+              "entities": []
+          })
+
+          # Execute chat
+          full_response = ""
+          async for chunk in orchestrator.process_chat(
+              "Create a character file for Gandalf, a wise wizard",
+              sample_vault_id
+          ):
+              full_response += chunk
+
+          # Verify character file was created
+          char_file = setup_environment / "Story_Bible" / "Characters" / "Gandalf.md"
+          assert char_file.exists()
+
+          content = char_file.read_text(encoding='utf-8')
+          assert "Gandalf" in content
+          assert "wizard" in content
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, setup_environment, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\agents\test_tool_calling.py:371
+__ ERROR at setup of TestAnalyzeEndpoint.test_analyze_accepts_plugin_format ___
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\api\test_legacy_compatibility.py, line 93
+      def test_analyze_accepts_plugin_format(self, test_client, mock_init_db, test_vault, mocker):
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\api\test_legacy_compatibility.py, line 30
+  @pytest.fixture
+  def test_vault(db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_init_db, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_client, test_engine, test_vault, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\api\test_legacy_compatibility.py:30
+_ ERROR at setup of TestAnalyzeEndpoint.test_analyze_triggers_background_task _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\api\test_legacy_compatibility.py, line 145
+      def test_analyze_triggers_background_task(self, test_client, mock_init_db, test_vault, mocker):
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\api\test_legacy_compatibility.py, line 30
+  @pytest.fixture
+  def test_vault(db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_init_db, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_client, test_engine, test_vault, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\api\test_legacy_compatibility.py:30
+_ ERROR at setup of TestObsidianPluginVaultAnalysis.test_full_vault_indexing_flow _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py, line 203
+      @pytest.mark.integration
+      @pytest.mark.slow
+      async def test_full_vault_indexing_flow(self, initialized_database, test_vault_directory, mock_embedding_service):
+          """Test complete vault indexing with VaultIndexer."""
+          # Get or create vault
+          with Session(engine) as session:
+              vault = session.exec(select(Vault)).first()
+              if not vault:
+                  pytest.skip("No vault available for testing")
+
+          # Create indexer
+          indexer = VaultIndexer(
+              vault_path=str(test_vault_directory),
+              vault_id=vault.id,
+              chunking_strategy="auto"
+          )
+
+          # Run indexing (this will actually index the files)
+          result = await indexer.index_vault(force_reindex=True)
+
+          # Verify documents were created
+          with Session(engine) as session:
+              docs = session.exec(
+                  select(Document).where(Document.vault_id == vault.id)
+              ).all()
+
+              # Should have indexed at least the 3 files we created
+              assert len(docs) > 0
+E       fixture 'mock_embedding_service' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, initialized_database, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault_directory, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py:203
+_ ERROR at setup of TestObsidianPluginCompleteWorkflow.test_complete_plugin_workflow_sequence _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py, line 348
+      @pytest.mark.integration
+      @pytest.mark.slow
+      def test_complete_plugin_workflow_sequence(
+E       fixture 'mock_embedding_service' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, initialized_database, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault_directory, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py:348
+_ ERROR at setup of TestObsidianPluginDataPersistence.test_indexed_data_persists _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py, line 437
+      @pytest.mark.integration
+      async def test_indexed_data_persists(self, initialized_database, test_vault_directory, mock_embedding_service):
+          """Test that indexed documents persist in database."""
+          with Session(engine) as session:
+              vault = session.exec(select(Vault)).first()
+              if not vault:
+                  pytest.skip("No vault available")
+
+          # Index vault
+          indexer = VaultIndexer(
+              vault_path=str(test_vault_directory),
+              vault_id=vault.id
+          )
+          await indexer.index_vault(force_reindex=True)
+
+          # Query in new session to verify persistence
+          with Session(engine) as session:
+              docs = session.exec(
+                  select(Document).where(Document.vault_id == vault.id)
+              ).all()
+
+              assert len(docs) > 0, "Documents should persist in database"
+E       fixture 'mock_embedding_service' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, initialized_database, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault_directory, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py:437
+_ ERROR at setup of TestObsidianPluginPerformance.test_indexing_provides_progress_feedback _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py, line 479
+      @pytest.mark.slow
+      def test_indexing_provides_progress_feedback(self, initialized_database, test_vault_directory, mock_embedding_service):
+E       fixture 'mock_embedding_service' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, initialized_database, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault_directory, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_obsidian_plugin_e2e.py:479
+______ ERROR at setup of TestRAGPipelineE2E.test_full_ingestion_pipeline ______
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py, line 70
+      @pytest.mark.asyncio
+      async def test_full_ingestion_pipeline(
+          self,
+          test_vault,
+          db_session,
+          mock_embedding_service
+      ):
+          """Test: Ingest markdown \u2192 Chunk \u2192 Embed \u2192 Store."""
+          vault_id = uuid4()
+
+          # Create indexer
+          indexer = VaultIndexer(
+              vault_path=str(test_vault),
+              vault_id=vault_id
+          )
+
+          # Index the vault
+          results = await indexer.index_vault()
+
+          # Verify results
+          assert results["files_processed"] >= 2
+          assert results["chunks_created"] > 0
+          assert len(results["errors"]) == 0
+
+          # Verify documents were stored
+          from sqlmodel import select
+          docs = db_session.exec(
+              select(Document).where(Document.vault_id == vault_id)
+          ).all()
+
+          assert len(docs) > 0
+
+          # Each document should have an embedding
+          for doc in docs:
+              assert doc.embedding is not None
+              assert len(doc.embedding) == 1536
+E       fixture 'mock_embedding_service' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_engines, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py:70
+______ ERROR at setup of TestRAGPipelineE2E.test_full_retrieval_pipeline ______
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py, line 107
+      @pytest.mark.asyncio
+      async def test_full_retrieval_pipeline(
+          self,
+          test_vault,
+          db_session,
+          sample_vault_id,
+          mock_embedding_service
+      ):
+          """Test: Query \u2192 Retrieve \u2192 Rank \u2192 Return."""
+          # First, populate database with test data
+          doc1 = Document(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              title="Character: Aria",
+              content="Aria is a skilled hacker with cybernetic eyes.",
+              doc_type="character_sheet",
+              embedding=[0.9, 0.8, 0.7] + [0.0] * 1533
+          )
+
+          doc2 = Document(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              title="Chapter 1",
+              content="The hero fought bravely against the dragon.",
+              doc_type="manuscript",
+              embedding=[0.1, 0.2, 0.3] + [0.0] * 1533
+          )
+
+          db_session.add(doc1)
+          db_session.add(doc2)
+          db_session.commit()
+
+          # Mock embedding for query
+          mock_embedding_service.embed_query.return_value = [0.85, 0.75, 0.65] + [0.0] * 1533
+
+          # Perform semantic search
+          from sqlmodel import select
+          query_embedding = [0.85, 0.75, 0.65] + [0.0] * 1533
+
+          results = db_session.exec(
+              select(Document)
+              .where(Document.vault_id == sample_vault_id)
+              .order_by(Document.embedding.cosine_distance(query_embedding))
+              .limit(1)
+          ).all()
+
+          # Should retrieve the hacker document (more similar)
+          assert len(results) == 1
+          assert "Aria" in results[0].title or "hacker" in results[0].content
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_engines, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py:107
+___ ERROR at setup of TestRAGPipelineE2E.test_graphrag_query_with_multi_hop ___
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py, line 157
+      @pytest.mark.asyncio
+      async def test_graphrag_query_with_multi_hop(
+          self,
+          db_session,
+          sample_vault_id,
+          mock_llm_client
+      ):
+          """Test: GraphRAG query with multi-hop traversal."""
+          # Create a chain of entities: A -> B -> C
+          entity_a = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Entity A",
+              type="CHARACTER",
+              description="First entity",
+              embedding=[0.1] * 1536
+          )
+          entity_b = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Entity B",
+              type="CHARACTER",
+              description="Second entity",
+              embedding=[0.2] * 1536
+          )
+          entity_c = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Entity C",
+              type="CHARACTER",
+              description="Third entity",
+              embedding=[0.3] * 1536
+          )
+
+          db_session.add(entity_a)
+          db_session.add(entity_b)
+          db_session.add(entity_c)
+
+          from writeros.schema import Relationship, RelationType
+
+          rel_ab = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=entity_a.id,
+              to_entity_id=entity_b.id,
+              rel_type=RelationType.FRIEND,
+              properties={"strength": 1.0},
+              canon={"layer": "primary", "status": "active"}
+          )
+          rel_bc = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=entity_b.id,
+              to_entity_id=entity_c.id,
+              rel_type=RelationType.FRIEND,
+              properties={"strength": 1.0},
+              canon={"layer": "primary", "status": "active"}
+          )
+
+          db_session.add(rel_ab)
+          db_session.add(rel_bc)
+          db_session.commit()
+
+          # Query with 2-hop traversal
+          profiler = ProfilerAgent()
+          graph_data = await profiler.generate_graph_data(
+              vault_id=sample_vault_id,
+              max_hops=2,
+              max_nodes=10
+          )
+
+          # Should include all 3 entities
+          assert len(graph_data["nodes"]) == 3
+          assert len(graph_data["links"]) >= 2
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_engines, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py:157
+__ ERROR at setup of TestRAGPipelinePerformance.test_large_document_chunking __
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py, line 243
+      @pytest.mark.asyncio
+      @pytest.mark.slow
+      async def test_large_document_chunking(self, tmp_path, mock_embedding_service):
+          """Test chunking performance with large documents."""
+          from writeros.preprocessing.chunker import SemanticChunker
+
+          # Create a large document (~2000 words, 500 sentences)
+          # Reduced from 5000 to balance test coverage vs. performance
+          large_text = " ".join([f"Sentence number {i}." for i in range(500)])
+
+          chunker = SemanticChunker(min_chunk_size=100, max_chunk_size=400)
+
+          # This should complete in reasonable time
+          import time
+          start = time.time()
+          chunks = await chunker.chunk_document(large_text)
+          elapsed = time.time() - start
+
+          # Should complete in < 5 seconds (with mocked embeddings)
+          assert elapsed < 5.0
+          assert len(chunks) > 0
+E       fixture 'mock_embedding_service' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_engines, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py:243
+_ ERROR at setup of TestRAGPipelinePerformance.test_vector_search_performance _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py, line 265
+      def test_vector_search_performance(self, db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_engines, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\integration\test_rag_pipeline_e2e.py:265
+_____ ERROR at setup of TestGraphRAGTraversal.test_graph_traversal_basic ______
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 140
+      @pytest.mark.asyncio
+      async def test_graph_traversal_basic(self, db_session, sample_graph, mock_llm_client):
+          """Test basic graph traversal from a starting node."""
+          profiler = ProfilerAgent()
+          vault_id = sample_graph["vault_id"]
+
+          # Generate graph data starting from entity A
+          graph_data = await profiler.generate_graph_data(
+              vault_id=vault_id,
+              graph_type="force",
+              max_nodes=10
+          )
+
+          assert "nodes" in graph_data
+          assert "links" in graph_data
+          assert len(graph_data["nodes"]) > 0
+          assert len(graph_data["links"]) > 0
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 27
+      @pytest.fixture
+      def sample_graph(self, db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_graph, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py:27
+_____ ERROR at setup of TestGraphRAGTraversal.test_relationship_filtering _____
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 159
+      @pytest.mark.asyncio
+      async def test_relationship_filtering(self, db_session, sample_graph, mock_llm_client):
+          """Test filtering by relationship type."""
+          profiler = ProfilerAgent()
+          vault_id = sample_graph["vault_id"]
+
+          # Filter for only PARENT relationships
+          graph_data = await profiler.generate_graph_data(
+              vault_id=vault_id,
+              graph_type="family",
+              relationship_types=["PARENT"],
+              max_nodes=10
+          )
+
+          # All links should be PARENT type
+          for link in graph_data["links"]:
+              assert link["type"] in ["PARENT", "CHILD"]  # Bidirectional
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 27
+      @pytest.fixture
+      def sample_graph(self, db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_graph, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py:27
+_______ ERROR at setup of TestGraphRAGTraversal.test_max_hops_limiting ________
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 178
+      @pytest.mark.asyncio
+      async def test_max_hops_limiting(self, db_session, sample_graph, mock_llm_client):
+          """Test that max_hops limits traversal depth."""
+          profiler = ProfilerAgent()
+          vault_id = sample_graph["vault_id"]
+
+          # Limit to 1 hop
+          graph_data_1hop = await profiler.generate_graph_data(
+              vault_id=vault_id,
+              graph_type="force",
+              max_hops=1,
+              max_nodes=10
+          )
+
+          # Limit to 2 hops
+          graph_data_2hop = await profiler.generate_graph_data(
+              vault_id=vault_id,
+              graph_type="force",
+              max_hops=2,
+              max_nodes=10
+          )
+
+          # 2-hop should have more or equal nodes than 1-hop
+          assert len(graph_data_2hop["nodes"]) >= len(graph_data_1hop["nodes"])
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 27
+      @pytest.fixture
+      def sample_graph(self, db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_graph, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py:27
+_______ ERROR at setup of TestGraphRAGTraversal.test_temporal_filtering _______
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 204
+      @pytest.mark.asyncio
+      async def test_temporal_filtering(self, db_session, sample_vault_id, mock_llm_client):
+          """Test filtering relationships by story time."""
+          # Create entities
+          entity_a = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Character A",
+              type=EntityType.CHARACTER,
+              description="Test",
+              embedding=[0.1] * 1536
+          )
+          entity_b = Entity(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              name="Character B",
+              type=EntityType.CHARACTER,
+              description="Test",
+              embedding=[0.2] * 1536
+          )
+
+          db_session.add(entity_a)
+          db_session.add(entity_b)
+
+          # Relationship active from sequence 10 to 20
+          rel = Relationship(
+              id=uuid4(),
+              vault_id=sample_vault_id,
+              from_entity_id=entity_a.id,
+              to_entity_id=entity_b.id,
+              rel_type=RelationType.FRIEND,
+              properties={"strength": 1.0},
+              effective_from={"sequence": 10},
+              effective_until={"sequence": 20},
+              canon={"layer": "primary", "status": "active"}
+          )
+          db_session.add(rel)
+          db_session.commit()
+
+          profiler = ProfilerAgent()
+
+          # Query at sequence 15 (should include relationship)
+          graph_active = await profiler.generate_graph_data(
+              vault_id=sample_vault_id,
+              current_story_time=15,
+              max_nodes=10
+          )
+
+          # Query at sequence 25 (should exclude relationship)
+          graph_inactive = await profiler.generate_graph_data(
+              vault_id=sample_vault_id,
+              current_story_time=25,
+              max_nodes=10
+          )
+
+          # Active query should have the relationship
+          assert len(graph_active["links"]) >= 1
+
+          # Inactive query should have fewer or no relationships
+          assert len(graph_inactive["links"]) <= len(graph_active["links"])
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_graph, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py:204
+__ ERROR at setup of TestCycleDetection.test_circular_relationship_traversal __
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 508
+      @pytest.mark.asyncio
+      async def test_circular_relationship_traversal(self, db_session, circular_graph, mock_llm_client):
+          """Test that circular relationships don't cause infinite loops."""
+          profiler = ProfilerAgent()
+          vault_id = circular_graph["vault_id"]
+
+          # This should not hang or crash
+          graph_data = await profiler.generate_graph_data(
+              vault_id=vault_id,
+              graph_type="family",
+              max_hops=5,  # Even with many hops, should not infinite loop
+              max_nodes=10
+          )
+
+          # Should complete successfully
+          assert "nodes" in graph_data
+          assert "links" in graph_data
+
+          # Should have all 3 entities
+          assert len(graph_data["nodes"]) == 3
+
+          # Should have all 3 relationships
+          assert len(graph_data["links"]) >= 3
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py, line 432
+      @pytest.fixture
+      def circular_graph(self, db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, circular_graph, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mock_profiler_engine, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_graph_rag.py:432
+_______ ERROR at setup of TestDocumentVectorSearch.test_document_search _______
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_vector_search.py, line 201
+      def test_document_search(self, db_session, populated_docs):
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_vector_search.py, line 173
+      @pytest.fixture
+      def populated_docs(self, db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, populated_docs, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_vector_search.py:173
+___________ ERROR at setup of TestFactVectorSearch.test_fact_search ___________
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_vector_search.py, line 262
+      def test_fact_search(self, db_session, populated_facts):
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_vector_search.py, line 223
+      @pytest.fixture
+      def populated_facts(self, db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, populated_facts, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\rag\test_vector_search.py:223
+_ ERROR at setup of TestGraphScriptWithDatabase.test_script_can_query_entities _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\test_graph_generation.py, line 231
+      @pytest.mark.integration
+      def test_script_can_query_entities(self, test_vault_with_entities, tmp_path):
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\test_graph_generation.py, line 26
+  @pytest.fixture
+  def test_vault_with_entities(db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault_with_entities, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\test_graph_generation.py:26
+_ ERROR at setup of TestGraphScriptWithDatabase.test_script_generates_html_file _
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\test_graph_generation.py, line 242
+      @pytest.mark.integration
+      def test_script_generates_html_file(self, test_vault_with_entities, tmp_path, mocker):
+file C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\test_graph_generation.py, line 26
+  @pytest.fixture
+  def test_vault_with_entities(db_session, sample_vault_id):
+E       fixture 'sample_vault_id' not found
+>       available fixtures: _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_faker, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_db_engine, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, class_mocker, cov, db_session, doctest_namespace, event_loop_policy, faker, fixtures_dir, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, manuscripts_dir, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, sample_documents, sample_markdown_file, session_mocker, test_engine, test_vault_with_entities, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\test_graph_generation.py:26
+================================== FAILURES ===================================
+_____ TestAnalyzeEndpoint.test_analyze_returns_404_for_nonexistent_vault ______
+
+self = <test_legacy_compatibility.TestAnalyzeEndpoint object at 0x00000270FEFA29E0>
+test_client = <starlette.testclient.TestClient object at 0x00000270FFE92330>
+mock_init_db = <MagicMock name='init_db' id='2684353292544'>
+mocker = <pytest_mock.plugin.MockerFixture object at 0x00000270FFE0B930>
+
+    def test_analyze_returns_404_for_nonexistent_vault(self, test_client, mock_init_db, mocker):
+        """Test that /analyze returns 404 for non-existent vault."""
+        fake_vault_id = str(uuid4())
+    
+        request_data = {
+            "vault_path": "C:\\test\\vault",
+            "vault_id": fake_vault_id
+        }
+    
+        response = test_client.post("/analyze", json=request_data)
+    
+>       assert response.status_code == 404
+E       assert 500 == 404
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\api\test_legacy_compatibility.py:142: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.api.app:app.py:219 [2m2025-11-25T21:02:27.590705Z[0m [[31m[1merror    [0m] [1mplugin_analyze_failed         [0m [36merror[0m=[35m'404: Vault not found'[0m
+______ TestChatStreamEndpoint.test_chat_stream_rejects_invalid_vault_id _______
+
+self = <test_legacy_compatibility.TestChatStreamEndpoint object at 0x00000270FEECB020>
+test_client = <starlette.testclient.TestClient object at 0x00000270FFE70D70>
+mock_init_db = <MagicMock name='init_db' id='2684353295568'>
+
+    def test_chat_stream_rejects_invalid_vault_id(self, test_client, mock_init_db):
+        """Test that /chat/stream rejects invalid vault_id."""
+        request_data = {
+            "message": "Test",
+            "vault_id": "invalid-uuid"
+        }
+    
+        response = test_client.post("/chat/stream", json=request_data)
+    
+>       assert response.status_code == 400
+E       assert 200 == 400
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests\api\test_legacy_compatibility.py:292: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.api.app:app.py:259 [2m2025-11-25T21:02:28.346590Z[0m [[31m[1merror    [0m] [1mplugin_chat_stream_error      [0m [36merror[0m=[35m'badly formed hexadecimal UUID string'[0m
+_____________________ test_architect_conflict_integration _____________________
+
+db_session = <sqlmodel.orm.session.Session object at 0x00000270FFEB86E0>
+
+    @pytest.mark.asyncio
+    async def test_architect_conflict_integration(db_session):
+        # 1. Setup Data
+        vault_id = uuid4()
+    
+        conflict = Conflict(
+            vault_id=vault_id,
+            name="The Long War",
+            conflict_type=ConflictType.PERSON_VS_SOCIETY,
+            status=ConflictStatus.RISING_ACTION,
+            stakes="Freedom",
+            intensity=80
+        )
+        db_session.add(conflict)
+        db_session.commit()
+    
+        # 2. Run Architect
+        architect = ArchitectAgent()
+        tasks = await architect.generate_plot_tasks(vault_id)
+    
+        # 3. Verify
+>       assert len(tasks) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests\integration\test_conflict_integration.py:32: AssertionError
+_____________________ test_dramatist_conflict_integration _____________________
+
+db_session = <sqlmodel.orm.session.Session object at 0x00000270FFF3CC80>
+
+    @pytest.mark.asyncio
+    async def test_dramatist_conflict_integration(db_session):
+        # 1. Setup Data
+        vault_id = uuid4()
+    
+        hero = Entity(vault_id=vault_id, name="Hero", type=EntityType.CHARACTER)
+        db_session.add(hero)
+        db_session.commit()
+    
+        conflict = Conflict(
+            vault_id=vault_id,
+            name="Nemesis Duel",
+            conflict_type=ConflictType.PERSON_VS_PERSON,
+            status=ConflictStatus.CLIMAX,
+            stakes="Life or Death",
+            intensity=95
+        )
+        db_session.add(conflict)
+        db_session.commit()
+    
+        participant = ConflictParticipant(
+            conflict_id=conflict.id,
+            entity_id=hero.id,
+            role=ConflictRole.PROTAGONIST
+        )
+        db_session.add(participant)
+        db_session.commit()
+    
+        # 2. Run Dramatist
+        dramatist = DramatistAgent()
+        instructions = await dramatist.generate_scene_instructions(vault_id, [str(hero.id)])
+    
+        # 3. Verify
+>       assert len(instructions) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests\integration\test_conflict_integration.py:68: AssertionError
+_________ TestSemanticChunker.test_coherence_score_varied_similarity __________
+
+self = <test_semantic_chunker.TestSemanticChunker object at 0x00000270FEF87E50>
+chunker = <writeros.preprocessing.chunker.SemanticChunker object at 0x00000270FFF3A470>
+mocker = <pytest_mock.plugin.MockerFixture object at 0x000002708B3FDE60>
+
+    @pytest.mark.asyncio
+    async def test_coherence_score_varied_similarity(self, chunker, mocker):
+        """Ensure coherence reflects mixed segment similarity."""
+        text = (
+            "Vector one points on x. Vector two points on negative x. "
+            "Vector three points on y."
+        )
+    
+        diverse_embeddings = [
+            [1.0, 0.0],
+            [-1.0, 0.0],
+            [0.0, 1.0],
+        ]
+    
+        mock_service = MagicMock()
+        mock_service.get_embeddings = AsyncMock(return_value=diverse_embeddings)
+        mocker.patch("writeros.utils.embeddings.EmbeddingService", return_value=mock_service)
+    
+        chunks = await chunker.chunk_document(text)
+    
+        coherence = chunks[0]["coherence_score"]
+        assert isinstance(coherence, float)
+>       assert coherence == pytest.approx(2 / 3, rel=1e-6)
+E       assert 0.9494570273727556 == 0.6666666666666666 ▒ 6.7e-07
+E         
+E         comparison failed
+E         Obtained: 0.9494570273727556
+E         Expected: 0.6666666666666666 ▒ 6.7e-07
+
+tests\preprocessing\test_semantic_chunker.py:140: AssertionError
+_ TestGraphScriptDatabaseConnection.test_script_initializes_database_connection _
+
+self = <tests.test_graph_generation.TestGraphScriptDatabaseConnection object at 0x00000270FF0FA490>
+
+    def test_script_initializes_database_connection(self):
+        """Test that script connects to database."""
+        with open(GENERATE_GRAPH_PY, 'r') as f:
+            content = f.read()
+    
+        # Should import database utilities
+>       assert 'from writeros' in content
+E       assert 'from writeros' in '#!/usr/bin/env python3\n"""\nGraph generation script for WriterOS.\nGenerates D3.js visualizations of vault data.\n"""\nimport sys\nimport asyncio\nfrom pathlib import Path\n\n# Add src to path\nsys.path.insert(0, str(Path(__file__).parent))\n\nasync def main():\n    from src.writeros.core.logging import setup_logging, get_logger\n    from src.writeros.agents.profiler import ProfilerAgent\n    from src.writeros.utils.db import get_or_create_vault_id\n    from uuid import UUID\n    import argparse\n    \n    setup_logging()\n    logger = get_logger(__name__)\n    \n    parser = argparse.ArgumentParser(description=\'Generate WriterOS graph\')\n    parser.add_argument(\'--graph-type\', required=True, \n                       choices=[\'force\', \'family\', \'faction\', \'location\'],\n                       help=\'Type of graph to generate\')\n    parser.add_argument(\'--vault-path\', required=True,\n                       help=\'Path to the vault root directory\')\n    parser.add_argument(\'--vault-id\', required=False,\n                       help=\'Vault UUID (optional, will auto-create if not provided)\')\n    \n    args = parser.parse_args()\n    vault_path = Path(args.vault_p...h))\n    \n    logger.info("generating_graph", vault_id=str(vault_id), graph_type=args.graph_type)\n    \n    # Generate graph\n    profiler = ProfilerAgent()\n    \n    graph_data = await profiler.generate_graph_data(\n        vault_id=vault_id,\n        graph_type=args.graph_type,\n        max_nodes=100,\n        canon_layer="primary"\n    )\n    \n    logger.info("graph_data_generated", \n                nodes=graph_data.get(\'stats\', {}).get(\'node_count\', len(graph_data.get(\'nodes\', []))), \n                links=graph_data.get(\'stats\', {}).get(\'link_count\', len(graph_data.get(\'links\', []))))\n    \n    # Save to .writeros/graphs/\n    output_path = profiler.generate_graph_html(\n        graph_data=graph_data,\n        vault_path=vault_path,\n        graph_type=args.graph_type\n    )\n    \n    # Print output path (Obsidian plugin parses this line)\n    print(f"\\nGraph generated successfully!")\n    print(f"Graph HTML generated: {output_path}")\n\nif __name__ == "__main__":\n    try:\n        asyncio.run(main())\n    except Exception as e:\n        print(f"ERROR: {e}", file=sys.stderr)\n        import traceback\n        traceback.print_exc()\n        sys.exit(1)\n'
+
+tests\test_graph_generation.py:283: AssertionError
+____________ TestServerLauncherIntegration.test_server_help_output ____________
+
+self = <tests.test_server_launcher.TestServerLauncherIntegration object at 0x00000270FF0FB610>
+
+    @pytest.mark.slow
+    @pytest.mark.skipif(
+        not (PROJECT_ROOT / "src" / "writeros" / "api" / "app.py").exists(),
+        reason="Requires full WriterOS installation"
+    )
+    def test_server_help_output(self):
+        """Test that python server.py can be invoked (will fail without proper args)."""
+        # Just verify the script is valid Python
+>       result = subprocess.run(
+            [sys.executable, str(SERVER_PY), "--help"],
+            capture_output=True,
+            text=True,
+            timeout=2
+        )
+
+tests\test_server_launcher.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:556: in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:1222: in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <Popen: returncode: 1 args: ['C:\\Users\\rahme\\AppData\\Local\\Programs\\Py...>
+input = None, endtime = 97172.5847173, orig_timeout = 2
+
+    def _communicate(self, input, endtime, orig_timeout):
+        # Start reader threads feeding into a list hanging off of this
+        # object, unless they've already been started.
+        if self.stdout and not hasattr(self, "_stdout_buff"):
+            self._stdout_buff = []
+            self.stdout_thread = \
+                    threading.Thread(target=self._readerthread,
+                                     args=(self.stdout, self._stdout_buff))
+            self.stdout_thread.daemon = True
+            self.stdout_thread.start()
+        if self.stderr and not hasattr(self, "_stderr_buff"):
+            self._stderr_buff = []
+            self.stderr_thread = \
+                    threading.Thread(target=self._readerthread,
+                                     args=(self.stderr, self._stderr_buff))
+            self.stderr_thread.daemon = True
+            self.stderr_thread.start()
+    
+        if self.stdin:
+            self._stdin_write(input)
+    
+        # Wait for the reader threads, or time out.  If we time out, the
+        # threads remain reading and the fds left open in case the user
+        # calls communicate again.
+        if self.stdout is not None:
+            self.stdout_thread.join(self._remaining_time(endtime))
+            if self.stdout_thread.is_alive():
+>               raise TimeoutExpired(self.args, orig_timeout)
+E               subprocess.TimeoutExpired: Command '['C:\\Users\\rahme\\AppData\\Local\\Programs\\Python\\Python313\\python.exe', 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\server.py', '--help']' timed out after 2 seconds
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:1646: TimeoutExpired
+_____ TestEnsureDefaultUserAndVault.test_creates_admin_user_in_local_mode _____
+
+self = <sqlalchemy.engine.base.Connection object at 0x000002708B3EAE10>
+dialect = <sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x00000270FF197250>
+context = <sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x000002708B429F50>
+statement = <sqlalchemy.dialects.postgresql.base.PGCompiler object at 0x000002708B3B9E50>
+parameters = [{}]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x00000270FF197250>
+cursor = <cursor object at 0x000002708B66B680; closed: -1>
+statement = 'DELETE FROM users', parameters = {}
+context = <sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x000002708B429F50>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       psycopg2.errors.ForeignKeyViolation: update or delete on table "users" violates foreign key constraint "vaults_owner_id_fkey" on table "vaults"
+E       DETAIL:  Key (id)=(e136f4ad-a650-4509-b0b0-d9d80e9667d2) is still referenced from table "vaults".
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: ForeignKeyViolation
+
+The above exception was the direct cause of the following exception:
+
+self = <test_init_db.TestEnsureDefaultUserAndVault object at 0x00000270FF195310>
+db_session = <sqlmodel.orm.session.Session object at 0x000002708B777E30>
+
+    @patch.dict(os.environ, {"WRITEROS_MODE": "local", "VAULT_PATH": "/test/vault"})
+    def test_creates_admin_user_in_local_mode(self, db_session):
+        """Test that admin user is created in LOCAL mode."""
+        # Clear any existing users
+>       db_session.exec(text("DELETE FROM users")).all()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\utils\test_init_db.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlmodel\orm\session.py:83: in exec
+    results = super().execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2351: in execute
+    return self._execute_internal(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2258: in _execute_internal
+    result = conn.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x00000270FF197250>
+cursor = <cursor object at 0x000002708B66B680; closed: -1>
+statement = 'DELETE FROM users', parameters = {}
+context = <sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x000002708B429F50>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) update or delete on table "users" violates foreign key constraint "vaults_owner_id_fkey" on table "vaults"
+E       DETAIL:  Key (id)=(e136f4ad-a650-4509-b0b0-d9d80e9667d2) is still referenced from table "vaults".
+E       
+E       [SQL: DELETE FROM users]
+E       (Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: IntegrityError
+___ TestEnsureDefaultUserAndVault.test_creates_default_vault_in_local_mode ____
+
+self = <test_init_db.TestEnsureDefaultUserAndVault object at 0x00000270FF195450>
+db_session = <sqlmodel.orm.session.Session object at 0x000002708B777C50>
+
+    @patch.dict(os.environ, {"WRITEROS_MODE": "local", "VAULT_PATH": "/test/vault"})
+    def test_creates_default_vault_in_local_mode(self, db_session):
+        """Test that default vault is created in LOCAL mode."""
+        # Clear existing vaults
+>       db_session.exec(text("DELETE FROM vaults")).all()
+
+tests\utils\test_init_db.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:1384: in all
+    return self._allrows()
+           ^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:546: in _allrows
+    make_row = self._row_getter
+               ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:1338: in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:471: in _row_getter
+    key_to_index = metadata._key_to_index
+                   ^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1366: in _key_to_index
+    self._we_dont_return_rows()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.engine.cursor._NoResultMetaData object at 0x00000270ED332F20>
+err = None
+
+    def _we_dont_return_rows(self, err=None):
+>       raise exc.ResourceClosedError(
+            "This result object does not return rows. "
+            "It has been closed automatically."
+        ) from err
+E       sqlalchemy.exc.ResourceClosedError: This result object does not return rows. It has been closed automatically.
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1346: ResourceClosedError
+______ TestEnsureDefaultUserAndVault.test_does_not_duplicate_admin_user _______
+
+self = <test_init_db.TestEnsureDefaultUserAndVault object at 0x00000270FF0CF6F0>
+db_session = <sqlmodel.orm.session.Session object at 0x00000270FFF3FA70>
+
+    @patch.dict(os.environ, {"WRITEROS_MODE": "local", "VAULT_PATH": "/test/vault"})
+    def test_does_not_duplicate_admin_user(self, db_session):
+        """Test that running twice doesn't create duplicate admin users."""
+        # Clear existing
+>       db_session.exec(text("DELETE FROM vaults")).all()
+
+tests\utils\test_init_db.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:1384: in all
+    return self._allrows()
+           ^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:546: in _allrows
+    make_row = self._row_getter
+               ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:1338: in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:471: in _row_getter
+    key_to_index = metadata._key_to_index
+                   ^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1366: in _key_to_index
+    self._we_dont_return_rows()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.engine.cursor._NoResultMetaData object at 0x00000270ED332F20>
+err = None
+
+    def _we_dont_return_rows(self, err=None):
+>       raise exc.ResourceClosedError(
+            "This result object does not return rows. "
+            "It has been closed automatically."
+        ) from err
+E       sqlalchemy.exc.ResourceClosedError: This result object does not return rows. It has been closed automatically.
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1346: ResourceClosedError
+___________ TestEnsureDefaultUserAndVault.test_vault_has_owner_link ___________
+
+self = <test_init_db.TestEnsureDefaultUserAndVault object at 0x00000270FF0CF820>
+db_session = <sqlmodel.orm.session.Session object at 0x00000270FFCFA6C0>
+
+    @patch.dict(os.environ, {"WRITEROS_MODE": "local", "VAULT_PATH": "/test/vault"})
+    def test_vault_has_owner_link(self, db_session):
+        """Test that created vault is linked to admin user."""
+        # Clear existing
+>       db_session.exec(text("DELETE FROM vaults")).all()
+
+tests\utils\test_init_db.py:149: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:1384: in all
+    return self._allrows()
+           ^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:546: in _allrows
+    make_row = self._row_getter
+               ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:1338: in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:471: in _row_getter
+    key_to_index = metadata._key_to_index
+                   ^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1366: in _key_to_index
+    self._we_dont_return_rows()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.engine.cursor._NoResultMetaData object at 0x00000270ED332F20>
+err = None
+
+    def _we_dont_return_rows(self, err=None):
+>       raise exc.ResourceClosedError(
+            "This result object does not return rows. "
+            "It has been closed automatically."
+        ) from err
+E       sqlalchemy.exc.ResourceClosedError: This result object does not return rows. It has been closed automatically.
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1346: ResourceClosedError
+___ TestUUIDPreservation.test_ensure_default_vault_preserves_existing_uuid ____
+
+self = <test_init_db.TestUUIDPreservation object at 0x00000270FF08ABE0>
+db_session = <sqlmodel.orm.session.Session object at 0x00000270FFF3DE50>
+tmp_path = WindowsPath('C:/Users/rahme/AppData/Local/Temp/pytest-of-rahme/pytest-39/test_ensure_default_vault_pres0')
+
+    @patch.dict(os.environ, {"WRITEROS_MODE": "local"})
+    def test_ensure_default_vault_preserves_existing_uuid(self, db_session, tmp_path):
+        """Test that existing filesystem UUID is preserved in database."""
+        # Create existing UUID on filesystem
+        existing_uuid = uuid4()
+        writeros_dir = tmp_path / ".writeros"
+        writeros_dir.mkdir()
+        (writeros_dir / "vault_id").write_text(str(existing_uuid))
+    
+        # Clear database
+>       db_session.exec(text("DELETE FROM vaults")).all()
+
+tests\utils\test_init_db.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:1384: in all
+    return self._allrows()
+           ^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:546: in _allrows
+    make_row = self._row_getter
+               ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:1338: in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\result.py:471: in _row_getter
+    key_to_index = metadata._key_to_index
+                   ^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1366: in _key_to_index
+    self._we_dont_return_rows()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.engine.cursor._NoResultMetaData object at 0x00000270ED332F20>
+err = None
+
+    def _we_dont_return_rows(self, err=None):
+>       raise exc.ResourceClosedError(
+            "This result object does not return rows. "
+            "It has been closed automatically."
+        ) from err
+E       sqlalchemy.exc.ResourceClosedError: This result object does not return rows. It has been closed automatically.
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\cursor.py:1346: ResourceClosedError
+________________ TestInitDbIntegration.test_init_db_full_flow _________________
+
+self = <test_init_db.TestInitDbIntegration object at 0x00000270FF195F90>
+test_engine = Engine(postgresql://writer:***@127.0.0.1:5433/writeros_test)
+
+    @pytest.mark.integration
+    @patch.dict(os.environ, {"WRITEROS_MODE": "local", "VAULT_PATH": "/test/vault"})
+    def test_init_db_full_flow(self, test_engine):
+        """Test complete init_db flow creates usable database."""
+        # Run init_db
+>       init_db()
+
+tests\utils\test_init_db.py:342: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\writeros\utils\db.py:135: in init_db
+    ensure_default_user_and_vault()
+src\writeros\utils\db.py:232: in ensure_default_user_and_vault
+    write_uuid_to_filesystem(vault.id, vault_path)
+src\writeros\utils\db.py:298: in write_uuid_to_filesystem
+    config_dir.mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('/test/vault/.writeros'), mode = 511, parents = False
+exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: '\\test\\vault\\.writeros'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+------------------------------ Captured log call ------------------------------
+ERROR    writeros.utils.db:db.py:142 [2m2025-11-25T21:02:51.824046Z[0m [[31m[1merror    [0m] [1mdatabase_connection_failed    [0m [36mattempt[0m=[35m1[0m [36merror[0m=[35m"[WinError 3] The system cannot find the path specified: '\\\\test\\\\vault\\\\.writeros'"[0m
+ERROR    writeros.utils.db:db.py:142 [2m2025-11-25T21:02:53.910024Z[0m [[31m[1merror    [0m] [1mdatabase_connection_failed    [0m [36mattempt[0m=[35m2[0m [36merror[0m=[35m"[WinError 3] The system cannot find the path specified: '\\\\test\\\\vault\\\\.writeros'"[0m
+ERROR    writeros.utils.db:db.py:142 [2m2025-11-25T21:02:55.991089Z[0m [[31m[1merror    [0m] [1mdatabase_connection_failed    [0m [36mattempt[0m=[35m3[0m [36merror[0m=[35m"[WinError 3] The system cannot find the path specified: '\\\\test\\\\vault\\\\.writeros'"[0m
+ERROR    writeros.utils.db:db.py:142 [2m2025-11-25T21:02:58.069508Z[0m [[31m[1merror    [0m] [1mdatabase_connection_failed    [0m [36mattempt[0m=[35m4[0m [36merror[0m=[35m"[WinError 3] The system cannot find the path specified: '\\\\test\\\\vault\\\\.writeros'"[0m
+ERROR    writeros.utils.db:db.py:142 [2m2025-11-25T21:03:00.152768Z[0m [[31m[1merror    [0m] [1mdatabase_connection_failed    [0m [36mattempt[0m=[35m5[0m [36merror[0m=[35m"[WinError 3] The system cannot find the path specified: '\\\\test\\\\vault\\\\.writeros'"[0m
+CRITICAL writeros.utils.db:db.py:147 [2m2025-11-25T21:03:00.153020Z[0m [[31m[1mcritical [0m] [1minitialization_failed         [0m
+============================== warnings summary ===============================
+src\writeros\config.py:4
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+src\writeros\api\app.py:113
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:113: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4575: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+src\writeros\api\app.py:128
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\api\app.py:128: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("shutdown")
+
+tests/agents/test_tool_calling.py: 16 warnings
+tests/integration/test_conflict_integration.py: 6 warnings
+tests/integration/test_obsidian_plugin_e2e.py: 4 warnings
+tests/rag/test_vector_search.py: 32 warnings
+tests/schema/test_conflict_model.py: 6 warnings
+tests/utils/test_indexer_integration.py: 114 warnings
+tests/utils/test_init_db.py: 10 warnings
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\pydantic\fields.py:747: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return fac()
+
+tests/test_vault_config.py::test_get_or_create_vault_id_creates_config
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\utils\vault_config.py:34: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    'created_at': datetime.utcnow().isoformat(),
+
+tests/test_vault_config.py::test_update_vault_config_preserves_existing_values
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\utils\vault_config.py:98: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    config['updated_at'] = datetime.utcnow().isoformat()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                                     Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------
+src\writeros\__init__.py                                     1      0   100%
+src\writeros\agents\__init__.py                             22     10    55%   14-23
+src\writeros\agents\architect.py                           136    109    20%   22-27, 36-158, 173-210, 220-251, 261-281, 287-305, 320-325
+src\writeros\agents\base.py                                 18      2    89%   27-28
+src\writeros\agents\chronologist.py                         22      6    73%   25-26, 30-57
+src\writeros\agents\dramatist.py                           150    118    21%   38-53, 64-87, 91-114, 118-141, 154-191, 204-248, 252-268, 272-289, 312-315
+src\writeros\agents\mechanic.py                             31      6    81%   39-40, 43-68
+src\writeros\agents\navigator.py                            26      6    77%   34-35, 38-59
+src\writeros\agents\orchestrator.py                        107     62    42%   37-38, 51-106, 118-124, 127-136, 142-157, 163-172, 175-212, 215, 231, 255-257
+src\writeros\agents\producer.py                            203    170    16%   19-27, 30-32, 36-45, 53-63, 67-85, 89-97, 101-110, 114-121, 129-159, 163-199, 207-219, 223-243, 247-264, 272-279, 283-291, 295-305, 313-331, 339-382
+src\writeros\agents\profiler.py                            201    152    24%   58-80, 106-274, 285-303, 330-461, 475, 478, 490-529
+src\writeros\agents\psychologist.py                         40     16    60%   38-39, 42-66, 73-92
+src\writeros\agents\stylist.py                              14      7    50%   8, 12-13, 16-49
+src\writeros\agents\theorist.py                             34      6    82%   37-39, 42-65
+src\writeros\agents\tools.py                                31     31     0%   5-76
+src\writeros\agents\tools_registry.py                      129     43    67%   296-304, 377-378, 396, 436-437, 451-496, 538, 548-549, 576-577, 589-620, 659-660
+src\writeros\api\__init__.py                                 0      0   100%
+src\writeros\api\app.py                                    223    103    54%   60-66, 116-125, 131, 272-277, 302-349, 373-374, 410-463, 480-498, 521-580, 590-591, 609
+src\writeros\cli\__init__.py                                 0      0   100%
+src\writeros\cli\main.py                                    41     41     0%   1-83
+src\writeros\config.py                                      16      2    88%   26, 33
+src\writeros\core\__init__.py                                0      0   100%
+src\writeros\core\logging.py                                13      1    92%   32
+src\writeros\graphs\__init__.py                              0      0   100%
+src\writeros\preprocessing\__init__.py                       4      0   100%
+src\writeros\preprocessing\chunker.py                       78      7    91%   91-94, 118, 134-135
+src\writeros\preprocessing\cluster_semantic_chunker.py     155     10    94%   58-60, 90, 156, 213-216, 252, 283
+src\writeros\preprocessing\unified_chunker.py              160      2    99%   41, 79
+src\writeros\rag\__init__.py                                 2      2     0%   1-3
+src\writeros\rag\retriever.py                               74     74     0%   5-171
+src\writeros\schema\__init__.py                             18      0   100%
+src\writeros\schema\api.py                                  22      0   100%
+src\writeros\schema\base.py                                 12      0   100%
+src\writeros\schema\enums.py                               132      0   100%
+src\writeros\schema\extended_universe.py                    90      0   100%
+src\writeros\schema\graph.py                                16      0   100%
+src\writeros\schema\identity.py                             41      0   100%
+src\writeros\schema\library.py                              74      9    88%   51-61, 127
+src\writeros\schema\logistics.py                            17      0   100%
+src\writeros\schema\mechanics.py                            20      0   100%
+src\writeros\schema\narrative.py                            19      0   100%
+src\writeros\schema\project.py                              13      0   100%
+src\writeros\schema\prose.py                                14      0   100%
+src\writeros\schema\psychology.py                           37      0   100%
+src\writeros\schema\session.py                              27      0   100%
+src\writeros\schema\temporal_anchoring.py                   54      0   100%
+src\writeros\schema\theme.py                                16      0   100%
+src\writeros\schema\world.py                                80      0   100%
+src\writeros\services\__init__.py                            0      0   100%
+src\writeros\services\conflict_engine.py                    31     12    61%   35, 48-64
+src\writeros\tasks\__init__.py                               0      0   100%
+src\writeros\utils\db.py                                   143     14    90%   17-23, 137, 236-239, 251-252, 267, 294, 313, 323
+src\writeros\utils\embeddings.py                            41      0   100%
+src\writeros\utils\indexer.py                               87     10    89%   68-72, 90-96, 208, 214
+src\writeros\utils\llm_client.py                            54     38    30%   56-99, 122-135, 152-156
+src\writeros\utils\vault_config.py                          33      2    94%   72, 90
+src\writeros\utils\vault_reader.py                         100      5    95%   57-58, 64-65, 98
+src\writeros\utils\writer.py                               178    130    27%   36-43, 47-49, 52, 58-62, 87-89, 93-130, 135-194, 197-235, 238-266, 269-274, 278-366
+--------------------------------------------------------------------------------------
+TOTAL                                                     3300   1206    63%
+Coverage HTML written to dir htmlcov
+=========================== short test summary info ===========================
+FAILED tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_returns_404_for_nonexistent_vault
+FAILED tests/api/test_legacy_compatibility.py::TestChatStreamEndpoint::test_chat_stream_rejects_invalid_vault_id
+FAILED tests/integration/test_conflict_integration.py::test_architect_conflict_integration
+FAILED tests/integration/test_conflict_integration.py::test_dramatist_conflict_integration
+FAILED tests/preprocessing/test_semantic_chunker.py::TestSemanticChunker::test_coherence_score_varied_similarity
+FAILED tests/test_graph_generation.py::TestGraphScriptDatabaseConnection::test_script_initializes_database_connection
+FAILED tests/test_server_launcher.py::TestServerLauncherIntegration::test_server_help_output
+FAILED tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_creates_admin_user_in_local_mode
+FAILED tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_creates_default_vault_in_local_mode
+FAILED tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_does_not_duplicate_admin_user
+FAILED tests/utils/test_init_db.py::TestEnsureDefaultUserAndVault::test_vault_has_owner_link
+FAILED tests/utils/test_init_db.py::TestUUIDPreservation::test_ensure_default_vault_preserves_existing_uuid
+FAILED tests/utils/test_init_db.py::TestInitDbIntegration::test_init_db_full_flow
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_entity_extraction
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_find_similar_entities
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_generate_graph_data
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_simple
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_multi_generation
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_siblings
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_with_child_relationship
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_empty
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgent::test_build_family_tree_nonexistent_entity
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_nodes
+ERROR tests/agents/test_profiler_agent.py::TestProfilerAgentHelpers::test_format_links
+ERROR tests/agents/test_tool_calling.py::TestEndToEndToolCalling::test_complete_workflow_create_character
+ERROR tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_accepts_plugin_format
+ERROR tests/api/test_legacy_compatibility.py::TestAnalyzeEndpoint::test_analyze_triggers_background_task
+ERROR tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginVaultAnalysis::test_full_vault_indexing_flow
+ERROR tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginCompleteWorkflow::test_complete_plugin_workflow_sequence
+ERROR tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginDataPersistence::test_indexed_data_persists
+ERROR tests/integration/test_obsidian_plugin_e2e.py::TestObsidianPluginPerformance::test_indexing_provides_progress_feedback
+ERROR tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_full_ingestion_pipeline
+ERROR tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_full_retrieval_pipeline
+ERROR tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelineE2E::test_graphrag_query_with_multi_hop
+ERROR tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelinePerformance::test_large_document_chunking
+ERROR tests/integration/test_rag_pipeline_e2e.py::TestRAGPipelinePerformance::test_vector_search_performance
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_graph_traversal_basic
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_relationship_filtering
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_max_hops_limiting
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_temporal_filtering
+ERROR tests/rag/test_graph_rag.py::TestCycleDetection::test_circular_relationship_traversal
+ERROR tests/rag/test_vector_search.py::TestDocumentVectorSearch::test_document_search
+ERROR tests/rag/test_vector_search.py::TestFactVectorSearch::test_fact_search
+ERROR tests/test_graph_generation.py::TestGraphScriptWithDatabase::test_script_can_query_entities
+ERROR tests/test_graph_generation.py::TestGraphScriptWithDatabase::test_script_generates_html_file
+===== 13 failed, 203 passed, 1 skipped, 195 warnings, 32 errors in 37.62s =====

@@ -15,12 +15,16 @@ class TestProfilerAgent:
     """Test suite for ProfilerAgent."""
 
     @pytest.fixture(autouse=True)
-    def mock_profiler_engine(self, test_engine, mocker):
+    def mock_session(self, mocker, db_session):
         """
-        Mock the ProfilerAgent's engine to use test database.
-        This ensures ProfilerAgent queries run against test DB, not production.
+        Mock Session to return the test db_session.
+        This ensures the agent uses the same session (and transaction) as the test.
         """
-        mocker.patch("writeros.agents.profiler.engine", test_engine)
+        mock_session_cls = mocker.patch("writeros.agents.profiler.Session")
+        mock_session_cls.return_value.__enter__.return_value = db_session
+        return mock_session_cls
+
+
 
     @pytest.fixture
     def profiler(self, mock_llm_client):

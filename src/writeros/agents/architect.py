@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from .base import BaseAgent, logger
 from sqlmodel import Session, select
-from writeros.utils.db import engine
+from writeros.utils import db as db_utils
 from writeros.utils.embeddings import get_embedding_service
 from writeros.schema import Document, Event, Anchor, AnchorStatus, Fact, Relationship, Entity
 from writeros.services.conflict_engine import ConflictEngine
@@ -262,7 +262,7 @@ class ArchitectAgent(BaseAgent):
         
         embedding = get_embedding_service().embed_query(description)
         
-        with Session(engine) as session:
+        with Session(db_utils.engine) as session:
             # Search Documents (assuming doc_type='scene' or similar)
             # We'll search all documents for now, but ideally we'd filter by doc_type
             results = session.exec(
@@ -288,7 +288,7 @@ class ArchitectAgent(BaseAgent):
         
         embedding = get_embedding_service().embed_query(query)
         
-        with Session(engine) as session:
+        with Session(db_utils.engine) as session:
             results = session.exec(
                 select(Event)
                 .order_by(Event.embedding.cosine_distance(embedding))

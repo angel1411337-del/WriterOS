@@ -1,0 +1,364 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 6 items
+
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_graph_traversal_basic ERROR [ 16%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_relationship_filtering ERROR [ 33%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_max_hops_limiting ERROR [ 50%]
+tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_temporal_filtering ERROR [ 66%]
+tests/rag/test_graph_rag.py::TestFamilyTreeConstruction::test_build_family_tree SKIPPED [ 83%]
+tests/rag/test_graph_rag.py::TestCycleDetection::test_circular_relationship_traversal ERROR [100%]
+
+=================================== ERRORS ====================================
+_____ ERROR at setup of TestGraphRAGTraversal.test_graph_traversal_basic ______
+
+self = <test_graph_rag.TestGraphRAGTraversal object at 0x0000023B22338050>
+test_engine = Engine(postgresql://writer:***@127.0.0.1:5433/writeros_test)
+mocker = <pytest_mock.plugin.MockerFixture object at 0x0000023B223EC590>
+
+    @pytest.fixture(autouse=True)
+    def mock_profiler_engine(self, test_engine, mocker):
+        """
+        Mock the ProfilerAgent's engine to use test database.
+        This ensures ProfilerAgent queries run against test DB, not production.
+        """
+>       mocker.patch("writeros.agents.profiler.engine", test_engine)
+
+tests\rag\test_graph_rag.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x0000023B22316B30>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.profiler' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\profiler.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+_____ ERROR at setup of TestGraphRAGTraversal.test_relationship_filtering _____
+
+self = <test_graph_rag.TestGraphRAGTraversal object at 0x0000023B22338550>
+test_engine = Engine(postgresql://writer:***@127.0.0.1:5433/writeros_test)
+mocker = <pytest_mock.plugin.MockerFixture object at 0x0000023B224456D0>
+
+    @pytest.fixture(autouse=True)
+    def mock_profiler_engine(self, test_engine, mocker):
+        """
+        Mock the ProfilerAgent's engine to use test database.
+        This ensures ProfilerAgent queries run against test DB, not production.
+        """
+>       mocker.patch("writeros.agents.profiler.engine", test_engine)
+
+tests\rag\test_graph_rag.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x0000023B2235AF90>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.profiler' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\profiler.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+_______ ERROR at setup of TestGraphRAGTraversal.test_max_hops_limiting ________
+
+self = <test_graph_rag.TestGraphRAGTraversal object at 0x0000023B222B16E0>
+test_engine = Engine(postgresql://writer:***@127.0.0.1:5433/writeros_test)
+mocker = <pytest_mock.plugin.MockerFixture object at 0x0000023B22445BD0>
+
+    @pytest.fixture(autouse=True)
+    def mock_profiler_engine(self, test_engine, mocker):
+        """
+        Mock the ProfilerAgent's engine to use test database.
+        This ensures ProfilerAgent queries run against test DB, not production.
+        """
+>       mocker.patch("writeros.agents.profiler.engine", test_engine)
+
+tests\rag\test_graph_rag.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x0000023B22430AD0>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.profiler' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\profiler.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+_______ ERROR at setup of TestGraphRAGTraversal.test_temporal_filtering _______
+
+self = <test_graph_rag.TestGraphRAGTraversal object at 0x0000023B222B1940>
+test_engine = Engine(postgresql://writer:***@127.0.0.1:5433/writeros_test)
+mocker = <pytest_mock.plugin.MockerFixture object at 0x0000023B22811A70>
+
+    @pytest.fixture(autouse=True)
+    def mock_profiler_engine(self, test_engine, mocker):
+        """
+        Mock the ProfilerAgent's engine to use test database.
+        This ensures ProfilerAgent queries run against test DB, not production.
+        """
+>       mocker.patch("writeros.agents.profiler.engine", test_engine)
+
+tests\rag\test_graph_rag.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x0000023B2235ACF0>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.profiler' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\profiler.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+__ ERROR at setup of TestCycleDetection.test_circular_relationship_traversal __
+
+self = <test_graph_rag.TestCycleDetection object at 0x0000023B22338690>
+test_engine = Engine(postgresql://writer:***@127.0.0.1:5433/writeros_test)
+mocker = <pytest_mock.plugin.MockerFixture object at 0x0000023B22812520>
+
+    @pytest.fixture(autouse=True)
+    def mock_profiler_engine(self, test_engine, mocker):
+        """Mock the ProfilerAgent's engine to use test database."""
+>       mocker.patch("writeros.agents.profiler.engine", test_engine)
+
+tests\rag\test_graph_rag.py:430: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:448: in __call__
+    return self._start_patch(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytest_mock\plugin.py:266: in _start_patch
+    mocked: MockType = p.start()
+                       ^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1654: in start
+    result = self.__enter__()
+             ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <unittest.mock._patch object at 0x0000023B22432890>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'writeros.agents.profiler' from 'C:\\Users\\rahme\\IdeaProjects\\YouTube Transcript Agent\\src\\writeros\\agents\\profiler.py'> does not have the attribute 'engine'
+
+..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: AttributeError
+============================== warnings summary ===============================
+src\writeros\config.py:4
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                                     Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------
+src\writeros\__init__.py                                     1      0   100%
+src\writeros\agents\__init__.py                             22     10    55%   14-23
+src\writeros\agents\architect.py                           136    116    15%   15-16, 22-27, 36-158, 173-210, 220-251, 261-281, 287-305, 311-327
+src\writeros\agents\base.py                                 19      9    53%   21-39
+src\writeros\agents\chronologist.py                         22      6    73%   25-26, 30-57
+src\writeros\agents\dramatist.py                           150    128    15%   22-27, 38-53, 64-87, 91-114, 118-141, 154-191, 204-248, 252-268, 272-289, 300-317
+src\writeros\agents\mechanic.py                             31      6    81%   39-40, 43-68
+src\writeros\agents\navigator.py                            26      6    77%   34-35, 38-59
+src\writeros\agents\orchestrator.py                        118    118     0%   6-315
+src\writeros\agents\producer.py                            203    170    16%   19-27, 30-32, 36-45, 53-63, 67-85, 89-97, 101-110, 114-121, 129-159, 163-199, 207-219, 223-243, 247-264, 272-279, 283-291, 295-305, 313-331, 339-382
+src\writeros\agents\profiler.py                            207    160    23%   54-55, 58-80, 106-274, 285-303, 330-461, 475, 481-529, 541-580
+src\writeros\agents\psychologist.py                         40     16    60%   38-39, 42-66, 73-92
+src\writeros\agents\stylist.py                              14      7    50%   8, 12-13, 16-49
+src\writeros\agents\theorist.py                             34      6    82%   37-39, 42-65
+src\writeros\agents\tools.py                                31     31     0%   5-76
+src\writeros\agents\tools_registry.py                      129    129     0%   7-660
+src\writeros\api\__init__.py                                 0      0   100%
+src\writeros\api\app.py                                    242    242     0%   13-658
+src\writeros\cli\__init__.py                                 0      0   100%
+src\writeros\cli\main.py                                    41     41     0%   1-83
+src\writeros\config.py                                      16      2    88%   26, 33
+src\writeros\core\__init__.py                                0      0   100%
+src\writeros\core\logging.py                                13      6    54%   14-42
+src\writeros\graphs\__init__.py                              0      0   100%
+src\writeros\preprocessing\__init__.py                       4      4     0%   7-23
+src\writeros\preprocessing\chunker.py                       78     78     0%   5-143
+src\writeros\preprocessing\cluster_semantic_chunker.py     155    155     0%   10-406
+src\writeros\preprocessing\unified_chunker.py              160    160     0%   14-405
+src\writeros\rag\__init__.py                                 2      2     0%   1-3
+src\writeros\rag\retriever.py                              124    124     0%   6-298
+src\writeros\schema\__init__.py                             18      0   100%
+src\writeros\schema\api.py                                  22      0   100%
+src\writeros\schema\base.py                                 12      0   100%
+src\writeros\schema\enums.py                               132      0   100%
+src\writeros\schema\extended_universe.py                    90      0   100%
+src\writeros\schema\graph.py                                16      0   100%
+src\writeros\schema\identity.py                             41      0   100%
+src\writeros\schema\library.py                              74      9    88%   51-61, 127
+src\writeros\schema\logistics.py                            17      0   100%
+src\writeros\schema\mechanics.py                            20      0   100%
+src\writeros\schema\narrative.py                            19      0   100%
+src\writeros\schema\project.py                              13      0   100%
+src\writeros\schema\prose.py                                14      0   100%
+src\writeros\schema\psychology.py                           37      0   100%
+src\writeros\schema\session.py                              27      0   100%
+src\writeros\schema\temporal_anchoring.py                   54      0   100%
+src\writeros\schema\theme.py                                16      0   100%
+src\writeros\schema\world.py                                80      0   100%
+src\writeros\services\__init__.py                            0      0   100%
+src\writeros\services\conflict_engine.py                    31     21    32%   11-16, 20-44, 48-64
+src\writeros\tasks\__init__.py                               0      0   100%
+src\writeros\utils\db.py                                   143    121    15%   17-23, 70-148, 162-241, 251-252, 262-284, 291-302, 310-325, 336-346
+src\writeros\utils\embeddings.py                            41     18    56%   22-29, 32-42, 46, 50, 54, 65, 75
+src\writeros\utils\llm_client.py                            54     42    22%   24-30, 56-99, 122-135, 152-156, 169
+--------------------------------------------------------------------------------------
+TOTAL                                                     2989   1943    35%
+Coverage HTML written to dir htmlcov
+=========================== short test summary info ===========================
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_graph_traversal_basic
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_relationship_filtering
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_max_hops_limiting
+ERROR tests/rag/test_graph_rag.py::TestGraphRAGTraversal::test_temporal_filtering
+ERROR tests/rag/test_graph_rag.py::TestCycleDetection::test_circular_relationship_traversal
+=================== 1 skipped, 1 warning, 5 errors in 3.81s ===================

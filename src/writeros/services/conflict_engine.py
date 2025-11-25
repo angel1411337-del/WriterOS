@@ -1,14 +1,14 @@
 from typing import List, Dict, Any, Optional
 from uuid import UUID
 from sqlmodel import Session, select, desc
-from writeros.utils.db import engine
+from writeros.utils import db as db_utils
 from writeros.schema.world import Conflict, ConflictParticipant, Entity
 from writeros.schema.enums import ConflictStatus, ConflictRole
 
 class ConflictEngine:
     def get_active_conflicts(self, vault_id: UUID) -> List[Conflict]:
         """Returns all conflicts where status != RESOLUTION."""
-        with Session(engine) as session:
+        with Session(db_utils.engine) as session:
             statement = select(Conflict).where(
                 Conflict.vault_id == vault_id,
                 Conflict.status != ConflictStatus.RESOLUTION
@@ -17,7 +17,7 @@ class ConflictEngine:
 
     def get_tension_map(self, vault_id: UUID) -> List[Dict[str, Any]]:
         """Returns a weighted list of characters involved in the most high-intensity conflicts."""
-        with Session(engine) as session:
+        with Session(db_utils.engine) as session:
             # Join Conflict and ConflictParticipant to get high intensity conflicts
             statement = select(Conflict, ConflictParticipant, Entity).join(
                 ConflictParticipant, Conflict.id == ConflictParticipant.conflict_id
@@ -45,7 +45,7 @@ class ConflictEngine:
 
     def update_conflict_status(self, conflict_id: UUID, new_status: ConflictStatus) -> Dict[str, Any]:
         """Handles the logic (e.g., if moving to CLIMAX, check if intensity is high enough)."""
-        with Session(engine) as session:
+        with Session(db_utils.engine) as session:
             conflict = session.get(Conflict, conflict_id)
             if not conflict:
                 return {"error": "Conflict not found"}
