@@ -68,15 +68,32 @@ class ProvenanceService:
     def get_character_knowledge(self, character_id: UUID, world_timestamp: Optional[int] = None) -> List[CharacterKnowledge]:
         """
         Returns a list of what the character currently believes.
+
+        Args:
+            character_id: The character whose knowledge to retrieve
+            world_timestamp: Optional sequence number. If provided, returns knowledge
+                           valid at that point in the narrative timeline.
+
+        Returns:
+            List of CharacterKnowledge entries that are valid for the given timestamp.
         """
         # Fetch knowledge that hasn't been forgotten or superseded
         query = select(CharacterKnowledge).where(
             CharacterKnowledge.character_id == character_id,
             CharacterKnowledge.superseded_by_id == None
         )
-        
-        # TODO: Add logic for 'forgotten_at_sequence' if we had a sequence number passed in
-        
+
+        # Filter based on narrative sequence if timestamp provided
+        if world_timestamp is not None:
+            # Only include knowledge that hasn't been forgotten yet at this timestamp
+            # Knowledge is valid if:
+            # 1. It was never forgotten (forgotten_at_sequence is None), OR
+            # 2. It was forgotten after this timestamp (forgotten_at_sequence > world_timestamp)
+            query = query.where(
+                (CharacterKnowledge.forgotten_at_sequence == None) |
+                (CharacterKnowledge.forgotten_at_sequence > world_timestamp)
+            )
+
         return self.session.exec(query).all()
 
     def detect_retcon_impact(self, modified_entity_id: UUID) -> List[ContentDependency]:

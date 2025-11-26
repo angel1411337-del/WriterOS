@@ -156,12 +156,27 @@ class RAGRetriever:
                     )
 
                 elif temporal_mode == "story_time" and max_story_time is not None:
-                    # Filter by story_time (JSONB comparison)
-                    # For now, simple year comparison if available
+                    # Filter by story_time (JSONB comparison in SQL)
                     if "year" in max_story_time:
-                        # This requires custom SQL for JSONB comparison
-                        # Simplified: We'll filter in Python for now
-                        pass  # Will be applied post-query
+                        from sqlalchemy import func, cast, Integer, or_
+
+                        # Filter events where:
+                        # 1. story_time is NULL (no time info, include by default), OR
+                        # 2. story_time->>'year' is NULL (no year field), OR
+                        # 3. story_time->>'year' <= max_year
+                        max_year = max_story_time["year"]
+                        event_stmt = event_stmt.where(
+                            or_(
+                                Event.story_time.is_(None),
+                                Event.story_time['year'].as_string().is_(None),
+                                cast(Event.story_time['year'].as_string(), Integer) <= max_year
+                            )
+                        )
+                        logger.info(
+                            "temporal_filter_applied",
+                            filter_type="story_time",
+                            max_year=max_year
+                        )
 
                 if distance_metric == "cosine":
                     event_stmt = event_stmt.order_by(
@@ -174,9 +189,8 @@ class RAGRetriever:
 
                 events = list(session.exec(event_stmt).all())
 
-                # Post-filter for story_time if needed
-                if temporal_mode == "story_time" and max_story_time is not None:
-                    events = self._filter_events_by_story_time(events, max_story_time)
+                # Note: story_time filtering is now done in SQL (see lines 158-179)
+                # No post-query filtering needed
 
         return RetrievalResult(
             documents=documents,
@@ -197,7 +211,10 @@ class RAGRetriever:
         max_story_time: Dict[str, int]
     ) -> List[Event]:
         """
-        Filter events by story_time in Python (post-query).
+        DEPRECATED: Filter events by story_time in Python (post-query).
+
+        This method is kept for backwards compatibility but is no longer used.
+        Filtering is now done in SQL for better performance (see lines 158-179).
 
         Args:
             events: List of events to filter
@@ -285,7 +302,6 @@ class RAGRetriever:
                 if event.story_time:
                     time_str = f" (Story Time: {event.story_time})"
                 desc = event.description or event.name
-                event_lines.append(f"- {seq} {desc}{time_str}")
                 event_lines.append(f"- {seq} {desc}{time_str}")
             sections.append("📅 EVENTS:\n" + "\n".join(event_lines))
 

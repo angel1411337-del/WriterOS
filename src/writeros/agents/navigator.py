@@ -100,13 +100,40 @@ class NavigatorAgent(BaseAgent):
 
         origin_norm = origin.lower().strip()
         dest_norm = destination.lower().strip()
-        
-        # Find edge
+
+        # Find edge in distances data
         edges = self.distances_data.get("edges", [])
         found_edge = None
-        
-        # ... (existing logic) ...
-        return {"success": False, "reason": "Not implemented in snippet"}
+
+        for edge in edges:
+            s = edge["source"].lower().strip()
+            t = edge["target"].lower().strip()
+            if (s == origin_norm and t == dest_norm) or (s == dest_norm and t == origin_norm):
+                found_edge = edge
+                break
+
+        if not found_edge:
+            return {"success": False, "reason": "No direct route found in DB"}
+
+        # Get speed for travel method
+        speeds = self.distances_data.get("speeds", {})
+        method_norm = method.lower().strip()
+
+        if not method_norm or method_norm not in speeds:
+            method_norm = "horse" if not method_norm else method_norm
+            if method_norm not in speeds:
+                return {"success": False, "reason": f"Unknown method: {method}"}
+
+        speed = speeds[method_norm]
+        distance = found_edge["miles"]
+        time_days = distance / speed
+
+        return {
+            "success": True,
+            "distance": distance,
+            "time": time_days,
+            "method": method_norm
+        }
 
     async def find_route(self, origin_id: UUID, destination_id: UUID, max_depth: int = 10) -> Dict[str, Any]:
         """
@@ -169,36 +196,6 @@ class NavigatorAgent(BaseAgent):
                     "found": False,
                     "reason": "One or both locations not found in the connectivity graph."
                 }
-        
-        for edge in edges:
-            s = edge["source"].lower().strip()
-            t = edge["target"].lower().strip()
-            if (s == origin_norm and t == dest_norm) or (s == dest_norm and t == origin_norm):
-                found_edge = edge
-                break
-        
-        if not found_edge:
-            return {"success": False, "reason": "No direct route found in DB"}
-
-        # Get speed
-        speeds = self.distances_data.get("speeds", {})
-        method_norm = method.lower().strip()
-        
-        if not method_norm or method_norm not in speeds:
-            method_norm = "horse" if not method_norm else method_norm
-            if method_norm not in speeds:
-                 return {"success": False, "reason": f"Unknown method: {method}"}
-                
-        speed = speeds[method_norm]
-        distance = found_edge["miles"]
-        time_days = distance / speed
-        
-        return {
-            "success": True,
-            "distance": distance,
-            "time": time_days,
-            "method": method_norm
-        }
 
     async def agentic_rag_traversal(self, query: str, origin: Optional[str], destination: Optional[str]) -> Dict[str, Any]:
         """
@@ -237,21 +234,6 @@ class NavigatorAgent(BaseAgent):
             "findings": findings,
             "context_str": "\n\n".join(findings)
         }
-
-    async def should_respond(self, query: str, context: str = "") -> tuple[bool, float, str]:
-        """
-        Navigator responds to travel, location, and geography queries.
-        """
-        nav_keywords = [
-            "where", "location", "travel", "distance", "map", "route",
-            "journey", "arrive", "depart", "north", "south", "east", "west"
-        ]
-        
-        query_lower = query.lower()
-        if any(kw in query_lower for kw in nav_keywords):
-            return (True, 0.9, "Query involves travel/location")
-        else:
-            return (False, 0.2, "No travel context detected")
 
     async def run(self, full_text: str, existing_notes: str, title: str):
         logger.info(f"🗺️ Navigator analyzing travel in: {title}...")
