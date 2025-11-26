@@ -73,11 +73,14 @@ Tension indicators:
 Consider: conflict, pacing, stakes, danger, urgency, and unresolved questions.
 
 Return ONLY a number between 1.0 and 10.0 (e.g., "7.5")"""),
-            ("user", f"Genre: {genre}\n\nScene:\n{scene_text[:2000]}")  # Limit to 2000 chars
+            ("user", "Genre: {genre}\n\nScene:\n{scene_text}")
         ])
         
         chain = prompt | self.llm | StrOutputParser()
-        result = await chain.ainvoke({})
+        result = await chain.ainvoke({
+            "genre": genre,
+            "scene_text": scene_text[:2000]
+        })
         
         try:
             score = float(result.strip())
@@ -100,11 +103,13 @@ Emotion indicators:
 Consider: character reactions, dialogue intensity, internal conflict, and emotional stakes.
 
 Return ONLY a number between 1.0 and 10.0 (e.g., "6.8")"""),
-            ("user", f"Scene:\n{scene_text[:2000]}")
+            ("user", "Scene:\n{scene_text}")
         ])
         
         chain = prompt | self.llm | StrOutputParser()
-        result = await chain.ainvoke({})
+        result = await chain.ainvoke({
+            "scene_text": scene_text[:2000]
+        })
         
         try:
             score = float(result.strip())

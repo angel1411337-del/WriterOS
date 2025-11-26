@@ -286,12 +286,166 @@ class RAGRetriever:
                     time_str = f" (Story Time: {event.story_time})"
                 desc = event.description or event.name
                 event_lines.append(f"- {seq} {desc}{time_str}")
+                event_lines.append(f"- {seq} {desc}{time_str}")
             sections.append("📅 EVENTS:\n" + "\n".join(event_lines))
 
         if not sections:
             return "No relevant information found."
 
         return "\n\n".join(sections)
+
+
+    async def retrieve_iterative(
+        self,
+        initial_query: str,
+        vault_id: Optional[UUID] = None,
+        max_hops: int = 10,
+        limit_per_hop: int = 3,
+        **kwargs
+    ) -> RetrievalResult:
+        """
+        Performs iterative multi-hop retrieval to gather deeper context.
+        
+        Process:
+        1. Retrieve initial context based on query
+        2. Analyze what was found and identify gaps
+        3. Generate follow-up query to fill gaps
+        4. Retrieve more context
+        5. Repeat up to max_hops times
+        
+        Args:
+            initial_query: The starting query
+            vault_id: Optional vault filter
+            max_hops: Maximum number of retrieval iterations (default: 10)
+            limit_per_hop: Results to retrieve per hop (default: 3)
+            **kwargs: Additional arguments passed to retrieve()
+            
+        Returns:
+            Aggregated RetrievalResult from all hops
+        """
+        from langchain_core.prompts import ChatPromptTemplate
+        from langchain_core.output_parsers import StrOutputParser
+        from writeros.utils.llm_client import LLMClient
+        import os
+        
+        logger.info("iterative_retrieval_started", query=initial_query, max_hops=max_hops)
+        
+        # Initialize LLM for query refinement
+        llm = LLMClient(model_name="gpt-4o", api_key=os.getenv("OPENAI_API_KEY"))
+        
+        # Aggregated results
+        all_documents = []
+        all_entities = []
+        all_facts = []
+        all_events = []
+        all_scores = {"documents": [], "entities": [], "facts": [], "events": []}
+        
+        current_query = initial_query
+        seen_ids = {"documents": set(), "entities": set(), "facts": set(), "events": set()}
+        
+        for hop in range(max_hops):
+            logger.info("retrieval_hop", hop=hop+1, query=current_query[:100])
+            
+            # Retrieve for this hop
+            hop_results = await self.retrieve(
+                query=current_query,
+                vault_id=vault_id,
+                limit=limit_per_hop,
+                **kwargs
+            )
+            
+            # Deduplicate and aggregate results
+            new_results_found = False
+            
+            for doc in hop_results.documents:
+                if doc.id not in seen_ids["documents"]:
+                    all_documents.append(doc)
+                    seen_ids["documents"].add(doc.id)
+                    new_results_found = True
+            
+            for entity in hop_results.entities:
+                if entity.id not in seen_ids["entities"]:
+                    all_entities.append(entity)
+                    seen_ids["entities"].add(entity.id)
+                    new_results_found = True
+            
+            for fact in hop_results.facts:
+                if fact.id not in seen_ids["facts"]:
+                    all_facts.append(fact)
+                    seen_ids["facts"].add(fact.id)
+                    new_results_found = True
+            
+            for event in hop_results.events:
+                if event.id not in seen_ids["events"]:
+                    all_events.append(event)
+                    seen_ids["events"].add(event.id)
+                    new_results_found = True
+            
+            # If no new results, stop early
+            if not new_results_found:
+                logger.info("iterative_retrieval_converged", hop=hop+1)
+                break
+            
+            # If this is the last hop, don't generate a follow-up query
+            if hop == max_hops - 1:
+                break
+            
+            # Generate follow-up query based on current context
+            context_summary = self.format_results(hop_results, max_content_length=100)
+            
+            refinement_prompt = ChatPromptTemplate.from_messages([
+                ("system", """You are refining a search query based on retrieved context.
+
+Your goal: Generate a follow-up query that will retrieve COMPLEMENTARY information.
+
+Rules:
+1. Identify gaps in the current context
+2. Ask about related entities, events, or facts NOT yet retrieved
+3. Keep it concise (one sentence)
+4. Don't repeat the original query verbatim
+
+Example:
+Original: "Who is Jon Snow?"
+Context: "Jon Snow is Ned Stark's bastard son"
+Follow-up: "What is Jon Snow's relationship with the Night's Watch?"
+"""),
+                ("user", """Original Query: {original_query}
+
+Current Context Retrieved:
+{context_summary}
+
+Generate a follow-up query to gather complementary information:""")
+            ])
+            
+            chain = refinement_prompt | llm | StrOutputParser()
+            try:
+                current_query = await chain.ainvoke({
+                    "original_query": initial_query,
+                    "context_summary": context_summary
+                })
+                logger.info("query_refined", new_query=current_query[:100])
+            except Exception as e:
+                logger.error("query_refinement_failed", error=str(e))
+                break  # Stop if we can't refine
+        
+        logger.info(
+            "iterative_retrieval_complete",
+            hops=hop+1,
+            total_docs=len(all_documents),
+            total_entities=len(all_entities),
+            total_facts=len(all_facts),
+            total_events=len(all_events)
+        )
+        
+        # Return aggregated results
+        return RetrievalResult(
+            documents=all_documents,
+            entities=all_entities,
+            facts=all_facts,
+            events=all_events,
+            scores=all_scores,
+            temporal_context=hop_results.temporal_context if hop_results else None
+        )
 
 
 # Global instance for convenience

@@ -164,3 +164,111 @@ class ConflictRole(str, Enum):
     ANTAGONIST = "antagonist"
     INSTIGATOR = "instigator"
     BYSTANDER = "bystander"
+
+# ============================================
+# QUICK WIN ENUMS (Architectural Improvements)
+# ============================================
+
+class SceneOutcomeType(str, Enum):
+    """Tracks whether scene goals were achieved."""
+    ACHIEVED = "achieved"  # Character got what they wanted
+    FAILED = "failed"  # Character did not achieve goal
+    SUBVERTED = "subverted"  # Got something unexpected instead
+    MODIFIED = "modified"  # Partially achieved or changed during scene
+    ABANDONED = "abandoned"  # Goal became irrelevant
+
+class DramaticFunction(str, Enum):
+    """Scene's role in overall story structure."""
+    EXPOSITION = "exposition"  # Introduces characters/world/setup
+    INCITING_INCIDENT = "inciting_incident"  # Kicks off the main story
+    RISING_ACTION = "rising_action"  # Builds tension toward climax
+    MIDPOINT = "midpoint"  # Major revelation or turning point
+    CRISIS = "crisis"  # Character's darkest moment
+    CLIMAX = "climax"  # Peak of story tension
+    FALLING_ACTION = "falling_action"  # Aftermath of climax
+    RESOLUTION = "resolution"  # Ties up loose ends
+    DENOUEMENT = "denouement"  # Final reflection/epilogue
+
+class SubplotStatus(str, Enum):
+    """Tracks subplot lifecycle."""
+    SETUP = "setup"  # Introducing the subplot
+    RISING = "rising"  # Building tension in subplot
+    CLIMAX = "climax"  # Subplot reaches peak
+    RESOLUTION = "resolution"  # Subplot resolved
+    ABANDONED = "abandoned"  # Subplot dropped (may be intentional)
+
+class ThreadRole(str, Enum):
+    """How much a scene contributes to a plot thread."""
+    PRIMARY = "primary"  # Scene primarily about this thread
+    SECONDARY = "secondary"  # Scene touches on this thread
+    REFERENCE = "reference"  # Brief mention/callback
+
+class GoalLevel(str, Enum):
+    """Hierarchy of character goals."""
+    STORY_GOAL = "story_goal"  # Overarching goal for entire story
+    ACT_GOAL = "act_goal"  # Goal for this act/section
+    SCENE_GOAL = "scene_goal"  # Immediate goal in this scene
+
+class GoalStatus(str, Enum):
+    """Tracking goal progress."""
+    PENDING = "pending"  # Not yet attempted
+    IN_PROGRESS = "in_progress"  # Currently being pursued
+    ACHIEVED = "achieved"  # Goal accomplished
+    FAILED = "failed"  # Goal failed permanently
+    ABANDONED = "abandoned"  # Character gave up or goal became irrelevant
+
+# ============================================
+# PROVENANCE SYSTEM ENUMS
+# ============================================
+
+class StateChangeEventType(str, Enum):
+    """Types of state changes that can happen to entities."""
+    INVENTORY_ADD = "inventory_add"
+    INVENTORY_REMOVE = "inventory_remove"
+    LOCATION_MOVE = "location_move"
+    STATUS_CHANGE = "status_change"
+    HEALTH_CHANGE = "health_change"
+    ABILITY_GAIN = "ability_gain"
+    ABILITY_LOSS = "ability_loss"
+    RELATIONSHIP_CHANGE = "relationship_change"
+    ATTRIBUTE_CHANGE = "attribute_change"
+
+class KnowledgeSourceType(str, Enum):
+    """How a character learned a piece of information."""
+    WITNESSED = "witnessed"  # Saw it firsthand
+    TOLD_BY = "told_by"  # Someone told them
+    READ = "read"  # Read in a book/letter
+    DEDUCED = "deduced"  # Figured it out logically
+    DREAMED = "dreamed"  # Vision or prophetic dream
+    OVERHEARD = "overheard"  # Eavesdropped
+    RUMOR = "rumor"  # Heard through gossip
+    UNKNOWN = "unknown"  # Source unclear
+
+class DependencyType(str, Enum):
+    """Types of dependencies between content and facts."""
+    REFERENCES_EVENT = "references_event"  # Scene references a past event
+    ASSUMES_ALIVE = "assumes_alive"  # Assumes character is alive
+    ASSUMES_DEAD = "assumes_dead"  # Assumes character is dead
+    ASSUMES_LOCATION = "assumes_location"  # Assumes entity is at location
+    ASSUMES_RELATIONSHIP = "assumes_relationship"  # Assumes relationship exists
+    ASSUMES_KNOWLEDGE = "assumes_knowledge"  # Assumes character knows something
+    ASSUMES_POSSESSION = "assumes_possession"  # Assumes character has item
+    ASSUMES_ABILITY = "assumes_ability"  # Assumes character has ability
+
+class PresenceType(str, Enum):
+    """How an entity is present in a scene."""
+    ACTIVE = "active"  # Directly participating
+    PASSIVE = "passive"  # Present but not active
+    MENTIONED = "mentioned"  # Talked about but not present
+    FLASHBACK = "flashback"  # Appears in memory/flashback
+    VISION = "vision"  # Appears in dream/vision
+    OFFSCREEN = "offscreen"  # Actions happen but not shown
+
+class IngestionSourceType(str, Enum):
+    """How data entered the system."""
+    MANUAL = "manual"  # User manually entered
+    FILE_UPLOAD = "file_upload"  # Uploaded document
+    API = "api"  # External API
+    INFERENCE = "inference"  # AI inferred from text
+    IMPORT = "import"  # Bulk import operation
+

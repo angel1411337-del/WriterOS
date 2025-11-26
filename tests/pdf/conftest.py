@@ -20,6 +20,7 @@ except ImportError:
 
 from writeros.utils.pdf_processor import PDFProcessor
 from writeros.preprocessing import ChunkingStrategy
+from writeros.agents.profiler import ProfilerAgent
 
 
 def create_pdf_with_content(path: Path, content: str, metadata: dict = None):
@@ -183,3 +184,20 @@ def mock_pdf_processor(db_session, sample_vault_id, mocker):
     )
     
     return processor
+
+@pytest.fixture
+def mock_profiler(db_session, mocker):
+    """
+    Create a ProfilerAgent with mocked database session.
+    Ensures it shares the same transaction as the test.
+    """
+    # Patch Session to use test db_session
+    from unittest.mock import MagicMock
+    mock_ctx = MagicMock()
+    mock_ctx.__enter__.return_value = db_session
+    mock_ctx.__exit__.return_value = None
+    
+    # Patch Session in profiler module
+    mocker.patch("writeros.agents.profiler.Session", return_value=mock_ctx)
+    
+    return ProfilerAgent()

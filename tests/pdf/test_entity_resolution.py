@@ -11,6 +11,7 @@ Tests:
 """
 import pytest
 from uuid import uuid4
+import time
 
 from writeros.schema import Entity, EntityType
 from writeros.agents.profiler import ProfilerAgent
@@ -20,9 +21,9 @@ class TestEntityResolution:
     """Test suite for temporal entity resolution."""
     
     @pytest.mark.asyncio
-    async def test_resolve_entity_by_era_single_match(self, db_session, sample_vault_id):
+    async def test_resolve_entity_by_era_single_match(self, db_session, sample_vault_id, mock_profiler):
         """Test resolving entity when only one match exists."""
-        profiler = ProfilerAgent()
+        profiler = mock_profiler
         
         # Create single entity
         entity = Entity(
@@ -47,9 +48,9 @@ class TestEntityResolution:
         assert result.name == "Rhaenyra"
     
     @pytest.mark.asyncio
-    async def test_resolve_entity_by_era_temporal_disambiguation(self, db_session, sample_vault_id):
+    async def test_resolve_entity_by_era_temporal_disambiguation(self, db_session, sample_vault_id, mock_profiler):
         """Test temporal disambiguation with multiple entities of same name."""
-        profiler = ProfilerAgent()
+        profiler = mock_profiler
         
         # Create Aegon I (1-37 AC)
         aegon_i = Entity(
@@ -58,7 +59,7 @@ class TestEntityResolution:
             type=EntityType.CHARACTER,
             description="Aegon I Targaryen, the Conqueror",
             embedding=[0.1] * 1536,
-            metadata_={
+            properties={
                 "era_start_year": 1,
                 "era_end_year": 37
             }
@@ -71,7 +72,7 @@ class TestEntityResolution:
             type=EntityType.CHARACTER,
             description="Aegon II Targaryen",
             embedding=[0.2] * 1536,
-            metadata_={
+            properties={
                 "era_start_year": 129,
                 "era_end_year": 131
             }
@@ -91,16 +92,14 @@ class TestEntityResolution:
         # Verify Aegon II returned (not Aegon I)
         assert result is not None
         assert result.id == aegon_ii.id
-        assert result.metadata_["era_start_year"] == 129
+        assert result.properties["era_start_year"] == 129
     
     @pytest.mark.asyncio
-    async def test_resolve_entity_by_era_fallback(self, db_session, sample_vault_id):
+    async def test_resolve_entity_by_era_fallback(self, db_session, sample_vault_id, mock_profiler):
         """Test fallback to most recent entity when no temporal context."""
-        profiler = ProfilerAgent()
+        profiler = mock_profiler
         
         # Create two entities (different created_at times)
-        import time
-        
         aegon_old = Entity(
             vault_id=sample_vault_id,
             name="Aegon",
@@ -134,9 +133,9 @@ class TestEntityResolution:
         assert result.id == aegon_new.id
     
     @pytest.mark.asyncio
-    async def test_find_or_create_entity_existing(self, db_session, sample_vault_id):
+    async def test_find_or_create_entity_existing(self, db_session, sample_vault_id, mock_profiler):
         """Test find_or_create_entity returns existing entity."""
-        profiler = ProfilerAgent()
+        profiler = mock_profiler
         
         # Create existing entity
         existing = Entity(
@@ -171,9 +170,9 @@ class TestEntityResolution:
         assert len(daemons) == 1
     
     @pytest.mark.asyncio
-    async def test_find_or_create_entity_new(self, db_session, sample_vault_id):
+    async def test_find_or_create_entity_new(self, db_session, sample_vault_id, mock_profiler):
         """Test find_or_create_entity creates new entity when none exists."""
-        profiler = ProfilerAgent()
+        profiler = mock_profiler
         
         # Create new entity
         result = await profiler.find_or_create_entity(
@@ -188,16 +187,16 @@ class TestEntityResolution:
         assert result is not None
         assert result.name == "Viserys"
         assert result.type == EntityType.CHARACTER
-        assert result.metadata_["era_start_year"] == 103
+        assert result.properties["era_start_year"] == 103
         
         # Verify entity in database
         db_session.refresh(result)
         assert result.id is not None
     
     @pytest.mark.asyncio
-    async def test_prevent_duplicate_entities_across_eras(self, db_session, sample_vault_id):
+    async def test_prevent_duplicate_entities_across_eras(self, db_session, sample_vault_id, mock_profiler):
         """Test that entities with same name but different eras don't create duplicates."""
-        profiler = ProfilerAgent()
+        profiler = mock_profiler
         
         # Create Aegon I
         aegon_i = await profiler.find_or_create_entity(

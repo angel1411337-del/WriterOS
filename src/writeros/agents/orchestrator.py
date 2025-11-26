@@ -12,8 +12,17 @@ from sqlmodel import Session, select, desc
 from sqlalchemy import func
 
 from writeros.schema import Conversation, Message, Document, Entity
+from writeros.rag.retriever import RAGRetriever
 from writeros.agents.profiler import ProfilerAgent
 from writeros.agents.dramatist import DramatistAgent
+from writeros.agents.architect import ArchitectAgent
+from writeros.agents.chronologist import ChronologistAgent
+from writeros.agents.mechanic import MechanicAgent
+from writeros.agents.navigator import NavigatorAgent
+from writeros.agents.producer import ProducerAgent
+from writeros.agents.psychologist import PsychologistAgent
+from writeros.agents.stylist import StylistAgent
+from writeros.agents.theorist import TheoristAgent
 from writeros.agents.base import BaseAgent
 from writeros.agents.tools_registry import ToolRegistry
 from writeros.utils.embeddings import get_embedding_service
@@ -23,10 +32,19 @@ class OrchestratorAgent(BaseAgent):
     def __init__(self):
         super().__init__(model_name="gpt-5.1")
         self.embedder = get_embedding_service()
+        self.retriever = RAGRetriever()
 
         # Sub-agents
         self.profiler = ProfilerAgent()
         self.dramatist = DramatistAgent()
+        self.architect = ArchitectAgent()
+        self.chronologist = ChronologistAgent()
+        self.mechanic = MechanicAgent()
+        self.navigator = NavigatorAgent()
+        self.producer = ProducerAgent()
+        self.psychologist = PsychologistAgent()
+        self.stylist = StylistAgent()
+        self.theorist = TheoristAgent()
 
         # Tool Registry for function calling (write-back capability)
         vault_path = os.getenv("VAULT_PATH")
@@ -36,6 +54,21 @@ class OrchestratorAgent(BaseAgent):
         else:
             self.tools = None
             self.log.warning("tools_registry_disabled", reason="VAULT_PATH not set")
+        # Agent registry for broadcast
+        self.agents = {
+            "architect": self.architect,
+            "chronologist": self.chronologist,
+            "dramatist": self.dramatist,
+            "mechanic": self.mechanic,
+            "navigator": self.navigator,
+            "producer": self.producer,
+            "profiler": self.profiler,
+            "psychologist": self.psychologist,
+            "stylist": self.stylist,
+            "theorist": self.theorist
+        }
+
+
 
     async def process_chat(
         self,
@@ -46,87 +79,47 @@ class OrchestratorAgent(BaseAgent):
         current_story_time: Optional[Dict[str, int]] = None
     ) -> AsyncGenerator[str, None]:
         """
-        Main entry point for chat. Streams the response.
-        Supports OpenAI Function Calling for write-back operations.
-        Supports temporal filtering to prevent spoilers (Phase 2).
-
-        Args:
-            user_message: The user's chat message
-            vault_id: Vault ID for context retrieval
-            conversation_id: Optional existing conversation ID
-            current_sequence_order: Current chapter/scene for temporal filtering
-            current_story_time: Current in-universe time for temporal filtering
+        Main entry point for chat.
+        Uses Iterative RAG -> Agent Broadcast -> Response Synthesis.
         """
         # 1. Manage Conversation
         if not conversation_id:
             conversation_id = self._create_conversation(vault_id, user_message)
 
-        # 2. RAG Retrieval with Temporal Context
-        context = await self._retrieve_context(
+        # 2. Iterative RAG Retrieval (10 hops)
+        self.log.info("starting_iterative_rag", query=user_message)
+        rag_result = await self.retriever.retrieve_iterative(
+            initial_query=user_message,
+            max_hops=10,
+            limit_per_hop=3
+        )
+        
+        # Format context for agents
+        context_str = self.retriever.format_results(rag_result)
+
+        # 3. Broadcast to Agents (Autonomy Check)
+        agent_results = await self._execute_agents_with_autonomy(
+            list(self.agents.keys()),
             user_message,
-            vault_id,
-            current_sequence_order=current_sequence_order,
-            current_story_time=current_story_time
+            context_str
         )
 
-        # 3. Route to Agent (Simple keyword routing for now)
-        agent = self._select_agent(user_message)
+        # 4. Synthesize Response
+        synthesis = await self._synthesize_response(user_message, agent_results)
 
-        # 4. Save User Message
+        # 5. Save User Message
         self._save_message(conversation_id, "user", user_message)
 
-        # 5. Generate Response (Streaming with Tool Calling support)
-        full_response = ""
-        tool_calls_executed = []
+        # 6. Stream Synthesis
+        yield synthesis
 
-        # Construct Prompt
-        system_prompt = self._build_system_prompt(agent, context)
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_message}
-        ]
-
-        # Enable tools if available
-        tools = self.tools.get_tool_schemas() if self.tools else None
-
-        # Stream from LLM with tool support
-        async for chunk in self.llm.stream_chat(messages, tools=tools):
-            # Check if chunk contains a tool call
-            if isinstance(chunk, dict) and chunk.get("type") == "tool_call":
-                # Execute tool
-                tool_result = await self._execute_tool_call(chunk)
-                tool_calls_executed.append(tool_result)
-
-                # Yield tool execution feedback to user
-                yield f"\n[Tool: {chunk['name']}] {tool_result['message']}\n"
-
-                # Add tool result to messages for continued conversation
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": chunk.get("id", ""),
-                    "content": json.dumps(tool_result)
-                })
-
-                # Continue conversation with tool result
-                async for response_chunk in self.llm.stream_chat(messages, tools=tools):
-                    if isinstance(response_chunk, str):
-                        full_response += response_chunk
-                        yield response_chunk
-            else:
-                # Regular text chunk
-                full_response += chunk
-                yield chunk
-
-        # 6. Save Assistant Message with tool execution metadata
+        # 7. Save Assistant Message
         self._save_message(
             conversation_id,
             "assistant",
-            full_response,
-            agent=agent.agent_name,
-            context_used={
-                **self._serialize_context(context),
-                "tool_calls": tool_calls_executed
-            }
+            synthesis,
+            agent="Orchestrator",
+            context_used={"rag_stats": f"{len(rag_result.documents)} docs, {len(rag_result.entities)} entities"}
         )
 
     def _create_conversation(self, vault_id: UUID, first_message: str) -> UUID:
@@ -274,7 +267,129 @@ class OrchestratorAgent(BaseAgent):
             "documents": [str(d.id) for d in context['documents']],
             "entities": [str(e.id) for e in context['entities']]
         }
+    async def _execute_agents_with_autonomy(
+        self,
+        agent_names: List[str],
+        user_message: str,
+        context: str
+    ) -> Dict[str, Any]:
+        """
+        Executes agents with autonomy check - agents can opt-out if query is irrelevant.
+        """
+        import asyncio
+        
+        # Phase 1: Check agent willingness (in parallel)
+        self.log.info("checking_agent_relevance", agent_count=len(agent_names))
+        relevance_tasks = []
+        valid_agents = []
+        
+        for name in agent_names:
+            agent_key = name.lower()
+            if agent_key in self.agents:
+                agent = self.agents[agent_key]
+                relevance_tasks.append(agent.should_respond(user_message, context))
+                valid_agents.append((agent_key, agent))
+            else:
+                self.log.warning("unknown_agent_requested", agent=agent_key)
+        
+        # Get all relevance checks
+        relevance_results = await asyncio.gather(*relevance_tasks, return_exceptions=True)
+        
+        # Phase 2: Execute only willing agents
+        execution_tasks = []
+        active_agents = []
+        results = {}
+        
+        for (agent_key, agent), relevance_result in zip(valid_agents, relevance_results):
+            if isinstance(relevance_result, Exception):
+                self.log.error("relevance_check_failed", agent=agent_key, error=str(relevance_result))
+                should_respond, confidence, reason = (True, 1.0, "Relevance check failed")
+            else:
+                should_respond, confidence, reason = relevance_result
+            
+            if should_respond or confidence >= 0.5:
+                self.log.info("agent_responding", agent=agent_key, confidence=confidence)
+                execution_tasks.append(agent.run(
+                    full_text=user_message,
+                    existing_notes=context,
+                    title="User Query"
+                ))
+                active_agents.append(agent_key)
+            else:
+                self.log.info("agent_skipped", agent=agent_key, reason=reason)
+                results[agent_key] = {
+                    "skipped": True,
+                    "confidence": confidence,
+                    "reason": reason
+                }
+        
+        if not execution_tasks:
+            self.log.warning("no_agents_willing_to_respond")
+            return results
+        
+        # Execute willing agents in parallel
+        self.log.info("executing_agents", agent_count=len(active_agents))
+        results_list = await asyncio.gather(*execution_tasks, return_exceptions=True)
+        
+        for agent_key, result in zip(active_agents, results_list):
+            if isinstance(result, Exception):
+                self.log.error("agent_execution_failed", agent=agent_key, error=str(result))
+                results[agent_key] = {"error": str(result)}
+            else:
+                results[agent_key] = result
+                
+        return results
 
+    async def _synthesize_response(self, query: str, agent_results: Dict[str, Any]) -> str:
+        """
+        Synthesizes multiple agent responses into one coherent natural language answer.
+        """
+        from langchain_core.prompts import ChatPromptTemplate
+        from langchain_core.output_parsers import StrOutputParser
+        
+        # Filter to only responding agents (not skipped)
+        responding_agents = {
+                name: result for name, result in agent_results.items()
+                if not (isinstance(result, dict) and result.get("skipped"))
+            }
+            
+        if not responding_agents:
+            return "No agents had relevant information for this query."
+            
+        # Build structured summary
+        agent_summaries = []
+        for agent_name, result in responding_agents.items():
+                summary = f"**{agent_name.capitalize()}**: {str(result)[:200]}"
+                agent_summaries.append(summary)
+            
+        # Synthesis prompt
+        synthesis_prompt = ChatPromptTemplate.from_messages([
+                ("system", """You are synthesizing multiple expert analyses into one coherent answer.
+
+    Your goal: Provide a natural, conversational response that integrates all expert insights.
+
+    Rules:
+    1. Write in 2nd person ("You can...", "This would take...") 
+    2. Integrate facts from all agents naturally
+    3. If agents contradict, acknowledge both perspectives
+    4. If data is missing, state what's needed
+    5. Keep it concise (2-3 paragraphs max)
+    6. Don't say "According to Agent X" - just present the integrated facts"""),
+                ("user", """User Query: {query}
+
+    Agent Analyses:
+    {agent_summaries}
+
+    Synthesize these into one natural, helpful answer:""")
+            ])
+            
+        chain = synthesis_prompt | self.llm | StrOutputParser()
+        synthesis = await chain.ainvoke({
+            "query": query,
+            "agent_summaries": "\n".join(agent_summaries)
+        })
+        return synthesis
+    
     async def _execute_tool_call(self, tool_call: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute a tool call from the LLM.

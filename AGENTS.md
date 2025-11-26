@@ -1,7 +1,7 @@
 # WriterOS Agents Registry
 
 **System Intelligence Level:** Targeting **GPT-5.1** class reasoning.
-**Knowledge Retrieval:** Hybrid RAG (Vector via pgvector) + GraphRAG (Knowledge Graph).
+**Knowledge Retrieval:** Hybrid RAG (Vector via pgvector) + GraphRAG (Knowledge Graph), also SQL.
 
 This document defines the personalities, responsibilities, and domains of the 11 specialized agents within WriterOS.
 
@@ -109,3 +109,117 @@ This document defines the personalities, responsibilities, and domains of the 11
 **Input:** Word counts, Session times.
 **Output:** Sprints, Goals, Progress Reports.
 **Focus:** You need 500 words to hit your daily goal. Let's sprint.
+
+---
+
+## 📚 Schema Reference
+
+The WriterOS database is organized into logical domains.
+
+### 1. World & Entities (The "Truth")
+Defines the objective reality of the story world.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Entity** | Core object (Character, Location, Object). | `name`, `type`, `status`, `embedding` |
+| **Relationship** | Connection between entities. | `from_entity`, `to_entity`, `rel_type` |
+| **Fact** | Atomic unit of world truth. | `content`, `fact_type`, `confidence` |
+| **Event** | Major plot beat or historical event. | `name`, `story_time`, `causes_event_ids` |
+| **Conflict** | Dramatic conflict tracking. | `conflict_type`, `status`, `intensity`, `stakes` |
+| **Organization** | Structured institutions (Houses, Guilds). | `leader_id`, `member_ids`, `organization_type` |
+| **Faction** | Political/military alliances between orgs. | `member_organization_ids`, `alliance_type`, `treaty_terms` |
+| **Family** | Bloodlines with legitimacy tracking. | `legitimate_member_ids`, `bastard_member_ids`, `inheritance_rules` |
+| **Group** | Vague social categories (Smallfolk, Nobles). | `category_type`, `membership_criteria`, `social_hierarchy_level` |
+| **SystemRule** | Magic/Tech system rules. | `name`, `cost_value`, `consequences` |
+| **LoreEntry** | Advanced worldbuilding (culture, history). | `title`, `category`, `content` |
+
+### 2. Narrative Structure (The "Book")
+Defines how the story is told and organized.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Chapter** | Manuscript container. | `chapter_number`, `title`, `word_count` |
+| **Scene** | Atomic unit of storytelling. | `scene_number`, `tension_level`, `pacing` |
+| **Subplot** | Parallel storyline tracking. | `name`, `status`, `priority`, `health_score` |
+| **Anchor** | Mandatory plot points (The Outline). | `name`, `target_location`, `status` |
+| **TimeFrame** | Links Scene to World Time (Two-Clock System). | `real_world_date`, `world_date` |
+| **OrderingConstraint** | Explicit "Before/After" logic. | `source_scene_id`, `target_scene_id` |
+
+### 3. Psychology & Identity (The "Mind")
+Defines character interiority and narrative voice.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **CharacterState** | Snapshot of character at a specific time. | `story_location`, `psych_data` |
+| **CharacterArc** | Long-term character growth. | `arc_type`, `starting_state`, `ending_state` |
+| **POVBoundary** | Tracks what a character knows (vs Truth). | `character_id`, `known_fact_id`, `certainty` |
+| **Narrator** | Narrative voice definition. | `name`, `reliability_score`, `biases` |
+| **User / Vault** | Author identity and project container. | `username`, `tier`, `connection_type` |
+
+### 4. Analysis & Themes (The "Critique")
+Derived data produced by agents.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Theme / Symbol** | Thematic resonance tracking. | `name`, `strength`, `meaning` |
+| **StyleReport** | Prose quality analysis. | `readability_score`, `passive_voice_count` |
+| **TimelineEvent** | Chronologist's linear timeline. | `date_str`, `absolute_timestamp` |
+| **TravelRoute** | Navigator's distance calculations. | `origin`, `destination`, `distance_km` |
+| **ProphecyVision** | Future prediction tracking. | `description`, `status`, `fulfilled_at` |
+
+### 5. Provenance System (The "Time Machine")
+Tracks the origin, evolution, and usage of facts.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **StateChangeEvent** | Logs *changes* to entity state over time. | `event_type`, `payload`, `world_timestamp` |
+| **CharacterKnowledge** | Subjective belief tracking. | `knowledge_content`, `source_type` |
+| **ContentDependency** | Tracks assumptions in text. | `assumption`, `dependency_id`, `is_valid` |
+| **ScenePresence** | Who was where, when. | `presence_type`, `location_id` |
+| **IngestionRecord** | Data origin tracking. | `source_type`, `source_path` |
+
+**Enums**: `StateChangeEventType`, `KnowledgeSourceType`, `DependencyType`, `PresenceType`, `IngestionSourceType`
+
+### 6. System & Session (The "Engine")
+Operational data for the agent system.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Conversation** | Chat session container. | `title`, `vault_id` |
+| **Message** | Individual chat message. | `role`, `content`, `agent` |
+| **Sprint** | Project management goals. | `goal_word_count`, `current_word_count` |
+| **UniverseManifest** | Multi-book ingestion config. | `universe_name`, `works`, `eras` |
+
+---
+
+## 🛠️ Service Reference
+
+The logic layer that powers the agents.
+
+### 1. Core Services (`src/writeros/services/`)
+Business logic for complex narrative operations.
+
+| Service | Purpose | Key Methods |
+| :--- | :--- | :--- |
+| **ProvenanceService** | The "Time Machine". Replays history and tracks causality. | `compute_character_state`, `detect_retcon_impact`, `get_character_knowledge` |
+| **ConflictEngine** | Manages dramatic tension and conflict lifecycles. | `get_active_conflicts`, `get_tension_map`, `update_conflict_status` |
+
+### 2. RAG & Ingestion (`src/writeros/rag/` & `utils/`)
+Handling data flow, indexing, and retrieval.
+
+| Service | Purpose | Key Methods |
+| :--- | :--- | :--- |
+| **RAGRetriever** | Unified vector search across all data types. | `retrieve(query)`, `format_results()` |
+| **Indexer** | Ingests content into the Vector DB. | `index_vault()`, `process_file()` |
+| **PDFProcessor** | Extracts text/metadata from PDFs. | `process_pdf()` |
+| **VaultReader** | Reads raw files from the Obsidian vault. | `read_all_files()`, `get_file_content()` |
+
+### 3. Infrastructure (`src/writeros/utils/`)
+Low-level utilities and wrappers.
+
+| Service | Purpose | Key Methods |
+| :--- | :--- | :--- |
+| **LLMClient** | Unified interface for AI models (OpenAI/Anthropic). | `achat()`, `astructured()` |
+| **DBUtils** | Database connection and session management. | `get_session()`, `init_db()` |
+
+

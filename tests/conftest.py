@@ -28,10 +28,12 @@ TEST_ASYNC_DATABASE_URL = "postgresql+asyncpg://writer:password@127.0.0.1:5433/w
 # Database Fixtures
 # ============================================================================
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def test_engine():
     """Create a synchronous test database engine (for simple tests)."""
     engine = create_engine(TEST_DATABASE_URL, echo=False)
+    # Ensure all models are registered
+    import writeros.schema
     SQLModel.metadata.create_all(engine)
     yield engine
     SQLModel.metadata.drop_all(engine)

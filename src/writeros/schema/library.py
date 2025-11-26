@@ -7,7 +7,10 @@ from sqlalchemy.dialects.postgresql import JSONB
 from pgvector.sqlalchemy import Vector
 
 from .base import UUIDMixin, TimestampMixin
-from .enums import PacingType, DraftStatus, UserRating
+from .enums import (
+    PacingType, DraftStatus, UserRating,
+    SceneOutcomeType, DramaticFunction  # Quick Win additions
+)
 
 # ============================================
 # 1. SOURCE MODEL (The Training Moat)
@@ -115,11 +118,25 @@ class Scene(UUIDMixin, TimestampMixin, table=True):
     tension_level: int = Field(ge=1, le=10, default=5)
     dominant_emotion: str = "neutral"
     pacing: PacingType = Field(default=PacingType.MEDIUM)
-    
+
+    # ⭐ QUICK WIN: Scene Goals & Outcomes (Validates Narrative Purpose)
+    scene_goal: Optional[str] = Field(default=None, description="What character wants to accomplish in this scene")
+    scene_outcome: Optional[str] = Field(default=None, description="What actually happens")
+    outcome_type: Optional[SceneOutcomeType] = Field(default=None, description="Whether goal was achieved/failed/subverted")
+
+    # ⭐ QUICK WIN: Dramatic Function (Story Structure)
+    dramatic_function: Optional[DramaticFunction] = Field(default=None, description="Scene's role in overall story")
+    character_goal_met: Optional[bool] = Field(default=None, description="Did protagonist achieve scene goal?")
+    story_goal_progression: int = Field(default=0, ge=0, le=100, description="How much this scene advances story goal (0-100)")
+
+    # ⭐ QUICK WIN: Consequences & Setup
+    consequence: Optional[str] = Field(default=None, description="What changed as a result of this scene")
+    flags_for_later: List[str] = Field(default_factory=list, sa_column=Column(JSONB), description="What this sets up for future scenes")
+
     # Metadata
     pov_character_id: Optional[UUID] = Field(default=None) # Link to Entity
     location_id: Optional[UUID] = Field(default=None)      # Link to Entity
-    
+
     # Vector Search
     embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(1536)))
 

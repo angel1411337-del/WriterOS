@@ -54,6 +54,22 @@ class ProfilerAgent(BaseAgent):
         super().__init__(model_name)
         self.extractor = self.llm.with_structured_output(WorldExtractionSchema)
 
+    async def should_respond(self, query: str, context: str = "") -> tuple[bool, float, str]:
+        """
+        Profiler responds to character, relationship, and entity queries.
+        """
+        prof_keywords = [
+            "who", "character", "know", "learns", "discovers",
+            "aware", "believes", "relationship", "entity",
+            "family", "friend", "enemy", "ally"
+        ]
+        
+        query_lower = query.lower()
+        if any(kw in query_lower for kw in prof_keywords):
+            return (True, 0.8, "Query involves character knowledge/relationships")
+        else:
+            return (False, 0.3, "No character analysis needed")
+
     async def run(self, full_text: str, existing_notes: str, title: str):
         self.log.info("extracting_lore", title=title)
 

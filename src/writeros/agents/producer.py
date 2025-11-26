@@ -123,6 +123,15 @@ class ProducerAgent(BaseAgent):
     # ============================================
     # 🎬 MAIN ORCHESTRATOR
     # ============================================
+
+    async def run(self, full_text: str, existing_notes: str, title: str):
+        """Standard entry point for Orchestrator."""
+        self.log.info("running_producer", title=title)
+        # If existing_notes are provided, use them as context for a consult
+        if existing_notes:
+            return await self.consult(full_text, existing_notes)
+        # Otherwise, run the full query pipeline
+        return await self.query(full_text)
     
     async def query(self, question: str, mode: Optional[str] = None, vault_path: Optional[str] = None) -> str:
         """Main entry point for Producer queries."""

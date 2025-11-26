@@ -9,6 +9,8 @@ from writeros.utils.embeddings import get_embedding_service
 from writeros.schema import Document, Event, Anchor, AnchorStatus, Fact, Relationship, Entity
 from writeros.services.conflict_engine import ConflictEngine
 from writeros.schema.enums import ConflictStatus
+import networkx as nx
+from collections import deque
 
 class ArchitectAgent(BaseAgent):
     def __init__(self, model_name="gpt-5.1"):
@@ -325,3 +327,93 @@ class ArchitectAgent(BaseAgent):
                 tasks.append(f"Advance Conflict '{conflict.name}' to Inciting Incident")
                 
         return tasks
+
+    async def trace_causality_chain(self, event_id: UUID, max_depth: int = 10) -> Dict[str, Any]:
+        """
+        Traces the chain of events that led to a specific event (backward causality)
+        and the events caused by it (forward causality).
+        
+        Args:
+            event_id: The UUID of the focal event.
+            max_depth: Maximum number of hops to trace.
+            
+        Returns:
+            Dict containing 'causes' (ancestors) and 'effects' (descendants) subgraphs.
+        """
+        self.log.info("tracing_causality", event_id=str(event_id), max_depth=max_depth)
+        
+        with Session(engine) as session:
+            # 1. Fetch all events to build the graph (optimization: fetch only relevant if possible, 
+            # but for now fetch all for simplicity as graph size is likely manageable per vault)
+            # In production, use recursive CTEs.
+            target_event = session.get(Event, event_id)
+            if not target_event:
+                return {"error": "Event not found"}
+                
+            all_events = session.exec(select(Event).where(Event.vault_id == target_event.vault_id)).all()
+            
+            # 2. Build Graph
+            G = nx.DiGraph()
+            event_map = {str(e.id): e for e in all_events}
+            
+            for event in all_events:
+                G.add_node(str(event.id), name=event.name)
+                if event.causes_event_ids:
+                    for caused_id in event.causes_event_ids:
+                        if caused_id in event_map:
+                            G.add_edge(str(event.id), caused_id)
+                            
+            # 3. Trace Backward (Causes)
+            causes = []
+            if str(event_id) in G:
+                ancestors = nx.ancestors(G, str(event_id))
+                # Filter by distance if needed, but nx.ancestors gets all. 
+                # To respect max_depth, we can use bfs_predecessors or similar.
+                # For simplicity with small depth, simple traversal:
+                q = deque([(str(event_id), 0)])
+                visited = {str(event_id)}
+                
+                # Reverse graph for backward traversal
+                R = G.reverse()
+                
+                while q:
+                    curr, depth = q.popleft()
+                    if depth >= max_depth:
+                        continue
+                        
+                    for neighbor in R.neighbors(curr):
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            causes.append({
+                                "id": neighbor,
+                                "name": event_map[neighbor].name,
+                                "depth": depth + 1
+                            })
+                            q.append((neighbor, depth + 1))
+
+            # 4. Trace Forward (Effects)
+            effects = []
+            if str(event_id) in G:
+                q = deque([(str(event_id), 0)])
+                visited = {str(event_id)}
+                
+                while q:
+                    curr, depth = q.popleft()
+                    if depth >= max_depth:
+                        continue
+                        
+                    for neighbor in G.neighbors(curr):
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            effects.append({
+                                "id": neighbor,
+                                "name": event_map[neighbor].name,
+                                "depth": depth + 1
+                            })
+                            q.append((neighbor, depth + 1))
+                            
+            return {
+                "focal_event": {"id": str(event_id), "name": target_event.name},
+                "causes": sorted(causes, key=lambda x: x['depth']),
+                "effects": sorted(effects, key=lambda x: x['depth'])
+            }

@@ -79,7 +79,7 @@ class VaultIndexer:
             Dict with indexing results including chunking stats
         """
         if directories is None:
-            directories = ["Story_Bible", "Writing_Bible", "Manuscripts"]
+            directories = ["."]  # Default to scanning entire vault
 
         if force_reindex:
             logger.info("force_reindex_triggered", vault_id=str(self.vault_id))
@@ -102,6 +102,14 @@ class VaultIndexer:
 
             # Process Markdown files
             for md_file in dir_path.rglob("*.md"):
+                # Skip files in hidden directories (e.g. .obsidian, .git)
+                try:
+                    rel_path = md_file.relative_to(self.vault_path)
+                    if any(part.startswith('.') for part in rel_path.parts):
+                        continue
+                except ValueError:
+                    continue
+
                 try:
                     chunks_count = await self.index_file(md_file)
                     results["files_processed"] += 1
@@ -120,6 +128,14 @@ class VaultIndexer:
             # Process PDF files (if enabled)
             if include_pdfs:
                 for pdf_file in dir_path.rglob("*.pdf"):
+                    # Skip files in hidden directories
+                    try:
+                        rel_path = pdf_file.relative_to(self.vault_path)
+                        if any(part.startswith('.') for part in rel_path.parts):
+                            continue
+                    except ValueError:
+                        continue
+
                     try:
                         chunks_count = await self.index_pdf(pdf_file)
                         results["pdfs_processed"] += 1
