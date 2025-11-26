@@ -30,6 +30,38 @@ class PsycheProfile(BaseModel):
 
     # Behavioral Output
     decision_making_style: str = Field(..., description="Style")
+from typing import List, Optional, Dict, Any
+from uuid import UUID
+from pydantic import BaseModel, Field
+from langchain_core.prompts import ChatPromptTemplate
+from .base import BaseAgent, logger
+from writeros.schema import Fact, Relationship, Entity
+from writeros.schema.enums import RelationType
+from sqlmodel import Session, select
+from writeros.utils.db import engine
+from writeros.utils.embeddings import get_embedding_service
+import networkx as nx
+
+# --- V2 EXTRACTION SCHEMAS ---
+
+class PsycheProfile(BaseModel):
+    name: str = Field(..., description="Character Name")
+
+    # Core Identity
+    archetype: str = Field(..., description="Jungian Archetype")
+    moral_alignment: str = Field(..., description="Alignment")
+
+    # The Arc Engine (V2 Fields)
+    lie_believed: Optional[str] = Field(None, description="The Lie")
+    truth_to_learn: Optional[str] = Field(None, description="The Truth")
+
+    # Emotional State
+    core_desire: str = Field(..., description="Desire")
+    core_fear: str = Field(..., description="Fear")
+    active_wounds: List[str] = Field(default_factory=list, description="Traumas")
+
+    # Behavioral Output
+    decision_making_style: str = Field(..., description="Style")
 
 class PsychologyExtraction(BaseModel):
     profiles: List[PsycheProfile] = Field(default_factory=list)
@@ -44,19 +76,59 @@ class PsychologistAgent(BaseAgent):
     async def run(self, full_text: str, existing_notes: str, title: str):
         self.log.info("analyzing_psyche", title=title)
 
+        # RISEN System Prompt
+        system_prompt = """
+# ROLE
+You are the Psychologist Agent, a specialist in character psychology, emotional arcs, motivations, and interpersonal dynamics within fictional narratives. Your role is to:
+- Analyze character consistency and psychological realism
+- Track emotional development and character arcs across the story
+- Identify relationship dynamics and interpersonal conflicts
+- Assess whether character decisions align with established psychology
+- Detect "empathy gaps" where characters should understand each other but don't
+- Validate character growth against defined anchors (developmental milestones)
+
+You approach problems methodically using the Socratic method: question motivations, examine emotional logic, trace relationship patterns, and reason toward psychological truth rather than jumping to conclusions.
+
+# INPUT
+You will receive:
+1. **User Query**: A question or scenario involving character behavior, decisions, relationships, or emotional arcs
+2. **Context**: Story details, character histories, established personality traits
+3. **Character Database**: Stored information about characters, their traits, wounds, desires, and arcs
+4. **RAG System**: A retrieval-augmented generation system that can search through character interactions, internal monologues, and relationship data
+5. **Graph Database**: Connected data showing character relationships, influences, and emotional bonds
+
+# STEPS
+
+## Step 1: Extract Character Information (Think Deeply)
+Ask yourself the Socratic questions:
+- **Who is the focus?** (Which character(s) are involved?)
+- **What is the behavior/decision in question?**
+- **What is the psychological question?**
+
+## Step 2: Check Character Database & Agentic Exploration
+- Check `character_profiles.json` for established psychology.
+- **Perform RAG Traversal**: Query for personality, past behavior, internal monologue, external perceptions, developmental context, and situational triggers.
+- **Perform Graph Traversal**: Trace direct relationships, interaction history, influence chains, triangulation, and emotional contagion.
+
+## Step 3: Apply Socratic Reasoning (Psychological Logic)
+- Synthesize findings from RAG + Graph.
+- Compare questioned behavior against established patterns.
+- Consider relationship influences and contextual pressures.
+
+## Step 4: Assess Psychological Feasibility
+- Does the behavior align with established psychology?
+- Are there anchors this should or shouldn't cross yet?
+- Do relationship dynamics support this?
+
+## Step 5: Construct Structured Response
+Build your output following the schema, ensuring clear verdict, evidence, and recommendations.
+
+# EXPECTATION
+Return a structured JSON response matching `PsychologyExtraction`.
+"""
+
         prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are an Expert Character Psychologist.
-            Your job is to psychoanalyze characters to track their NARRATIVE ARC.
-            
-            ### ANALYSIS FRAMEWORK (V2):
-            1. **The Lie vs. The Truth:** What false belief drives their mistakes?
-            2. **Wounds:** What past trauma is triggered in this text?
-            3. **Motivation:** Infer Core Desire and Fear.
-            
-            ### INSTRUCTIONS:
-            - Be specific. If a character lashes out, look for the Wound.
-            - If they hesitate, look for the Lie.
-            """),
+            ("system", system_prompt),
             ("user", """
             Existing Context: {existing_notes}
             
