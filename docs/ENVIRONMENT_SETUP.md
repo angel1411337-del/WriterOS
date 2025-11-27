@@ -6,6 +6,31 @@ WriterOS now **requires** environment variables for all sensitive configuration.
 
 ---
 
+## System Requirements
+
+### Windows Prerequisites (IMPORTANT)
+
+If you're on Windows, you **must** install the Visual C++ Redistributable for FastEmbed (local embeddings) to work:
+
+**Download and Install:**
+[Microsoft Visual C++ 2015-2022 Redistributable (x64)](https://aka.ms/vs/17/release/vc_redist.x64.exe)
+
+**Why is this needed?**
+- FastEmbed uses ONNX Runtime which requires Visual C++ runtime libraries
+- This is a one-time installation required for Python ML libraries on Windows
+- Without it, you'll see: `DLL load failed while importing onnxruntime_pybind11_state`
+
+**After Installation:**
+1. Download and run the installer from the link above
+2. Restart your terminal/IDE
+3. Verify: `python -c "from fastembed import TextEmbedding; print('OK')"`
+
+### Linux/Mac Prerequisites
+
+No additional system dependencies required. FastEmbed works out of the box.
+
+---
+
 ## Quick Start
 
 ### 1. Copy the Template
@@ -86,7 +111,7 @@ Example: postgresql://user:password@host:port/database
 
 ### OPENAI_API_KEY (Required)
 
-OpenAI API key for LLM agents and embeddings.
+OpenAI API key for LLM agents.
 
 **Get Your Key:**
 1. Visit https://platform.openai.com/api-keys
@@ -100,7 +125,6 @@ OPENAI_API_KEY=sk-proj-abc123...xyz789
 
 **Used For:**
 - LLM-powered agents (GPT-4, GPT-4o)
-- Text embeddings (text-embedding-3-small)
 - Smart content analysis
 - Entity extraction
 
@@ -110,9 +134,9 @@ ValueError: OPENAI_API_KEY is missing.
 ```
 
 **Cost Considerations:**
-- Embeddings: ~$0.02 per 1M tokens
 - GPT-4o: ~$2.50 per 1M input tokens
 - Set usage limits in OpenAI dashboard
+- **Note:** Embeddings now run locally with FastEmbed (FREE!)
 
 ---
 

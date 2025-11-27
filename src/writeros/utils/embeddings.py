@@ -1,6 +1,6 @@
 import os
 from typing import Callable, List, Optional
-from langchain_openai import OpenAIEmbeddings
+from fastembed import TextEmbedding
 from dotenv import load_dotenv
 import logging
 
@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small"
+DEFAULT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 
 # Factory used to create or return the embedding service singleton. This indirection
 # allows tests to swap in mocks without triggering API calls at import time.
@@ -29,25 +29,20 @@ class EmbeddingService:
         return cls._instances[embedding_model]
 
     def _initialize(self, model: str):
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            logger.error("❌ OPENAI_API_KEY not found in environment variables.")
-            raise ValueError("OPENAI_API_KEY is missing.")
-
-        self.embeddings = OpenAIEmbeddings(
-            model=model,
-            openai_api_key=api_key
-        )
+        # FastEmbed runs locally, no API key needed
+        self.embeddings = TextEmbedding(model_name=model)
         self.model = model
-        logger.info("Embedding Service initialized (%s)", model)
+        logger.info("FastEmbed Embedding Service initialized (%s)", model)
 
     def embed_query(self, text: str) -> List[float]:
         """Embed a single query string."""
-        return self.embeddings.embed_query(text)
+        # FastEmbed returns a generator, convert to list
+        return list(self.embeddings.embed([text]))[0].tolist()
 
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         """Embed a list of documents."""
-        return self.embeddings.embed_documents(texts)
+        # FastEmbed returns a generator of numpy arrays, convert to list of lists
+        return [embedding.tolist() for embedding in self.embeddings.embed(texts)]
     
     async def get_embeddings(self, texts: List[str]) -> List[List[float]]:
         """Async wrapper for embed_documents (for compatibility with async chunker)."""
