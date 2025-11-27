@@ -55,74 +55,17 @@
             "type": "sea"
         },
         {
-            {
-                "nodes": [
-                    "Winterfell",
-                    "King's Landing",
-                    "The Wall",
-                    "White Harbor",
-                    "Moat Cailin",
-                    "The Twins",
-                    "Riverrun",
-                    "The Eyrie",
-                    "Harrenhal",
-                    "Casterly Rock",
-                    "Highgarden",
-                    "Oldtown",
-                    "Sunspear",
-                    "Storm's End",
-                    "Dragonstone",
-                    "Pyke"
-                ],
-                "edges": [
-                    {
-                        "source": "Winterfell",
-                        "target": "King's Landing",
-                        "miles": 1500,
-                        "type": "road"
-                    },
-                    {
-                        "source": "Winterfell",
-                        "target": "The Wall",
-                        "miles": 600,
-                        "type": "road"
-                    },
-                    {
-                        "source": "Winterfell",
-                        "target": "White Harbor",
-                        "miles": 150,
-                        "type": "road"
-                    },
-                    {
-                        "source": "King's Landing",
-                        "target": "Storm's End",
-                        "miles": 300,
-                        "type": "road"
-                    },
-                    {
-                        "source": "King's Landing",
-                        "target": "Harrenhal",
-                        "miles": 200,
-                        "type": "road"
-                    },
-                    {
-                        "source": "King's Landing",
-                        "target": "Dragonstone",
-                        "miles": 400,
-                        "type": "sea"
-                    },
-                    {
-                        "source": "The Twins",
-                        "target": "Riverrun",
-                        "miles": 180,
-                        "type": "road"
-                    }
-                ],
-                "speeds": {
-                    "raven": 150,
-                    "horse": 30,
-                    "foot": 15,
-                    "ship": 75,
-                    "dragon": 200
-                }
-            }
+            "source": "The Twins",
+            "target": "Riverrun",
+            "miles": 180,
+            "type": "road"
+        }
+    ],
+    "speeds": {
+        "raven": 150,
+        "horse": 30,
+        "foot": 15,
+        "ship": 75,
+        "dragon": 200
+    }
+}

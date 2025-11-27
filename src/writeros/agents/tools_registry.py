@@ -570,7 +570,7 @@ tags: [organization, {type}]
 
             return {
                 "success": True,
-                "message": f"Created {relationship_type} relationship: {source} → {target}"
+                "message": f"Created {relationship_type} relationship: {source} -> {target}"
             }
 
         except Exception as e:

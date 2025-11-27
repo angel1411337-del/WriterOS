@@ -17,6 +17,33 @@ class ArchitectAgent(BaseAgent):
         super().__init__(model_name)
         self.conflict_engine = ConflictEngine()
 
+    async def run(self, full_text: str, existing_notes: str, title: str):
+        """
+        Main entry point for the Architect Agent.
+        Analyzes the query from a structural and plot perspective.
+        """
+        self.log.info("architect_run", query=full_text)
+        
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", """You are the Architect, a master of narrative structure, pacing, and plot causality.
+            Your goal is to analyze the user's query in the context of the story's structure.
+            
+            If the user asks about plot points, scenes, or causality, provide insights based on your knowledge.
+            If the query is general, answer from a structural perspective.
+            """),
+            ("user", f"""
+            Context: {{existing_notes}}
+            
+            Query: {{full_text}}
+            """)
+        ])
+        
+        chain = prompt | self.llm.client | StrOutputParser()
+        return await chain.ainvoke({
+            "existing_notes": existing_notes,
+            "full_text": full_text
+        })
+
     async def list_anchors(self, status: Optional[AnchorStatus] = None) -> List[Anchor]:
         """
         Retrieves a list of anchors, optionally filtered by status.
@@ -104,8 +131,8 @@ class ArchitectAgent(BaseAgent):
                         # Find relationship
                         rels = session.exec(
                             select(Relationship).where(
-                                (Relationship.from_entity_id == from_entity.id) &
-                                (Relationship.to_entity_id == to_entity.id)
+                                (Relationship.source_entity_id == from_entity.id) &
+                                (Relationship.target_entity_id == to_entity.id)
                             )
                         ).all()
                         
@@ -207,7 +234,7 @@ class ArchitectAgent(BaseAgent):
             """)
         ])
 
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
 
         return await chain.ainvoke({
             "context": context,
@@ -249,7 +276,7 @@ class ArchitectAgent(BaseAgent):
             ("user", "Analyze this text.")
         ])
         
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         return await chain.ainvoke({
             "anchors": anchors_list,
             "text": text

@@ -79,7 +79,7 @@ class ObsidianWriter:
 
                 # Update
                 entity.description = desc
-                entity.properties = props
+                entity.metadata_ = props
                 session.add(entity)
                 session.commit()
                 session.refresh(entity)
@@ -99,9 +99,11 @@ class ObsidianWriter:
                 if src and tgt:
                     # Check if relationship exists
                     stmt = select(Relationship).where(
-                        Relationship.from_entity_id == src.id,
-                        Relationship.to_entity_id == tgt.id
-                    )
+                Relationship.vault_id == src.vault_id,
+                Relationship.from_entity_id == src.id,
+                Relationship.to_entity_id == tgt.id,
+                Relationship.rel_type == RelationType(rel_type.lower()) # Convert string to enum for comparison
+            )
                     rel = session.exec(stmt).first()
 
                     if not rel:
@@ -118,12 +120,13 @@ class ObsidianWriter:
                             enum_type = RelationType.RELATED_TO
 
                         rel = Relationship(
-                            vault_id=src.vault_id,
-                            from_entity_id=src.id,
-                            to_entity_id=tgt.id,
-                            rel_type=enum_type,
-                            description=details
-                        )
+                    vault_id=src.vault_id, # Assuming vault_id maps to src.vault_id
+                    source_entity_id=src.id, # Assuming source_id maps to src.id
+                    target_entity_id=tgt.id, # Assuming target_id maps to tgt.id
+                    relationship_type=enum_type, # Assuming rel_type maps to enum_type
+                    description=details, # Assuming description maps to details
+                    relationship_metadata={} # Assuming props is an empty dict for now, as it's not provided in the original context
+                )
                         session.add(rel)
                         session.commit()
         except Exception as e:

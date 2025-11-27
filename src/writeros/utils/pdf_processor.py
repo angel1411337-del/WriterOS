@@ -435,14 +435,15 @@ class PDFProcessor:
                         rel_type = rel_type_map.get(rel.rel_type.lower(), RelationType.ALLY)
 
                         # Create relationship
-                        relationship = Relationship(
+                        rel_obj = Relationship(
                             vault_id=self.vault_id,
-                            from_entity_id=entity.id,
-                            to_entity_id=target_entity.id,
-                            rel_type=rel_type,
-                            description=rel.details or f"{rel.rel_type} relationship"
+                            source_entity_id=entity.id,
+                            target_entity_id=target_entity.id,
+                            relationship_type=rel_type,
+                            description=rel.details or f"{rel.rel_type} relationship",
+                            relationship_metadata={"confidence": 0.8, "source": "pdf_extraction"}
                         )
-                        session.add(relationship)
+                        session.add(rel_obj)
                         relationships_created += 1
 
             # Store organizations

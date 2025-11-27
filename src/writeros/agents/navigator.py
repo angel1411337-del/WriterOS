@@ -153,10 +153,12 @@ class NavigatorAgent(BaseAgent):
             # 1. Fetch all location connections
             # Optimization: In a huge graph, we'd use a graph DB or recursive CTE.
             # Here, we fetch all CONNECTED_TO relationships.
-            statement = select(Relationship).where(
-                Relationship.rel_type == RelationType.CONNECTED_TO
-            )
-            connections = session.exec(statement).all()
+            # Get location connections
+            connections = session.exec(
+                select(Relationship).where(
+                    Relationship.relationship_type == RelationType.CONNECTED_TO
+                )
+            ).all()
             
             # 2. Build Graph
             G = nx.Graph() # Undirected for travel usually, or DiGraph if one-way
@@ -164,7 +166,6 @@ class NavigatorAgent(BaseAgent):
             # We also need entity names for the path
             entity_ids = set()
             for conn in connections:
-                entity_ids.add(conn.from_entity_id)
                 entity_ids.add(conn.to_entity_id)
                 
             if not entity_ids:
@@ -243,7 +244,7 @@ class NavigatorAgent(BaseAgent):
             ("system", "Extract origin, destination, and travel method. Return nulls if unsure."),
             ("user", "{full_text}")
         ])
-        request: TravelRequest = await (extract_prompt | self.extractor).ainvoke({"full_text": full_text})
+        request: TravelRequest = await (extract_prompt | self.travel_extractor).ainvoke({"full_text": full_text})
         
         origin = request.origin
         destination = request.destination

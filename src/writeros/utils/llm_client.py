@@ -5,10 +5,16 @@ This module provides a wrapper around LangChain's ChatOpenAI that adds:
 - Streaming with function calling support
 - Tool call detection and parsing
 - Consistent response format for both text and tool calls
+- LCEL chain support for composability
+- Pydantic structured output parsing
 """
 import json
-from typing import List, Dict, Any, Optional, AsyncGenerator, Union
+from typing import List, Dict, Any, Optional, AsyncGenerator, Union, Type
+from pydantic import BaseModel
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage, ToolMessage
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import PydanticOutputParser, StrOutputParser
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_openai import ChatOpenAI
 from writeros.core.logging import get_logger
 
@@ -167,3 +173,129 @@ class LLMClient:
             LangChain client with structured output binding
         """
         return self.client.with_structured_output(schema)
+
+    def build_chain(
+        self,
+        prompt_template: Optional[ChatPromptTemplate] = None,
+        response_format: Optional[Type[BaseModel]] = None,
+        preprocessor: Optional[callable] = None
+    ):
+        """
+        Build an LCEL chain with optional preprocessing and structured output.
+
+        This enables composable chains like:
+        preprocessor | prompt | llm | parser
+
+        Args:
+            prompt_template: ChatPromptTemplate for formatting messages
+            response_format: Pydantic model for structured output parsing
+            preprocessor: Optional callable for preprocessing input (e.g., RAG retrieval)
+
+        Returns:
+            Runnable LCEL chain
+
+        Example:
+            >>> prompt = ChatPromptTemplate.from_messages([
+            ...     ("system", "You are a helpful assistant"),
+            ...     ("user", "{query}")
+            ... ])
+            >>> chain = client.build_chain(prompt, response_format=MyPydanticModel)
+            >>> result = await chain.ainvoke({"query": "Tell me about..."})
+        """
+        # Start with the base model
+        chain = self.client
+
+        # Add parser if structured output is requested
+        if response_format:
+            parser = PydanticOutputParser(pydantic_object=response_format)
+
+            # If we have a prompt template, inject format instructions
+            if prompt_template:
+                # Add format instructions to prompt variables
+                chain = (
+                    RunnablePassthrough.assign(
+                        format_instructions=lambda _: parser.get_format_instructions()
+                    )
+                    | prompt_template
+                    | self.client
+                    | parser
+                )
+            else:
+                chain = self.client | parser
+        elif prompt_template:
+            chain = prompt_template | self.client | StrOutputParser()
+        else:
+            chain = self.client | StrOutputParser()
+
+        # Add preprocessor at the start if provided
+        if preprocessor:
+            chain = RunnableLambda(preprocessor) | chain
+
+        logger.info(
+            "lcel_chain_built",
+            has_prompt=prompt_template is not None,
+            has_parser=response_format is not None,
+            has_preprocessor=preprocessor is not None
+        )
+
+        return chain
+
+    async def chat_with_parser(
+        self,
+        messages: List[Dict[str, str]],
+        response_format: Type[BaseModel]
+    ) -> BaseModel:
+        """
+        Chat with automatic Pydantic parsing of the response.
+
+        This is a convenience method for getting structured outputs without
+        building a full LCEL chain.
+
+        Args:
+            messages: List of message dicts
+            response_format: Pydantic model class for parsing
+
+        Returns:
+            Parsed Pydantic model instance
+
+        Example:
+            >>> from pydantic import BaseModel
+            >>> class TimelineExtraction(BaseModel):
+            ...     events: List[str]
+            ...     continuity_notes: str
+            >>> result = await client.chat_with_parser(
+            ...     messages=[{"role": "user", "content": "Extract timeline"}],
+            ...     response_format=TimelineExtraction
+            ... )
+            >>> print(result.events)  # Automatically parsed!
+        """
+        parser = PydanticOutputParser(pydantic_object=response_format)
+
+        # Convert to LangChain messages
+        lc_messages = []
+        for msg in messages:
+            role = msg.get("role")
+            content = msg.get("content", "")
+
+            if role == "system":
+                lc_messages.append(SystemMessage(content=content))
+            elif role == "user":
+                lc_messages.append(HumanMessage(content=content))
+            elif role == "assistant":
+                lc_messages.append(AIMessage(content=content))
+
+        # Add format instructions to the last user message
+        if lc_messages and isinstance(lc_messages[-1], HumanMessage):
+            lc_messages[-1].content += f"\n\n{parser.get_format_instructions()}"
+
+        # Build and invoke chain
+        chain = self.client | parser
+        result = await chain.ainvoke(lc_messages)
+
+        logger.info(
+            "structured_output_parsed",
+            model_type=response_format.__name__,
+            success=True
+        )
+
+        return result

@@ -28,6 +28,25 @@ class EntityStatus(str, Enum):
     IMPRISONED = "imprisoned"
     EXILED = "exiled"
 
+    # Location / Structure
+    INTACT = "intact"
+    DESTROYED = "destroyed"
+    ABANDONED = "abandoned"
+    OCCUPIED = "occupied"
+    CONTESTED = "contested"
+
+    # Item / Object
+    DAMAGED = "damaged"
+    LOST = "lost"
+    TRANSFORMED = "transformed"
+
+class NodeSignificance(str, Enum):
+    PROTAGONIST = "protagonist"
+    MAJOR = "major"
+    SUPPORTING = "supporting"
+    MINOR = "minor"
+    MENTIONED = "mentioned"
+
 class RelationType(str, Enum):
     # Social relationships
     FRIEND = "friend"
@@ -77,6 +96,21 @@ class RelationType(str, Enum):
     RELATED_TO = "related_to"
     REFERENCES = "references"
     APPEARS_IN = "appears_in"  # Character -> Scene
+
+    @property
+    def is_bidirectional(self) -> bool:
+        return self in BIDIRECTIONAL_TYPES
+
+BIDIRECTIONAL_TYPES = {
+    RelationType.FRIEND,
+    RelationType.SIBLING,
+    RelationType.SPOUSE,
+    RelationType.ALLY,
+    RelationType.RIVAL
+}
+
+def is_bidirectional(relation_type: RelationType) -> bool:
+    return relation_type in BIDIRECTIONAL_TYPES
 
 class CanonLayer(str, Enum):
     PRIMARY = "primary"

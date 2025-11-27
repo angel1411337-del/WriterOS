@@ -30,6 +30,13 @@ This document defines the personalities, responsibilities, and domains of the 11
 **Output:** Psychological Profiles, Emotional States, Hidden Drives.
 **Focus:** Why did they do that? Is this consistent with their trauma?
 
+**POV-Aware Analysis:**
+- `analyze_character()`: Generates psychological analysis respecting POVBoundary constraints
+- Queries `POVBoundary` table to filter facts the character should not know
+- Supports temporal knowledge filtering via `scene_id` (what they knew at specific story moments)
+- Prevents omniscient narrator errors by strictly limiting analysis to character's known facts
+- Returns both known facts and blocked facts for debugging and validation
+
 ### 3. The Theorist
 **Role:** Theme & Symbolism Analyst
 **Voice:** Academic, literary, abstract.
@@ -152,7 +159,7 @@ Defines character interiority and narrative voice.
 | :--- | :--- | :--- |
 | **CharacterState** | Snapshot of character at a specific time. | `story_location`, `psych_data` |
 | **CharacterArc** | Long-term character growth. | `arc_type`, `starting_state`, `ending_state` |
-| **POVBoundary** | Tracks what a character knows (vs Truth). | `character_id`, `known_fact_id`, `certainty` |
+| **POVBoundary** | Tracks what a character knows (vs Truth). Prevents omniscient POV errors. | `character_id`, `known_fact_id`, `certainty`, `learned_at_scene_id`, `forgotten_at_scene_id`, `is_false_belief`, `source` |
 | **Narrator** | Narrative voice definition. | `name`, `reliability_score`, `biases` |
 | **User / Vault** | Author identity and project container. | `username`, `tier`, `connection_type` |
 

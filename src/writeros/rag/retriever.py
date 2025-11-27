@@ -433,7 +433,7 @@ Current Context Retrieved:
 Generate a follow-up query to gather complementary information:""")
             ])
             
-            chain = refinement_prompt | llm | StrOutputParser()
+            chain = refinement_prompt | llm.client | StrOutputParser()
             try:
                 current_query = await chain.ainvoke({
                     "original_query": initial_query,

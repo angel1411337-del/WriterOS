@@ -137,25 +137,6 @@ class ProfilerAgent(BaseAgent):
 
             vault_id = root_entity.vault_id
 
-            # Step 2: Fetch all entities and relationships for this vault (single query)
-            # This is more efficient than recursive queries
-            all_entities = session.exec(
-                select(Entity).where(Entity.vault_id == vault_id)
-            ).all()
-
-            all_relationships = session.exec(
-                select(Relationship).where(
-                    Relationship.vault_id == vault_id,
-                    Relationship.rel_type.in_([
-                        RelationType.PARENT,
-                        RelationType.CHILD,
-                        RelationType.SIBLING,
-                        RelationType.FAMILY
-                    ])
-                )
-            ).all()
-
-            # Convert to dicts for easier access
             entity_map = {str(e.id): e for e in all_entities}
 
         # Step 3: Build NetworkX graph
@@ -168,25 +149,6 @@ class ProfilerAgent(BaseAgent):
         # Add edges with relationship type metadata
         for rel in all_relationships:
             from_id = str(rel.from_entity_id)
-            to_id = str(rel.to_entity_id)
-
-            # Add edge with relationship type
-            G.add_edge(from_id, to_id, rel_type=rel.rel_type)
-
-            # Add reverse edges to make graph symmetric
-            if rel.rel_type == RelationType.PARENT:
-                # Parent -[PARENT]-> Child, so add Child -[CHILD]-> Parent
-                G.add_edge(to_id, from_id, rel_type=RelationType.CHILD)
-            elif rel.rel_type == RelationType.CHILD:
-                # Child -[CHILD]-> Parent, so add Parent -[PARENT]-> Child
-                G.add_edge(to_id, from_id, rel_type=RelationType.PARENT)
-            elif rel.rel_type in [RelationType.SIBLING, RelationType.FAMILY]:
-                # For SIBLING and FAMILY, add reverse edge (bidirectional, same type)
-                G.add_edge(to_id, from_id, rel_type=rel.rel_type)
-
-        # Step 4: Calculate generations using BFS
-        target_id = str(character_id)
-
         if target_id not in G:
             self.log.error("entity_not_in_graph", character_id=target_id)
             return {
@@ -267,7 +229,7 @@ class ProfilerAgent(BaseAgent):
                     "id": str(entity.id),
                     "name": entity.name,
                     "type": entity.type,
-                    "properties": entity.properties
+                    "properties": entity.metadata_
                 })
 
         # Sort members within each generation by name
@@ -659,7 +621,7 @@ class ProfilerAgent(BaseAgent):
             }
 
     def _format_nodes(self, entities: List[Entity]) -> List[Dict[str, Any]]:
-        return [{"id": str(e.id), "name": e.name, "type": e.type, "properties": e.properties} for e in entities]
+        return [{"id": str(e.id), "name": e.name, "type": e.type, "properties": e.metadata_} for e in entities]
 
     def _format_links(self, relationships: List[Relationship]) -> List[Dict[str, Any]]:
         """
@@ -698,22 +660,6 @@ class ProfilerAgent(BaseAgent):
         for r in relationships:
             # Normalize type string (handle Enum or str)
             r_type = str(r.rel_type).lower() if r.rel_type else "default"
-            
-            # Lookup style (fallback to default if new enum not mapped)
-            style = VISUAL_STYLES.get(r_type, VISUAL_STYLES["default"])
-            
-            formatted.append({
-                "source": str(r.from_entity_id),
-                "target": str(r.to_entity_id),
-                "type": r_type,
-                # Injected Visual Attributes
-                "color": style["color"],
-                "strokeWidth": style["width"],
-                "strokeDasharray": style["dash"],
-                "label": r.description or r_type.title() # Tooltip text
-            })
-            
-        return formatted
 
     def generate_graph_html(
         self,

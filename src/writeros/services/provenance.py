@@ -9,7 +9,7 @@ from sqlmodel import Session, select, col
 from writeros.schema.provenance import (
     StateChangeEvent, CharacterKnowledge, ContentDependency, ScenePresence
 )
-from writeros.schema.world import Entity
+from writeros.schema import Entity
 
 class ProvenanceService:
     def __init__(self, session: Session):

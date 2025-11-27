@@ -39,7 +39,7 @@ class EmbeddingService:
             openai_api_key=api_key
         )
         self.model = model
-        logger.info("🧠 Embedding Service initialized (%s)", model)
+        logger.info("Embedding Service initialized (%s)", model)
 
     def embed_query(self, text: str) -> List[float]:
         """Embed a single query string."""

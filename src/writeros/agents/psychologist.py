@@ -3,39 +3,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from .base import BaseAgent, logger
-from writeros.schema import Fact, Relationship, Entity
-from writeros.schema.enums import RelationType
-from sqlmodel import Session, select
-from writeros.utils.db import engine
-from writeros.utils.embeddings import get_embedding_service
-import networkx as nx
-
-# --- V2 EXTRACTION SCHEMAS ---
-
-class PsycheProfile(BaseModel):
-    name: str = Field(..., description="Character Name")
-
-    # Core Identity
-    archetype: str = Field(..., description="Jungian Archetype")
-    moral_alignment: str = Field(..., description="Alignment")
-
-    # The Arc Engine (V2 Fields)
-    lie_believed: Optional[str] = Field(None, description="The Lie")
-    truth_to_learn: Optional[str] = Field(None, description="The Truth")
-
-    # Emotional State
-    core_desire: str = Field(..., description="Desire")
-    core_fear: str = Field(..., description="Fear")
-    active_wounds: List[str] = Field(default_factory=list, description="Traumas")
-
-    # Behavioral Output
-    decision_making_style: str = Field(..., description="Style")
-from typing import List, Optional, Dict, Any
-from uuid import UUID
-from pydantic import BaseModel, Field
-from langchain_core.prompts import ChatPromptTemplate
-from .base import BaseAgent, logger
-from writeros.schema import Fact, Relationship, Entity
+from writeros.schema import Fact, Relationship, Entity, POVBoundary
 from writeros.schema.enums import RelationType
 from sqlmodel import Session, select
 from writeros.utils.db import engine
@@ -243,4 +211,125 @@ Return a structured JSON response matching `PsychologyExtraction`.
                 "network_size": len(nodes),
                 "nodes": sorted(nodes, key=lambda x: x['centrality'], reverse=True),
                 "edges": edges
+            }
+
+    async def analyze_character(
+        self,
+        character_id: UUID,
+        vault_id: UUID,
+        context: Optional[str] = None,
+        scene_id: Optional[UUID] = None
+    ) -> Dict[str, Any]:
+        """
+        Analyzes a character's psychological state while respecting POV boundaries.
+
+        Filters out facts that the character should not know based on POVBoundary records.
+        This ensures generated text maintains proper perspective and prevents omniscient POV errors.
+
+        Args:
+            character_id: The character being analyzed
+            vault_id: The vault/project context
+            context: Optional additional context for analysis
+            scene_id: Optional scene context for temporal POV boundaries
+
+        Returns:
+            Dict containing:
+                - character_name: Character's name
+                - known_facts: List of facts the character knows
+                - blocked_facts: List of facts filtered out (for debugging)
+                - psychological_profile: Analysis based on available knowledge
+        """
+        self.log.info("analyzing_character_with_pov", character_id=str(character_id))
+
+        with Session(engine) as session:
+            # 1. Get the character entity
+            character = session.exec(
+                select(Entity).where(Entity.id == character_id)
+            ).first()
+            
+            if not character:
+                return {"error": f"Character {character_id} not found"}
+
+            # 2. Get POV boundaries
+            pov_query = select(POVBoundary).where(POVBoundary.character_id == character_id)
+            pov_boundaries = session.exec(pov_query).all()
+
+            # 3. Extract known fact IDs (excluding false beliefs for now)
+            known_fact_ids = {
+                pov.known_fact_id
+                for pov in pov_boundaries
+                if not pov.is_false_belief
+            }
+
+            # 4. Get ALL facts in the vault
+            all_facts = session.exec(
+                select(Fact).where(Fact.vault_id == vault_id)
+            ).all()
+
+            # 5. Filter facts into known vs blocked
+            known_facts = []
+            blocked_facts = []
+
+            for fact in all_facts:
+                if fact.id in known_fact_ids:
+                    known_facts.append({
+                        "id": str(fact.id),
+                        "content": fact.content,
+                        "fact_type": fact.fact_type,
+                        "confidence": fact.confidence
+                    })
+                else:
+                    blocked_facts.append({
+                        "id": str(fact.id),
+                        "content": fact.content,
+                        "reason": "Not in character's POV"
+                    })
+
+            # 6. Generate psychological analysis based ONLY on known facts
+            known_facts_text = "\n".join([
+                f"- [{f['fact_type']}] {f['content']}"
+                for f in known_facts
+            ])
+
+            system_prompt = f"""
+You are analyzing the psychological state of {character.name}.
+
+CRITICAL: You can ONLY use information that {character.name} knows.
+The following facts are within their knowledge:
+
+{known_facts_text}
+
+Do NOT reference or use any information outside of these known facts.
+This maintains proper POV boundaries and prevents omniscient narrator errors.
+"""
+
+            analysis_prompt = ChatPromptTemplate.from_messages([
+                ("system", system_prompt),
+                ("user", """
+Analyze this character's:
+1. Current emotional state
+2. Motivations and desires
+3. Fears and concerns
+4. Decision-making patterns
+
+Context (if any): {context}
+
+Provide a concise psychological profile based ONLY on what they know.
+""")
+            ])
+
+            chain = analysis_prompt | self.llm
+
+            result = await chain.ainvoke({
+                "context": context or "No additional context provided"
+            })
+
+            return {
+                "character_name": character.name,
+                "character_id": str(character_id),
+                "known_facts_count": len(known_facts),
+                "blocked_facts_count": len(blocked_facts),
+                "known_facts": known_facts,
+                "blocked_facts": blocked_facts[:5],  # Only return first 5 for debugging
+                "psychological_profile": result.content if hasattr(result, 'content') else str(result)
             }

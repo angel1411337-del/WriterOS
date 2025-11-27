@@ -2,7 +2,7 @@ from typing import List, Dict, Any, Optional
 from uuid import UUID
 from sqlmodel import Session, select, desc
 from writeros.utils import db as db_utils
-from writeros.schema.world import Conflict, ConflictParticipant, Entity
+from writeros.schema import Conflict, ConflictParticipant, Entity
 from writeros.schema.enums import ConflictStatus, ConflictRole
 
 class ConflictEngine:

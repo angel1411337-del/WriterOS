@@ -26,6 +26,7 @@ class ChunkingStrategy(str, Enum):
     CLUSTER_SEMANTIC = "cluster_semantic"  # Global DP optimization
     GREEDY_SEMANTIC = "greedy_semantic"    # Local greedy decisions
     FIXED_SIZE = "fixed_size"              # Simple token-based
+    NARRATIVE = "narrative"                # Fiction-optimized (preserves scenes, dialogue, chronology)
     AUTO = "auto"                          # Automatically choose based on doc size
 
 
@@ -139,6 +140,7 @@ class UnifiedChunker:
         self._cluster_chunker = None
         self._greedy_chunker = None
         self._fixed_chunker = None
+        self._narrative_chunker = None
 
         # Performance stats
         self.stats = {
@@ -196,6 +198,8 @@ class UnifiedChunker:
             result = self._chunk_cluster(text, embedding_fn)
         elif selected_strategy == ChunkingStrategy.GREEDY_SEMANTIC:
             result = self._chunk_greedy(text, embedding_fn)
+        elif selected_strategy == ChunkingStrategy.NARRATIVE:
+            result = self._chunk_narrative(text)
         else:  # FIXED_SIZE
             result = self._chunk_fixed(text)
 
@@ -330,6 +334,38 @@ class UnifiedChunker:
             chunks=chunks,
             embeddings=embeddings,
             metadata={"segments": len(chunks)}
+        )
+
+    def _chunk_narrative(self, text: str) -> ChunkedDocument:
+        """Chunk using narrative-aware strategy (fiction-optimized)."""
+        if self._narrative_chunker is None:
+            from writeros.preprocessing.narrative_chunker import NarrativeChunker
+            self._narrative_chunker = NarrativeChunker(
+                target_tokens=self.max_chunk_size // 2,  # Use half of max as target
+                max_tokens=self.max_chunk_size,
+                min_tokens=self.min_chunk_size,
+            )
+
+        # Chunk using narrative strategy
+        raw_chunks = self._narrative_chunker.chunk_file(
+            content=text,
+            file_path="unknown",
+        )
+
+        # Convert to ChunkedDocument format
+        chunks = [chunk.content for chunk in raw_chunks]
+
+        # Extract metadata
+        num_scenes = len(set(chunk.scene_index for chunk in raw_chunks))
+        section_types = [chunk.section_type for chunk in raw_chunks]
+
+        return ChunkedDocument(
+            chunks=chunks,
+            metadata={
+                "segments": len(chunks),
+                "num_scenes": num_scenes,
+                "section_types": section_types,
+            }
         )
 
     def _chunk_fixed(self, text: str) -> ChunkedDocument:

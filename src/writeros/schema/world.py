@@ -9,55 +9,8 @@ from pgvector.sqlalchemy import Vector
 from .base import UUIDMixin, TimestampMixin
 from .enums import EntityType, RelationType, FactType, EntityStatus, ConflictType, ConflictStatus, ConflictRole
 
-class Entity(UUIDMixin, TimestampMixin, table=True):
-    __tablename__ = "entities"
-    __table_args__ = (
-        Index("ix_entities_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
-    )
-    vault_id: UUID = Field(index=True)
 
-    type: EntityType = Field(index=True)
-    name: str = Field(index=True)
-    description: Optional[str] = None
 
-    # ⭐ CRITICAL: Character lifecycle status
-    status: EntityStatus = Field(default=EntityStatus.ALIVE, index=True)
-
-    # ⭐ CRITICAL: Aliases for name resolution ("Strider" vs "Aragorn")
-    aliases: List[str] = Field(default_factory=list, sa_column=Column(JSONB))
-
-    # ⭐ NEW: Species/Race (Human, Elf, Dwarf, Android, etc)
-    species: Optional[str] = None
-
-    # ⭐ NEW: Birth/Death dates (story time)
-    birth_date: Optional[Dict[str, int]] = Field(default=None, sa_column=Column(JSONB))
-    death_date: Optional[Dict[str, int]] = Field(default=None, sa_column=Column(JSONB))
-
-    # Flexible JSON storage
-    properties: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
-    tags: List[str] = Field(default_factory=list, sa_column=Column(JSONB))
-
-    # Stores CanonInfo structure
-    canon: Dict[str, Any] = Field(default_factory=lambda: {"layer": "primary", "status": "active"}, sa_column=Column(JSONB))
-
-    embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(1536)))
-
-class Relationship(UUIDMixin, TimestampMixin, table=True):
-    __tablename__ = "relationships"
-    vault_id: UUID = Field(index=True)
-    
-    from_entity_id: UUID = Field(index=True, foreign_key="entities.id")
-    to_entity_id: UUID = Field(index=True, foreign_key="entities.id")
-    
-    rel_type: RelationType = Field(index=True)
-    description: Optional[str] = None
-    
-    properties: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
-    relationship_metadata: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
-    
-    effective_from: Optional[Dict[str, int]] = Field(default=None, sa_column=Column(JSONB))
-    effective_until: Optional[Dict[str, int]] = Field(default=None, sa_column=Column(JSONB))
-    canon: Dict[str, Any] = Field(default_factory=lambda: {"layer": "primary"}, sa_column=Column(JSONB))
 
 class Fact(UUIDMixin, table=True):
     __tablename__ = "facts"

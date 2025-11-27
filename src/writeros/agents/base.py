@@ -28,10 +28,11 @@ class BaseAgentOutput(BaseModel):
 
 class BaseAgent:
     # ✅ UPDATED: Default is now 'gpt-5.1' (The SOTA Thinking Model)
-    def __init__(self, model_name="gpt-5.1"):
+    def __init__(self, model_name="gpt-5.1", enable_tracking: bool = True):
         self.model_name = model_name
         self.agent_name = self.__class__.__name__
         self.log = logger.bind(agent=self.agent_name)
+        self.enable_tracking = enable_tracking
 
         # Ensure API Key exists
         api_key = os.getenv("OPENAI_API_KEY")
@@ -46,11 +47,14 @@ class BaseAgent:
             temperature=0.7,  # 0.7 works well with 5.1 for creative+logic balance
             api_key=api_key
         )
-        
+
         # Load Data Cache
         self.data_cache: Dict[str, Any] = {}
 
-        self.log.info("agent_initialized", model=self.model_name)
+        # Execution tracker (set by create_tracker)
+        self.tracker: Optional[Any] = None  # Type hint as Any to avoid circular import
+
+        self.log.info("agent_initialized", model=self.model_name, tracking_enabled=enable_tracking)
 
     def load_data(self, filename: str) -> Any:
         """
@@ -100,9 +104,85 @@ class BaseAgent:
         # Subclasses should override with smart keyword detection
         return (True, 1.0, "Agent explicitly invoked")
 
+    def create_tracker(self, vault_id, conversation_id=None, user_id=None, parent_execution_id=None):
+        """
+        Create an execution tracker for this agent.
+
+        Usage:
+            tracker = self.create_tracker(vault_id=vault_id)
+            async with tracker.track_execution(method="run", input_data={...}):
+                # Do work
+                pass
+        """
+        if not self.enable_tracking:
+            # Return a no-op tracker
+            return NoOpTracker()
+
+        from writeros.utils.agent_tracker import ExecutionTracker
+        self.tracker = ExecutionTracker(
+            agent_name=self.agent_name,
+            vault_id=vault_id,
+            conversation_id=conversation_id,
+            user_id=user_id,
+            parent_execution_id=parent_execution_id
+        )
+        return self.tracker
+
+    async def log_event(self, message: str, level: str = "info", **kwargs):
+        """
+        Log an event during agent execution.
+
+        If tracker is active, logs to both tracker and logger.
+        Otherwise, just logs to logger.
+
+        Usage:
+            await self.log_event("Processing 15 facts", level="debug", count=15)
+        """
+        # Log to structlog
+        log_method = getattr(self.log, level, self.log.info)
+        log_method(message, **kwargs)
+
+        # Log to tracker if active
+        if self.tracker:
+            await self.tracker.log_event(message, level=level, data=kwargs)
+
     async def run(self, *args, **kwargs):
         """
         Every agent must implement this method.
         It is the standard entry point for the Swarm.
         """
         raise NotImplementedError("Subclasses must implement the `run` method.")
+
+
+class NoOpTracker:
+    """No-op tracker for when tracking is disabled"""
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+    def track_execution(self, *args, **kwargs):
+        return self
+
+    async def track_stage(self, *args, **kwargs):
+        pass
+
+    async def complete_stage(self, *args, **kwargs):
+        pass
+
+    async def track_llm_request(self, *args, **kwargs):
+        pass
+
+    async def track_llm_response(self, *args, **kwargs):
+        pass
+
+    async def track_should_respond(self, *args, **kwargs):
+        pass
+
+    def set_output(self, *args, **kwargs):
+        pass
+
+    async def log_event(self, *args, **kwargs):
+        pass

@@ -15,7 +15,7 @@ from writeros.utils.db import engine
 from writeros.utils.embeddings import get_embedding_service
 
 class ProducerAgent(BaseAgent):
-    def __init__(self, model_name="gpt-4o", vault_root: Optional[str] = None):
+    def __init__(self, model_name="gpt-4o", vault_root: Optional[str] = None, enable_tools: bool = True):
         super().__init__(model_name)
 
         self.repo_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -24,7 +24,21 @@ class ProducerAgent(BaseAgent):
 
         self._set_vault_root(self._resolve_vault_root(self.default_vault_root))
 
-        self.log.info("producer_initialized", vault_root=str(self.vault_root))
+        # Bind LangChain tools if enabled
+        self.tools_enabled = enable_tools
+        if enable_tools:
+            try:
+                from writeros.agents.langgraph_tools import PRODUCER_TOOLS
+                self.llm_with_tools = self.llm.client.bind_tools(PRODUCER_TOOLS)
+                self.log.info("producer_tools_bound", num_tools=len(PRODUCER_TOOLS))
+            except ImportError:
+                self.log.warning("langgraph_tools_not_available", fallback="tool_calling_disabled")
+                self.llm_with_tools = self.llm.client
+                self.tools_enabled = False
+        else:
+            self.llm_with_tools = self.llm.client
+
+        self.log.info("producer_initialized", vault_root=str(self.vault_root), tools_enabled=self.tools_enabled)
 
     def _set_vault_root(self, vault_root: Path) -> None:
         self.vault_root = vault_root
@@ -105,7 +119,7 @@ class ProducerAgent(BaseAgent):
             Reply with ONLY one word: 'project' or 'story'"""),
             ("user", f"Query: {question}")
         ])
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         result = await chain.ainvoke({})
         return result.strip().lower()
     
@@ -132,6 +146,67 @@ class ProducerAgent(BaseAgent):
             return await self.consult(full_text, existing_notes)
         # Otherwise, run the full query pipeline
         return await self.query(full_text)
+
+    async def run_with_tools(self, user_message: str, context: str, vault_id: str) -> Dict[str, Any]:
+        """
+        Enhanced run method that uses tool-augmented LLM.
+
+        This allows the ProducerAgent to autonomously call tools like:
+        - search_vault: Search for specific information
+        - create_note: Create character sheets, documentation
+        - get_entity_details: Deep dive into entities
+
+        Args:
+            user_message: User's query
+            context: RAG context from retriever
+            vault_id: Vault ID for tool calls
+
+        Returns:
+            Dict with analysis and any tool_calls made
+        """
+        if not self.tools_enabled:
+            # Fallback to regular query
+            result = await self.consult(user_message, context)
+            return {"analysis": result, "tool_calls": []}
+
+        self.log.info("producer_running_with_tools", query=user_message[:100])
+
+        # Create prompt that encourages tool use
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", """You are the Producer Agent with access to powerful tools.
+
+You can autonomously call tools to gather information or create content:
+- search_vault: Find specific information in the vault
+- get_entity_details: Get comprehensive entity information
+- create_note: Create new notes (character sheets, documentation)
+- list_vault_entities: Browse available entities
+
+Use tools when they would provide better answers than the context alone.
+
+Context:
+{context}"""),
+            ("user", "{query}")
+        ])
+
+        # Invoke LLM with tools
+        chain = prompt | self.llm_with_tools
+        result = await chain.ainvoke({"context": context, "query": user_message, "vault_id": vault_id})
+
+        # Check if LLM wants to call tools
+        if hasattr(result, "tool_calls") and result.tool_calls:
+            self.log.info("producer_tool_calls_requested", num_calls=len(result.tool_calls))
+            return {
+                "analysis": result.content if hasattr(result, "content") else str(result),
+                "tool_calls": result.tool_calls,
+                "wants_tools": True
+            }
+        else:
+            # No tool calls, return analysis
+            return {
+                "analysis": result.content if hasattr(result, "content") else str(result),
+                "tool_calls": [],
+                "wants_tools": False
+            }
     
     async def query(self, question: str, mode: Optional[str] = None, vault_path: Optional[str] = None) -> str:
         """Main entry point for Producer queries."""
@@ -223,7 +298,7 @@ class ProducerAgent(BaseAgent):
             Reply with ONLY the mode name."""),
             ("user", f"Query: {question}")
         ])
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         result = await chain.ainvoke({})
         return result.strip().lower()
     
@@ -236,7 +311,7 @@ class ProducerAgent(BaseAgent):
             """),
             ("user", f"Query: {question}")
         ])
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         result = await chain.ainvoke({})
         try:
             clean_result = result.replace("```json", "").replace("```", "").strip()
@@ -257,7 +332,7 @@ class ProducerAgent(BaseAgent):
             ("system", """Extract the two entities. Return JSON: {"start": "Entity A", "end": "Entity B"}"""),
             ("user", f"Query: {question}")
         ])
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         result = await chain.ainvoke({})
         try:
             clean_result = result.replace("```json", "").replace("```", "").strip()
@@ -284,7 +359,7 @@ class ProducerAgent(BaseAgent):
             {context}"""),
             ("user", "{query}")
         ])
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         return await chain.ainvoke({"context": context, "query": query})
 
     async def global_view(self, query: str, context: str) -> str:
@@ -296,7 +371,7 @@ class ProducerAgent(BaseAgent):
             {context}"""),
             ("user", "{query}")
         ])
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         return await chain.ainvoke({"context": context, "query": query})
 
     async def drift_search(self, problem: str, vault_context: str) -> str:
@@ -310,7 +385,7 @@ class ProducerAgent(BaseAgent):
             {context}"""),
             ("user", f"PROBLEM: {problem}")
         ])
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         return await chain.ainvoke({"context": vault_context})
 
     # ============================================
@@ -339,15 +414,24 @@ class ProducerAgent(BaseAgent):
             names = [e.name for e in results]
             return f"Found {len(names)} matches in DB: {', '.join(names)}"
 
-    # ============================================
-    # 🕸️ GRAPH TRAVERSAL
-    # ============================================
-
-    async def agentic_traversal(self, start_node_name: str, end_node_name: str, vault=None) -> str:
-        """Walks the graph using SQL Relationships table."""
-        self.log.info("walking_db_graph", start=start_node_name, end=end_node_name)
-        current_node = start_node_name
-        path = [current_node]
+        if mode == "local":
+            return await self._local_vector_search(question)
+        
+        elif mode == "global":
+            context = await self._load_targeted_context(question)
+            return await self.global_view(question, context)
+        
+        elif mode == "drift":
+            context = await self._load_targeted_context(question)
+            return await self.drift_search(question, context)
+        
+        elif mode == "sql":
+            criteria = await self._parse_sql_query(question)
+            return await self.structured_query(criteria, vault_path)    
+        
+        elif mode == "traversal":
+            nodes = await self._parse_traversal_query(question)
+            return await self.agentic_traversal(nodes["start"], nodes["end"], vault_path)
         visited = {current_node}
         max_steps = 6
 
@@ -361,15 +445,15 @@ class ProducerAgent(BaseAgent):
 
                 # 2. Get Neighbors
                 rels = session.exec(select(Relationship).where(
-                    (Relationship.from_entity_id == node_obj.id) |
-                    (Relationship.to_entity_id == node_obj.id)
+                    (Relationship.source_entity_id == node_obj.id) |
+                    (Relationship.target_entity_id == node_obj.id)
                 )).all()
                 if not rels: return f"Dead end at {current_node}."
 
                 # 3. Resolve Neighbor Names
                 neighbor_names = []
                 for r in rels:
-                    neighbor_id = r.to_entity_id if r.from_entity_id == node_obj.id else r.from_entity_id
+                    neighbor_id = r.target_entity_id if r.source_entity_id == node_obj.id else r.source_entity_id
                     n_obj = session.get(Entity, neighbor_id)
                     if n_obj: neighbor_names.append(n_obj.name)
 
@@ -378,7 +462,7 @@ class ProducerAgent(BaseAgent):
                     ("system", "Pick the neighbor most likely to lead to the target."),
                     ("user", f"Current: {current_node}\nTarget: {end_node_name}\nNeighbors: {neighbor_names}\n\nReturn ONLY the name.")
                 ])
-                next_step = (await (decision_prompt | self.llm | StrOutputParser()).ainvoke({})).strip()
+                next_step = (await (decision_prompt | self.llm.client | StrOutputParser()).ainvoke({})).strip()
 
                 if next_step in visited: return f"Loop detected at {next_step}. Traversal failed."
                 

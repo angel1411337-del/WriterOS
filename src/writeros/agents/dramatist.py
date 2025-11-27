@@ -76,7 +76,7 @@ Return ONLY a number between 1.0 and 10.0 (e.g., "7.5")"""),
             ("user", "Genre: {genre}\n\nScene:\n{scene_text}")
         ])
         
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         result = await chain.ainvoke({
             "genre": genre,
             "scene_text": scene_text[:2000]
@@ -106,7 +106,7 @@ Return ONLY a number between 1.0 and 10.0 (e.g., "6.8")"""),
             ("user", "Scene:\n{scene_text}")
         ])
         
-        chain = prompt | self.llm | StrOutputParser()
+        chain = prompt | self.llm.client | StrOutputParser()
         result = await chain.ainvoke({
             "scene_text": scene_text[:2000]
         })
