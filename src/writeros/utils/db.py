@@ -54,6 +54,17 @@ logger.info(
     total_connections=POOL_SIZE + MAX_OVERFLOW,
 )
 
+def refresh_engine():
+    """
+    Dispose the engine's connection pool to force fresh connections.
+
+    Use this after schema migrations to clear any connection-level caching
+    or stale prepared statements.
+    """
+    logger.info("disposing_engine_pool")
+    engine.dispose()
+    logger.info("engine_pool_disposed")
+
 def init_db():
     """
     Initializes the database with tables, indexes, and default data.

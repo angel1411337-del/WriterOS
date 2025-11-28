@@ -1,9 +1,19 @@
 import typer
+from dotenv import load_dotenv
+
+# Load environment variables FIRST
+load_dotenv()
+
 from writeros.core.logging import setup_logging, get_logger
 
-# Initialize logging before anything else
+# Initialize logging
 setup_logging()
 logger = get_logger(__name__)
+
+# Refresh database engine to clear any stale connections
+# This prevents issues after schema migrations
+from writeros.utils.db import refresh_engine
+refresh_engine()
 
 app = typer.Typer()
 
