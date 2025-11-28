@@ -240,13 +240,13 @@ class RAGRetriever:
 
         return filtered
 
-    def format_results(self, results: RetrievalResult, max_content_length: int = 200) -> str:
+    def format_results(self, results: RetrievalResult, max_content_length: int = 9000) -> str:
         """
         Format retrieval results as a readable string for LLM context.
 
         Args:
             results: The retrieval results
-            max_content_length: Maximum characters to include from content fields
+            max_content_length: Maximum characters to include from content fields (~1500 words)
 
         Returns:
             Formatted string with all results

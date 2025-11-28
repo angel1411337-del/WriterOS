@@ -10,6 +10,13 @@ This document defines the personalities, responsibilities, and domains of the 11
 **Voice:** Professional, concise, decisive.
 **Responsibility:** Receives user input via the **Obsidian Plugin**, determines intent, and routes tasks to the appropriate sub-agent. Never attempts to solve complex creative problems itself; it delegates.
 
+**Technical Architecture (Updated 2025-11-28 by Dev1):**
+- **Framework:** LangGraph with checkpointing for resumable workflows
+- **RAG Configuration:** 15 hops × 15 docs/hop (converges at ~5 hops, retrieves 20-40 docs)
+- **Context Quality:** 9000 chars/doc (~1500 words) - preserves full scenes instead of fragments
+- **Response Formatting:** AgentResponseFormatter converts Pydantic models → clean markdown
+- **Agent Communication:** Parallel execution via asyncio with state management
+
 ---
 
 ## 🧠 The Analysis Team
@@ -228,5 +235,84 @@ Low-level utilities and wrappers.
 | :--- | :--- | :--- |
 | **LLMClient** | Unified interface for AI models (OpenAI/Anthropic). | `achat()`, `astructured()` |
 | **DBUtils** | Database connection and session management. | `get_session()`, `init_db()` |
+| **AgentResponseFormatter** | Converts structured agent outputs to readable markdown. | `format_timeline()`, `format_psychology()`, `format_stylist()` |
+
+---
+
+## 📈 Recent Improvements (2025-11-28)
+
+### Phase 1: Agent Response Formatting
+**Developer:** Dev1
+**Impact:** CRITICAL - Fixed unreadable agent outputs
+
+**Problem:** Agents returned Python repr() strings like:
+```
+events=[TimelineEvent(order=1, timestamp=None, title='...')]
+```
+
+**Solution:** Created `AgentResponseFormatter` with 10 specialized format methods:
+- `format_timeline()` - Chronological events with titles, summaries, impact
+- `format_psychology()` - Character profiles, motivations, internal conflicts
+- `format_profiler()` - Entity extraction and relationships
+- `format_architect()` - Plot structure analysis
+- `format_dramatist()` - Conflict and dramatic tension
+- `format_mechanic()` - Scene mechanics and world rules
+- `format_theorist()` - Thematic analysis and symbols
+- `format_navigator()` - Travel and journey logistics
+- `format_stylist()` - Prose critique with craft concepts
+- `format_chronologist()` - Timeline ordering
+
+**Result:** Clean markdown sections with hierarchical structure:
+```markdown
+## Timeline Analysis
+
+### Bran reflects on his father as Lord Stark
+
+### Catelyn's reaction to Ned's bastard
+```
+
+**Files:**
+- Created: `src/writeros/agents/formatters.py` (229 lines)
+- Modified: `src/writeros/agents/langgraph_orchestrator.py` (formatting integration)
+
+### Phase 2: RAG Context Enhancement
+**Developer:** Dev1
+**Impact:** HIGH - 247x improvement in context quality
+
+**Problem:** Agents received truncated 200-char fragments, destroying narrative comprehension
+
+**Solution:**
+1. Increased RAG retrieval: 10 hops → **15 hops**, 3 docs/hop → **15 docs/hop**
+2. Removed truncation: 200 chars → **9000 chars** (~1500 words per document)
+3. Preserves full scenes instead of sentence fragments
+
+**Metrics:**
+- Documents retrieved: 4-13 → **22** (5.5x improvement)
+- Context per doc: 200 chars → **9000 chars** (45x improvement)
+- Total context: ~800 chars → **~198,000 chars** (247x improvement)
+
+**Example - Before (truncated):**
+```
+...but not if she were injured or blown.
+He would need to find new clothes soon; most like, he'd need to steal them...
+```
+
+**Example - After (full scene):**
+```
+the story of what had happened in the grasses today. By the time Viserys came limping back among them, every man, woman, and child in the camp would know him for a walker. There were no secrets in the khalasar.
+Dany gave the silver over to the slaves for grooming and entered her tent. It was cool and
+dim beneath the silk. As she let the door flap close behind her, Dany saw a finger of dusty red light reach out to touch her dragon's eggs across the tent. For an instant a thousand droplets of scarlet flame swam before her eyes. She blinked, and they were gone.
+Stone, she told herself. They are only stone, even Illyrio said so, the dragons are all
+dead. She put her palm against the black egg, fingers spread gently across the curve of the shell. The stone was warm. Almost hot. "The sun," Dany whispered. "The sun warmed them as they rode."
+[...full scene continues...]
+```
+
+**Files:**
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:181-186` (RAG params)
+- Modified: `src/writeros/rag/retriever.py:243` (truncation limit)
+
+**Next Priority:** Phase 3 - LLM-based synthesis to weave agent outputs into cohesive narratives
+
+**Documentation:** See `ai_context/dev1_phase1_phase2_implementation.md` for detailed technical analysis
 
 

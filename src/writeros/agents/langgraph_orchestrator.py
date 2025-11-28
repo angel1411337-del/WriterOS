@@ -27,6 +27,7 @@ from writeros.agents.producer import ProducerAgent
 from writeros.agents.psychologist import PsychologistAgent
 from writeros.agents.stylist import StylistAgent
 from writeros.agents.theorist import TheoristAgent
+from writeros.agents.formatters import AgentResponseFormatter
 from writeros.rag.retriever import RAGRetriever
 from writeros.utils.langsmith_config import configure_langsmith, get_langsmith_url
 from writeros.core.logging import get_logger
@@ -64,11 +65,16 @@ class OrchestratorState(TypedDict):
     agent_responses: Dict[str, Any]  # Agent name -> response
 
     # Structured Analysis (from individual agents)
-    timeline_analysis: Optional[Any]
-    psychology_analysis: Optional[Any]
-    travel_analysis: Optional[Any]
-    plot_analysis: Optional[Any]
-    tension_analysis: Optional[Any]
+    timeline_analysis: Optional[Any]  # chronologist
+    psychology_analysis: Optional[Any]  # psychologist
+    profiler_analysis: Optional[Any]  # profiler
+    architect_analysis: Optional[Any]  # architect
+    dramatist_analysis: Optional[Any]  # dramatist
+    mechanic_analysis: Optional[Any]  # mechanic
+    theorist_analysis: Optional[Any]  # theorist
+    navigator_analysis: Optional[Any]  # navigator
+    chronologist_analysis: Optional[Any]  # chronologist (alias)
+    stylist_analysis: Optional[Any]  # stylist
 
     # Output
     structured_summary: str  # Formatted structured analysis
@@ -172,11 +178,12 @@ class LangGraphOrchestrator(BaseAgent):
         """
         logger.info("rag_retrieval_node_start", query=state["user_message"][:100])
 
-        # Perform iterative RAG
+        # Perform iterative RAG with deeper search
+        # 15 hops x 15 docs/hop = up to 225 documents (convergence usually stops earlier)
         rag_result = await self.retriever.retrieve_iterative(
             initial_query=state["user_message"],
-            max_hops=10,
-            limit_per_hop=3
+            max_hops=15,
+            limit_per_hop=15
         )
 
         # Format context
@@ -264,12 +271,16 @@ class LangGraphOrchestrator(BaseAgent):
                 logger.error("agent_execution_failed", agent=agent_name, error=str(e))
                 results[agent_name] = {"error": str(e), "skipped": True}
 
-        # Extract structured analyses
+        # Extract structured analyses from all agents
         timeline_analysis = results.get("chronologist", {}).get("analysis")
         psychology_analysis = results.get("psychologist", {}).get("analysis")
-        travel_analysis = results.get("navigator", {}).get("analysis")
-        plot_analysis = results.get("architect", {}).get("analysis")
-        tension_analysis = results.get("dramatist", {}).get("analysis")
+        profiler_analysis = results.get("profiler", {}).get("analysis")
+        architect_analysis = results.get("architect", {}).get("analysis")
+        dramatist_analysis = results.get("dramatist", {}).get("analysis")
+        mechanic_analysis = results.get("mechanic", {}).get("analysis")
+        theorist_analysis = results.get("theorist", {}).get("analysis")
+        navigator_analysis = results.get("navigator", {}).get("analysis")
+        stylist_analysis = results.get("stylist", {}).get("analysis")
 
         logger.info(
             "parallel_agents_complete",
@@ -279,10 +290,15 @@ class LangGraphOrchestrator(BaseAgent):
         return {
             "agent_responses": results,
             "timeline_analysis": timeline_analysis,
+            "chronologist_analysis": timeline_analysis,  # Alias for clarity
             "psychology_analysis": psychology_analysis,
-            "travel_analysis": travel_analysis,
-            "plot_analysis": plot_analysis,
-            "tension_analysis": tension_analysis
+            "profiler_analysis": profiler_analysis,
+            "architect_analysis": architect_analysis,
+            "dramatist_analysis": dramatist_analysis,
+            "mechanic_analysis": mechanic_analysis,
+            "theorist_analysis": theorist_analysis,
+            "navigator_analysis": navigator_analysis,
+            "stylist_analysis": stylist_analysis,
         }
 
     async def _execute_single_agent(
@@ -327,12 +343,47 @@ class LangGraphOrchestrator(BaseAgent):
                 result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
                 return {"analysis": result, "type": "timeline"}
 
-            # Psychologist
+            # Psychologist with LCEL
             elif agent_name == "psychologist":
-                response = f"Psychology analysis for: {user_message}\nContext: {context[:200]}"
-                return {"analysis": response, "type": "psychology"}
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "psychology"}
 
-            # Generic agent execution
+            # Profiler with LCEL
+            elif agent_name == "profiler":
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "profiler"}
+
+            # Architect with LCEL
+            elif agent_name == "architect":
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "architect"}
+
+            # Dramatist with LCEL
+            elif agent_name == "dramatist":
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "dramatist"}
+
+            # Mechanic with LCEL
+            elif agent_name == "mechanic":
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "mechanic"}
+
+            # Navigator with LCEL
+            elif agent_name == "navigator":
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "navigator"}
+
+            # Stylist with LCEL
+            elif agent_name == "stylist":
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "stylist"}
+
+            # Theorist with LCEL
+            elif agent_name == "theorist":
+                result = await agent.run(full_text=context, existing_notes="", title=user_message[:50])
+                return {"analysis": result, "type": "theorist"}
+
+            # Generic agent execution (fallback)
             else:
                 response = f"{agent_name.capitalize()} analysis of: {user_message[:100]}"
                 return {"analysis": response, "type": "generic"}
@@ -382,22 +433,49 @@ class LangGraphOrchestrator(BaseAgent):
         """
         logger.info("build_structured_start")
 
-        # Format structured output
+        # Format structured output using AgentResponseFormatter
+        formatter = AgentResponseFormatter()
         structured_parts = ["## SYSTEMATIC ANALYSIS\n"]
 
+        # Format each agent's output using the appropriate formatter
         if state.get("timeline_analysis"):
-            structured_parts.append("### TIMELINE ANALYSIS")
-            structured_parts.append(str(state["timeline_analysis"]))
+            structured_parts.append(formatter.format_timeline(state["timeline_analysis"]))
             structured_parts.append("")
 
         if state.get("psychology_analysis"):
-            structured_parts.append("### PSYCHOLOGY ANALYSIS")
-            structured_parts.append(str(state["psychology_analysis"]))
+            structured_parts.append(formatter.format_psychology(state["psychology_analysis"]))
             structured_parts.append("")
 
-        if state.get("travel_analysis"):
-            structured_parts.append("### TRAVEL ANALYSIS")
-            structured_parts.append(str(state["travel_analysis"]))
+        if state.get("profiler_analysis"):
+            structured_parts.append(formatter.format_profiler(state["profiler_analysis"]))
+            structured_parts.append("")
+
+        if state.get("architect_analysis"):
+            structured_parts.append(formatter.format_architect(state["architect_analysis"]))
+            structured_parts.append("")
+
+        if state.get("dramatist_analysis"):
+            structured_parts.append(formatter.format_dramatist(state["dramatist_analysis"]))
+            structured_parts.append("")
+
+        if state.get("mechanic_analysis"):
+            structured_parts.append(formatter.format_mechanic(state["mechanic_analysis"]))
+            structured_parts.append("")
+
+        if state.get("theorist_analysis"):
+            structured_parts.append(formatter.format_theorist(state["theorist_analysis"]))
+            structured_parts.append("")
+
+        if state.get("navigator_analysis"):
+            structured_parts.append(formatter.format_navigator(state["navigator_analysis"]))
+            structured_parts.append("")
+
+        if state.get("chronologist_analysis"):
+            structured_parts.append(formatter.format_chronologist(state["chronologist_analysis"]))
+            structured_parts.append("")
+
+        if state.get("stylist_analysis"):
+            structured_parts.append(formatter.format_stylist(state["stylist_analysis"]))
             structured_parts.append("")
 
         structured_summary = "\n".join(structured_parts)
