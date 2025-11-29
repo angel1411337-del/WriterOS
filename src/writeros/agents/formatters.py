@@ -142,25 +142,76 @@ class AgentResponseFormatter:
 
     @staticmethod
     def format_profiler(profile: Any) -> str:
-        """Format character profile into markdown."""
+        """
+        Format character profile into markdown.
+
+        Design Decision: Extract structured data from WorldExtractionSchema instead of dumping raw objects.
+
+        Reasoning:
+        - Profiler returns WorldExtractionSchema with characters/organizations/locations
+        - Need to extract and format each type properly
+        - Avoid str(profile) which creates blob: "WorldExtractionSchema(characters=[...])"
+        """
         if not profile:
             return "_No character profiles identified._"
 
         if isinstance(profile, str):
             return f"## Character Profiles\n\n{profile}"
 
-        # If it's a Pydantic model, try to extract data
-        if hasattr(profile, 'entities') and profile.entities:
-            lines = ["## Character Profiles\n"]
-            for entity in profile.entities:
-                if hasattr(entity, 'name'):
-                    lines.append(f"### {entity.name}")
-                if hasattr(entity, 'description') and entity.description:
-                    lines.append(f"\n{entity.description}")
-                lines.append("")
-            return "\n".join(lines)
+        # Handle WorldExtractionSchema (from ProfilerAgent)
+        lines = ["## Character Profiles\n"]
 
-        return f"## Character Profiles\n\n{str(profile)}"
+        # Extract characters
+        if hasattr(profile, 'characters') and profile.characters:
+            for char in profile.characters:
+                lines.append(f"### {char.name}")
+                if hasattr(char, 'role'):
+                    lines.append(f"**Role:** {char.role}")
+
+                # Visual traits
+                if hasattr(char, 'visual_traits') and char.visual_traits:
+                    lines.append("\n**Appearance:**")
+                    for trait in char.visual_traits:
+                        lines.append(f"- {trait.feature}: {trait.description}")
+
+                # Relationships
+                if hasattr(char, 'relationships') and char.relationships:
+                    lines.append("\n**Relationships:**")
+                    for rel in char.relationships:
+                        detail = f" ({rel.details})" if hasattr(rel, 'details') and rel.details else ""
+                        lines.append(f"- {rel.target} ({rel.rel_type}){detail}")
+
+                lines.append("")
+
+        # Extract organizations
+        if hasattr(profile, 'organizations') and profile.organizations:
+            lines.append("\n## Organizations\n")
+            for org in profile.organizations:
+                lines.append(f"### {org.name}")
+                if hasattr(org, 'org_type'):
+                    lines.append(f"**Type:** {org.org_type}")
+                if hasattr(org, 'leader') and org.leader:
+                    lines.append(f"**Leader:** {org.leader}")
+                if hasattr(org, 'ideology'):
+                    lines.append(f"**Ideology:** {org.ideology}")
+                lines.append("")
+
+        # Extract locations
+        if hasattr(profile, 'locations') and profile.locations:
+            lines.append("\n## Locations\n")
+            for loc in profile.locations:
+                lines.append(f"### {loc.name}")
+                if hasattr(loc, 'geography'):
+                    lines.append(f"**Geography:** {loc.geography}")
+                if hasattr(loc, 'visual_signature'):
+                    lines.append(f"**Appearance:** {loc.visual_signature}")
+                lines.append("")
+
+        # If nothing was extracted, return simple message
+        if len(lines) == 1:  # Only header
+            return "_No character profiles identified._"
+
+        return "\n".join(lines)
 
     @staticmethod
     def format_architect(analysis: Any) -> str:

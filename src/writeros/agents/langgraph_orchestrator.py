@@ -232,8 +232,17 @@ class LangGraphOrchestrator(BaseAgent):
                 limit_per_hop=15
             )
 
-        # Format context
-        context_str = self.retriever.format_results(rag_result)
+        # Format context using smart formatter (replaces text blob approach)
+        from writeros.rag.smart_context_formatter import smart_formatter
+
+        context_str = await smart_formatter.format_context(
+            query=state["user_message"],
+            vault_id=state.get("vault_id"),
+            documents=rag_result.documents,
+            entities=rag_result.entities,
+            max_total_tokens=8000,  # Reasonable limit for LLM context
+            max_entities=5  # Focus on top 5 most relevant entities
+        )
 
         logger.info(
             "rag_retrieval_complete",
@@ -597,40 +606,80 @@ Provide a relevance score (0.0-1.0) for EACH agent."""
         """
         Node 5: Synthesize natural language narrative from agent responses.
 
+        Design Decision:
+        Use structured context instead of dumping agent responses as text blobs.
+
+        Reasoning:
+        Agent responses are already formatted by AgentResponseFormatter in the
+        structured_summary. Dumping them again as text creates redundancy and
+        loses the hierarchical structure.
+
         Updates state with:
         - narrative_summary
         - final_output
         """
         logger.info("synthesize_narrative_start")
 
-        # Use LLM to synthesize narrative
-        agent_summaries = []
-        for agent_name, response in state["agent_responses"].items():
-            if not response.get("skipped"):
-                agent_summaries.append(f"- {agent_name}: {response.get('analysis', 'No analysis')}")
+        # Build synthesis context from FORMATTED structured summaries
+        # Design Decision: Use the already-formatted structured output instead of raw analysis
+        #
+        # Reasoning:
+        # - structured_summary already contains ALL agent outputs in readable markdown
+        # - No need to re-format or truncate - just pass it to synthesis LLM
+        # - LLM sees full context in structured format (not raw Pydantic dumps)
+        # - Avoids information loss from truncation
 
+        # Create concise synthesis prompt for LLM
         synthesis_prompt = f"""
 User Question: {state["user_message"]}
 
-Agent Responses:
-{chr(10).join(agent_summaries)}
+Detailed Agent Analyses:
+{state["structured_summary"]}
 
-Synthesize a natural, conversational response that addresses the user's question
-based on the agent responses above. Be concise and helpful.
+Your task: Synthesize a natural, conversational response (2-3 paragraphs max) that
+directly answers the user's question. Use the detailed analyses above as your source.
+
+Guidelines:
+- Be concise and user-friendly
+- Directly answer the question
+- Reference specific details from the analyses
+- Avoid just repeating the structured format
+- Write in natural prose, not bullet points
 """
 
-        # Simple synthesis (can be enhanced with LLM call)
-        narrative_summary = f"Based on the analysis from {len(agent_summaries)} agents, here's what I found:\n\n"
-        narrative_summary += "\n".join(agent_summaries)
+        # Generate narrative summary using LLM
+        try:
+            from writeros.utils.llm_client import get_llm
+            synthesis_llm = get_llm(model_name="gpt-5.1")  # High-quality model for synthesis
+            narrative_summary = await synthesis_llm.ainvoke(synthesis_prompt)
 
-        # Combine structured + narrative
-        final_output = state["structured_summary"] + "\n\n## NARRATIVE SUMMARY\n\n" + narrative_summary
+            # Extract content if it's an AIMessage
+            if hasattr(narrative_summary, 'content'):
+                narrative_summary = narrative_summary.content
+        except Exception as e:
+            logger.warning("synthesis_llm_failed", error=str(e))
+            # Fallback: Return structured summary without synthesis
+            narrative_summary = "## Analysis\n\nSee detailed analysis below."
 
-        logger.info("synthesize_narrative_complete")
+        # Design Decision: Only show LLM synthesis, not structured analysis
+        #
+        # Reasoning:
+        # - LLM synthesis reads ALL structured agent outputs to create natural response
+        # - Structured analysis is verbose (profiler dumps, timeline events, etc.)
+        # - Users want answers, not raw agent output dumps
+        # - Structured data is still available in state for debugging/logging
+        #
+        # Trade-off: Lose visibility into agent details, but gain cleaner UX
+        final_output = narrative_summary  # Just the LLM summary, no structured dump
+
+        logger.info("synthesize_narrative_complete",
+                   narrative_length=len(narrative_summary),
+                   structured_hidden=True)
 
         return {
             "narrative_summary": narrative_summary,
             "final_output": final_output,
+            "structured_summary": state["structured_summary"],  # Keep in state for debugging
             "messages": [AIMessage(content=final_output)]
         }
 

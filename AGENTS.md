@@ -10,10 +10,11 @@ This document defines the personalities, responsibilities, and domains of the 11
 **Voice:** Professional, concise, decisive.
 **Responsibility:** Receives user input via the **Obsidian Plugin**, determines intent, and routes tasks to the appropriate sub-agent. Never attempts to solve complex creative problems itself; it delegates.
 
-**Technical Architecture (Updated 2025-11-28 by Dev1):**
+**Technical Architecture (Updated 2025-11-29):**
 - **Framework:** LangGraph with checkpointing for resumable workflows
 - **RAG Configuration:** 15 hops × 15 docs/hop (converges at ~5 hops, retrieves 20-40 docs)
 - **Context Quality:** 9000 chars/doc (~1500 words) - preserves full scenes instead of fragments
+- **Context Formatting:** SmartContextFormatter - entity-focused, hierarchical structure (replaces text blobs)
 - **Response Formatting:** AgentResponseFormatter converts Pydantic models → clean markdown
 - **Agent Communication:** Parallel execution via asyncio with state management
 
@@ -135,8 +136,9 @@ Defines the objective reality of the story world.
 
 | Schema | Purpose | Key Fields |
 | :--- | :--- | :--- |
-| **Entity** | Core object (Character, Location, Object). | `name`, `type`, `status`, `embedding` |
-| **Relationship** | Connection between entities. | `from_entity`, `to_entity`, `rel_type` |
+| **Entity** | Core object (Character, Location, Object). | `name`, `type`, `status`, `embedding`, `metadata_` |
+| **Chunk** | Source of truth for all knowledge (text fragments). | `content`, `primary_source_chunk_id`, `mentioned_entity_ids`, `narrative_sequence` |
+| **Relationship** | Connection between entities. | `from_entity`, `to_entity`, `rel_type`, `primary_source_chunk_id` |
 | **Fact** | Atomic unit of world truth. | `content`, `fact_type`, `confidence` |
 | **Event** | Major plot beat or historical event. | `name`, `story_time`, `causes_event_ids` |
 | **Conflict** | Dramatic conflict tracking. | `conflict_type`, `status`, `intensity`, `stakes` |
@@ -146,6 +148,15 @@ Defines the objective reality of the story world.
 | **Group** | Vague social categories (Smallfolk, Nobles). | `category_type`, `membership_criteria`, `social_hierarchy_level` |
 | **SystemRule** | Magic/Tech system rules. | `name`, `cost_value`, `consequences` |
 | **LoreEntry** | Advanced worldbuilding (culture, history). | `title`, `category`, `content` |
+
+**IMPORTANT - Entity Attributes Design Decision (2025-11-29):**
+WriterOS does NOT use a separate `EntityAttribute` table. This is an intentional architectural choice:
+- **Chunk-Centric Philosophy**: All knowledge derives from source material (chunks), not extracted key-value pairs
+- **Narrative Context Preservation**: Attributes like "Jon Snow has dark hair" are better understood in their narrative context ("bastard's coloring, like his father") rather than as isolated data points
+- **Provenance First**: Everything links back to `primary_source_chunk_id` for evidence-based reasoning
+- **No Redundancy**: Chunks already contain attribute information; extracting them separately would duplicate data
+- **Flexibility via metadata_**: When structured attributes ARE needed (e.g., "house": "Stark", "born": "283 AC"), use the `Entity.metadata_` JSONB field
+- **Domain Fit**: This works for narrative fiction where attributes are descriptive and contextual, unlike game engines (stats) or product catalogs (specs) where structured attributes make sense
 
 ### 2. Narrative Structure (The "Book")
 Defines how the story is told and organized.
@@ -311,8 +322,148 @@ dead. She put her palm against the black egg, fingers spread gently across the c
 - Modified: `src/writeros/agents/langgraph_orchestrator.py:181-186` (RAG params)
 - Modified: `src/writeros/rag/retriever.py:243` (truncation limit)
 
-**Next Priority:** Phase 3 - LLM-based synthesis to weave agent outputs into cohesive narratives
+### Phase 3: Smart Context Formatting (Text Blob Solution)
+**Developer:** Claude Code
+**Impact:** CRITICAL - Replaced unstructured text blobs with intelligent, hierarchical context
 
-**Documentation:** See `ai_context/dev1_phase1_phase2_implementation.md` for detailed technical analysis
+**Problem:** RAG system dumped 135,000+ chars of concatenated documents/entities as one giant text blob:
+- No structure or hierarchy
+- No prioritization
+- Hard for LLMs to parse
+- Wasted context window on irrelevant content
+
+**Solution:** Created SmartContextFormatter:
+- Entity-focused context building using EntityContextBuilder
+- Hierarchical markdown structure (Definition → Relationships → Context)
+- Token budget management (60% entities, 40% general docs)
+- 75-85% reduction in token usage with higher quality
+
+**Example Output:**
+```markdown
+## Key Entities
+
+### Ned Stark (CHARACTER)
+**Definition:**
+Eddard "Ned" Stark is Lord of Winterfell...
+
+**Relationships:**
+- Married to Catelyn Tully
+- Father of Robb, Sansa, Arya, Bran, Rickon
+
+**Context:**
+- Ned became Hand of the King
+- Discovered truth about Joffrey's parentage
+```
+
+**Results:**
+- Clean, structured context vs unmanageable blobs
+- Entity-focused prioritization
+- Token budget enforcement
+- Better LLM comprehension
+
+**Files:**
+- Created: `src/writeros/rag/smart_context_formatter.py` (340 lines)
+- Created: `tests/rag/test_smart_context_formatter.py` (260 lines, 4/4 tests passing)
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:235-245` (RAG integration)
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:605-669` (Synthesis node)
+- Documentation: `.claude/SMART_CONTEXT_FORMATTER.md`
+
+### Phase 3.1: Synthesis Node Optimization & Output Cleanup
+**Developer:** Claude Code
+**Impact:** CRITICAL - Eliminated all text blobs, clean conversational output only
+
+**Problem 1:** Synthesis node was dumping raw agent analysis outputs (Pydantic models, dicts) as text
+**Problem 2:** Character profiles outputting as blob: `WorldExtractionSchema(characters=[...])`
+**Problem 3:** Users seeing verbose structured dumps alongside synthesis
+
+**Solution:** Complete output pipeline overhaul:
+
+**1. Synthesis LLM Upgrade (langgraph_orchestrator.py:653)**
+```python
+# Before: Fast but lower quality
+synthesis_llm = get_llm(model_name="gpt-4o-mini")
+
+# After: High quality synthesis
+synthesis_llm = get_llm(model_name="gpt-5.1")
+```
+
+**2. Full Context for Synthesis (langgraph_orchestrator.py:633-648)**
+```python
+# Pass FULL structured summary to synthesis LLM (no truncation)
+synthesis_prompt = f"""
+User Question: {state["user_message"]}
+
+Detailed Agent Analyses:
+{state["structured_summary"]}  # ✅ ALL agent outputs in formatted markdown
+
+Your task: Synthesize a natural, conversational response...
+"""
+```
+
+**3. Hide Structured Output (langgraph_orchestrator.py:664-684)**
+```python
+# Design Decision: Only show LLM synthesis, not structured dumps
+# Reasoning: LLM reads ALL data to synthesize, users want answers not debug output
+final_output = narrative_summary  # Just the synthesis, no structured dump
+```
+
+**4. Fix Profiler Formatting (formatters.py:143-214)**
+```python
+# Before: Fallback blob
+return f"## Character Profiles\n\n{str(profile)}"  # ❌ Blob
+
+# After: Properly extract WorldExtractionSchema
+for char in profile.characters:
+    lines.append(f"### {char.name}")
+    lines.append(f"**Role:** {char.role}")
+    # Format visual traits, relationships, etc.
+```
+
+**Output Comparison:**
+
+**Before (verbose blobs):**
+```
+## SUMMARY
+[Natural answer]
+
+## SYSTEMATIC ANALYSIS
+
+## Character Profiles
+WorldExtractionSchema(characters=[CharacterProfile(name='Ned', role='Protagonist'...)])
+
+## Timeline Analysis
+[3000 chars of timeline data]
+
+## Psychology Analysis
+[2000 chars of psychology data]
+```
+
+**After (clean conversational):**
+```
+Ned Stark serves as Lord of Winterfell and becomes Hand of the King, creating
+tension between his honor-bound nature and political realities. His relationships
+with Catelyn (his wife) and Robert (his childhood friend) define his character arc.
+Jon Snow, his bastard son, joins the Night's Watch due to social stigma.
+```
+
+**Key Design Decisions:**
+1. **Full context to LLM**: Use entire `structured_summary` (no truncation = no information loss)
+2. **Hide structured output**: Users see natural answers, not debug dumps
+3. **Upgrade to gpt-5.1**: Higher quality synthesis
+4. **Proper formatting**: Extract Pydantic models correctly (no str() fallbacks)
+
+**Results:**
+- 100% elimination of text blobs
+- Conversational, user-friendly responses
+- LLM synthesizes from complete agent data
+- Structured data preserved in state for debugging
+
+**Files:**
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:605-684` (synthesis)
+- Modified: `src/writeros/agents/formatters.py:143-214` (profiler formatting)
+
+**Next Priority:** Phase 4 - LLM-based synthesis to weave agent outputs into cohesive narratives
+
+**Documentation:** See `.claude/SMART_CONTEXT_FORMATTER.md` for complete design and usage guide
 
 
