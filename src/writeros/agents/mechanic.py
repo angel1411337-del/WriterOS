@@ -164,7 +164,7 @@ class MechanicAgent(BaseAgent):
             return (False, 0.2, "No mechanics context detected")
 
     async def run(self, full_text: str, existing_notes: str, title: str):
-        logger.info(f"⚙️ Mechanic extracting systems from: {title}...")
+        logger.info(f"Mechanic extracting systems from: {title}...")
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", """You are the Lead Systems Designer.

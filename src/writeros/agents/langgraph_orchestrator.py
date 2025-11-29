@@ -12,6 +12,7 @@ import asyncio
 from typing import TypedDict, Annotated, List, Dict, Any, Optional, Sequence
 from operator import add
 from uuid import UUID
+from pydantic import BaseModel, Field
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
@@ -33,6 +34,27 @@ from writeros.utils.langsmith_config import configure_langsmith, get_langsmith_u
 from writeros.core.logging import get_logger
 
 logger = get_logger(__name__)
+
+
+# ============================================================================
+# AGENT ROUTING MODELS
+# ============================================================================
+
+class AgentRelevanceScores(BaseModel):
+    """
+    Relevance scores for all agents (0.0-1.0).
+    Used by smart router to filter agents before execution.
+    """
+    profiler: float = Field(ge=0, le=1, description="Character/entity profiling relevance")
+    psychologist: float = Field(ge=0, le=1, description="Character psychology/motivation relevance")
+    chronologist: float = Field(ge=0, le=1, description="Timeline/chronology relevance")
+    architect: float = Field(ge=0, le=1, description="Plot structure/narrative arc relevance")
+    dramatist: float = Field(ge=0, le=1, description="Tension/conflict/drama relevance")
+    mechanic: float = Field(ge=0, le=1, description="World rules/magic system relevance")
+    navigator: float = Field(ge=0, le=1, description="Travel/geography/distance relevance")
+    stylist: float = Field(ge=0, le=1, description="Prose style/voice/tone relevance")
+    theorist: float = Field(ge=0, le=1, description="Themes/symbolism/meaning relevance")
+    producer: float = Field(ge=0, le=1, description="Project planning/goals relevance")
 
 
 # ============================================================================
@@ -95,7 +117,12 @@ class LangGraphOrchestrator(BaseAgent):
     LangGraph-powered orchestrator with state management and checkpointing.
     """
 
-    def __init__(self, enable_tracking: bool = True, checkpoint_dir: str = "./checkpoints"):
+    def __init__(
+        self,
+        enable_tracking: bool = True,
+        checkpoint_dir: str = "./checkpoints",
+        use_graph_enhanced_retrieval: bool = False
+    ):
         super().__init__(model_name="gpt-5.1", enable_tracking=enable_tracking)
 
         # Configure LangSmith tracing
@@ -105,6 +132,7 @@ class LangGraphOrchestrator(BaseAgent):
 
         # Initialize retriever
         self.retriever = RAGRetriever()
+        self.use_graph_enhanced_retrieval = use_graph_enhanced_retrieval
 
         # Initialize all agents
         self.agents = {
@@ -176,15 +204,33 @@ class LangGraphOrchestrator(BaseAgent):
         - rag_entities
         - context_str
         """
-        logger.info("rag_retrieval_node_start", query=state["user_message"][:100])
-
-        # Perform iterative RAG with deeper search
-        # 15 hops x 15 docs/hop = up to 225 documents (convergence usually stops earlier)
-        rag_result = await self.retriever.retrieve_iterative(
-            initial_query=state["user_message"],
-            max_hops=15,
-            limit_per_hop=15
+        logger.info(
+            "rag_retrieval_node_start",
+            query=state["user_message"][:100],
+            graph_enhanced=self.use_graph_enhanced_retrieval
         )
+
+        if self.use_graph_enhanced_retrieval and state.get("vault_id"):
+            # Use graph-enhanced retrieval for improved relevance
+            logger.info("using_graph_enhanced_retrieval")
+            rag_result = await self.retriever.retrieve_with_graph_enhancement(
+                query=state["user_message"],
+                vault_id=state["vault_id"],
+                k=15,  # Number of results per type
+                expand_graph=True,
+                entity_boost_direct=0.3,
+                entity_boost_indirect=0.1,
+                return_chunks=True  # Use chunk-level retrieval
+            )
+        else:
+            # Standard iterative RAG with deeper search
+            # 15 hops x 15 docs/hop = up to 225 documents (convergence usually stops earlier)
+            rag_result = await self.retriever.retrieve_iterative(
+                initial_query=state["user_message"],
+                vault_id=state.get("vault_id"),
+                max_hops=15,
+                limit_per_hop=15
+            )
 
         # Format context
         context_str = self.retriever.format_results(rag_result)
@@ -192,7 +238,8 @@ class LangGraphOrchestrator(BaseAgent):
         logger.info(
             "rag_retrieval_complete",
             num_docs=len(rag_result.documents),
-            num_entities=len(rag_result.entities)
+            num_entities=len(rag_result.entities),
+            graph_enhanced=self.use_graph_enhanced_retrieval
         )
 
         # Eagerly access attributes to avoid detached instance errors
@@ -218,18 +265,82 @@ class LangGraphOrchestrator(BaseAgent):
 
     async def _agent_router_node(self, state: OrchestratorState) -> Dict[str, Any]:
         """
-        Node 2: Determine which agents should respond.
+        Node 2: Determine which agents should respond using smart LLM-based routing.
 
-        For now, broadcasts to all agents. In the future, this could use
-        an LLM to intelligently select only relevant agents.
+        Uses a single fast LLM call to score all agents (0.0-1.0) and selects
+        agents with score >= 0.5. This replaces 10 separate autonomy checks.
 
         Updates state with:
         - selected_agents
         """
-        # For now, select all agents (broadcast)
-        selected_agents = list(self.agents.keys())
+        user_message = state["user_message"]
+        context = state.get("rag_context", "")
 
-        logger.info("agent_router_selected", agents=selected_agents)
+        # Use a small, fast model for routing (gpt-4o-mini or similar)
+        from langchain_openai import ChatOpenAI
+        router_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+        # Create structured output extractor
+        scoring_llm = router_llm.with_structured_output(AgentRelevanceScores)
+
+        # Build routing prompt
+        routing_prompt = f"""You are an agent router for a multi-agent fiction writing system.
+
+Score each agent's relevance to the user query on a scale of 0.0 to 1.0:
+- 0.0 = Completely irrelevant, should not run
+- 0.5 = Somewhat relevant, borderline
+- 1.0 = Highly relevant, definitely should run
+
+**User Query**: {user_message}
+
+**Retrieved Context** (first 500 chars): {context[:500] if context else "No context available"}
+
+**Agent Descriptions**:
+- profiler: Identifies and profiles characters, entities, relationships
+- psychologist: Analyzes character psychology, motivations, emotional arcs
+- chronologist: Tracks timelines, event sequences, chronology
+- architect: Analyzes plot structure, narrative arcs, story architecture
+- dramatist: Evaluates tension, conflict, drama, stakes
+- mechanic: Checks world-building rules, magic systems, internal consistency
+- navigator: Handles travel logistics, geography, distances, routes
+- stylist: Analyzes prose style, voice, tone, writing quality
+- theorist: Examines themes, symbolism, deeper meanings
+- producer: Manages project planning, goals, objectives
+
+Provide a relevance score (0.0-1.0) for EACH agent."""
+
+        try:
+            # Get scores in a single LLM call
+            scores: AgentRelevanceScores = await scoring_llm.ainvoke(routing_prompt)
+
+            # Filter agents by score threshold (>= 0.5)
+            threshold = 0.5
+            selected_agents = []
+            scores_dict = scores.model_dump()
+
+            for agent_name, score in scores_dict.items():
+                if score >= threshold:
+                    selected_agents.append(agent_name)
+
+            logger.info("smart_routing_complete",
+                       threshold=threshold,
+                       scores=scores_dict,
+                       selected_agents=selected_agents,
+                       num_selected=len(selected_agents))
+
+            # Fallback: If no agents selected, run profiler as default
+            if not selected_agents:
+                logger.warning("no_agents_selected",
+                             message="No agents met threshold, defaulting to profiler")
+                selected_agents = ["profiler"]
+
+        except Exception as e:
+            logger.error("routing_failed", error=str(e))
+            # Fallback: Run all agents if routing fails
+            selected_agents = list(self.agents.keys())
+            logger.warning("routing_fallback",
+                         message="Routing failed, running all agents",
+                         agents=selected_agents)
 
         return {"selected_agents": selected_agents}
 
@@ -310,17 +421,15 @@ class LangGraphOrchestrator(BaseAgent):
         vault_id: UUID = None
     ) -> Dict[str, Any]:
         """
-        Execute a single agent with autonomy check and tool support.
+        Execute a single agent (already filtered by smart router).
+
+        The smart router has already determined this agent is relevant,
+        so we skip the autonomy check.
 
         Returns:
-            Dict with agent response or {"skipped": True} if agent declined
+            Dict with agent response
         """
-        # Check if agent wants to respond (autonomy)
-        should_respond = await self._check_agent_autonomy(agent_name, user_message, context)
-
-        if not should_respond:
-            logger.info("agent_skipped", agent=agent_name, reason="autonomy_check")
-            return {"skipped": True, "reason": "Not relevant to my expertise"}
+        # Agent has already been selected by smart router, no autonomy check needed
 
         # Agent wants to respond - execute it
         try:

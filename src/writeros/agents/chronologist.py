@@ -32,7 +32,7 @@ class ChronologistAgent(BaseAgent):
 
     async def run(self, full_text: str, existing_notes: str, title: str):
         """Extract a concise chronology to feed the larger swarm."""
-        logger.info(f"⏳ Chronologist sequencing events in: {title}...")
+        logger.info(f"Chronologist sequencing events in: {title}...")
 
         prompt = ChatPromptTemplate.from_messages([
             (
