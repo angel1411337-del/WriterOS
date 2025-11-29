@@ -1,0 +1,43 @@
+{
+    "travel": {
+        "raven_speed": {
+            "value": 50,
+            "unit": "leagues/day",
+            "desc": "Standard raven speed. Can be affected by weather or predators."
+        },
+        "horse_speed_sustained": {
+            "value": 30,
+            "unit": "miles/day",
+            "desc": "Sustainable pace for a horse on a road."
+        },
+        "army_march_speed": {
+            "value": 10,
+            "unit": "miles/day",
+            "desc": "Standard march speed for a large host."
+        }
+    },
+    "magic": {
+        "resurrection": {
+            "cost": "life",
+            "desc": "Only death can pay for life. Requires blood magic or divine intervention."
+        },
+        "warging": {
+            "limit": "distance",
+            "desc": "Easier with bonded animal. Distance weakens connection."
+        },
+        "dragons": {
+            "growth": "unlimited",
+            "desc": "Dragons never stop growing as long as they have food and freedom."
+        }
+    },
+    "technology": {
+        "communication": {
+            "limit": "ravens",
+            "desc": "No instant communication. Ravens are the fastest method."
+        },
+        "medicine": {
+            "limit": "medieval",
+            "desc": "Milk of the poppy for pain. Amputation for infection. No antibiotics."
+        }
+    }
+}

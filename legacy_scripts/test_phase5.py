@@ -52,7 +52,7 @@ def test_chat_stream():
                         try:
                             data = json.loads(data_str)
                             print(data.get('content', ''), end='', flush=True)
-                        except:
+                        except Exception:
                             pass
         print("\nChat test passed.")
         return True

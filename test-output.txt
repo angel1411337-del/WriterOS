@@ -1,0 +1,22 @@
+## 📊 SYSTEMATIC ANALYSIS
+### ⏱️ TIMELINE ANALYSIS
+**Events Identified:** 2
+1. **Jon leaves Winterfell** (Order: 1)
+   Jon departs
+2. **Jon arrives** (Order: 2)
+   After 14 days
+
+**⚠️ Continuity Notes:** 14 days travel from Winterfell to Castle Black
+
+### 🧠 PSYCHOLOGICAL ANALYSIS
+**Characters Analyzed:** 1
+
+**Jon Snow**
+- Archetype: Outcast Hero
+- Core Desire: prove worthy
+- Core Fear: defined by birth
+
+### 🗺️ TRAVEL ANALYSIS
+**Distance:** 1127 km
+**Travel Time:** 14 days
+**Method:** horseback

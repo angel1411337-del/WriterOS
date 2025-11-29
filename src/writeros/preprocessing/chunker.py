@@ -2,7 +2,7 @@
 Cluster Semantic Chunker
 Splits text into chunks based on semantic similarity using embeddings.
 """
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Callable
 import numpy as np
 from dataclasses import dataclass
 import re
@@ -18,20 +18,24 @@ class SemanticChunker:
         self,
         min_chunk_size: int = 50,
         max_chunk_size: int = 400,
-        embedding_model: str = "text-embedding-3-small"
+        embedding_model: str = "text-embedding-3-small",
+        embedder_factory: Optional[Callable[[Optional[str]], Any]] = None
     ):
         self.min_chunk_size = min_chunk_size
         self.max_chunk_size = max_chunk_size
         self.embedding_model = embedding_model
-        
+
         # Initialize embedding service (lazy load)
         self._embedder = None
+        self._embedder_factory = embedder_factory
 
     @property
     def embedder(self):
         if self._embedder is None:
-            from writeros.utils.embeddings import EmbeddingService
-            self._embedder = EmbeddingService()
+            from writeros.utils.embeddings import get_embedding_service
+
+            factory = self._embedder_factory or get_embedding_service
+            self._embedder = factory(self.embedding_model)
         return self._embedder
 
     async def chunk_document(self, text: str, document_type: str = "default") -> List[Dict[str, Any]]:
@@ -112,14 +116,30 @@ class SemanticChunker:
     def _finalize_chunk(self, chunks: List[Chunk], segments: List[str], embeddings: List[List[float]]):
         if not segments:
             return
-            
+
         content = " ".join(segments)
         # Calculate centroid embedding for the chunk
-        avg_embedding = np.mean(embeddings, axis=0).tolist()
-        
+        avg_embedding_np = np.mean(embeddings, axis=0)
+        avg_embedding = avg_embedding_np.tolist()
+
         # Calculate coherence (avg similarity to centroid)
-        coherence = 1.0 # Placeholder
-        
+        centroid_norm = np.linalg.norm(avg_embedding_np)
+        similarities = []
+
+        for emb in embeddings:
+            emb_np = np.array(emb)
+            emb_norm = np.linalg.norm(emb_np)
+
+            if centroid_norm == 0 or emb_norm == 0:
+                similarities.append(0.0)
+                continue
+
+            sim = float(np.dot(emb_np, avg_embedding_np) / (centroid_norm * emb_norm))
+            similarities.append(sim)
+
+        mean_similarity = float(np.mean(similarities)) if similarities else 0.0
+        coherence = float(np.clip((mean_similarity + 1) / 2, 0.0, 1.0))
+
         chunks.append(Chunk(
             content=content,
             embedding=avg_embedding,

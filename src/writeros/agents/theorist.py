@@ -39,7 +39,7 @@ class TheoristAgent(BaseAgent):
         self.extractor = self.llm.with_structured_output(CraftExtractionSchema)
 
     async def run(self, full_text: str, existing_notes: str, title: str):
-        logger.info(f"🧠 Theorist analyzing craft: {title}...")
+        logger.info(f"Theorist analyzing craft: {title}...")
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", """You are a Master Speculative Fiction Writing Coach.
@@ -53,7 +53,7 @@ class TheoristAgent(BaseAgent):
             2. IGNORE specific plot details unless used as an EXAMPLE.
             3. EXTRACT the underlying PRINCIPLE.
             """),
-            ("user", f"""
+            ("user", """
             Existing Vault Knowledge: {existing_notes}
             
             Content to Analyze:
@@ -62,4 +62,7 @@ class TheoristAgent(BaseAgent):
         ])
 
         chain = prompt | self.extractor
-        return await chain.ainvoke({})
+        return await chain.ainvoke({
+            "existing_notes": existing_notes,
+            "full_text": full_text
+        })

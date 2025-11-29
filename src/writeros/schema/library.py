@@ -2,12 +2,15 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 from uuid import UUID
 from sqlmodel import Field, Relationship
-from sqlalchemy import Column
+from sqlalchemy import Column, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from pgvector.sqlalchemy import Vector
 
 from .base import UUIDMixin, TimestampMixin
-from .enums import PacingType, DraftStatus, UserRating
+from .enums import (
+    PacingType, DraftStatus, UserRating,
+    SceneOutcomeType, DramaticFunction  # Quick Win additions
+)
 
 # ============================================
 # 1. SOURCE MODEL (The Training Moat)
@@ -95,6 +98,9 @@ class Scene(UUIDMixin, TimestampMixin, table=True):
     Enables tension arcs and pacing analysis.
     """
     __tablename__ = "scenes"
+    __table_args__ = (
+        Index("ix_scenes_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
     vault_id: UUID = Field(index=True)
     
     # Hierarchy
@@ -112,11 +118,25 @@ class Scene(UUIDMixin, TimestampMixin, table=True):
     tension_level: int = Field(ge=1, le=10, default=5)
     dominant_emotion: str = "neutral"
     pacing: PacingType = Field(default=PacingType.MEDIUM)
-    
+
+    # ⭐ QUICK WIN: Scene Goals & Outcomes (Validates Narrative Purpose)
+    scene_goal: Optional[str] = Field(default=None, description="What character wants to accomplish in this scene")
+    scene_outcome: Optional[str] = Field(default=None, description="What actually happens")
+    outcome_type: Optional[SceneOutcomeType] = Field(default=None, description="Whether goal was achieved/failed/subverted")
+
+    # ⭐ QUICK WIN: Dramatic Function (Story Structure)
+    dramatic_function: Optional[DramaticFunction] = Field(default=None, description="Scene's role in overall story")
+    character_goal_met: Optional[bool] = Field(default=None, description="Did protagonist achieve scene goal?")
+    story_goal_progression: int = Field(default=0, ge=0, le=100, description="How much this scene advances story goal (0-100)")
+
+    # ⭐ QUICK WIN: Consequences & Setup
+    consequence: Optional[str] = Field(default=None, description="What changed as a result of this scene")
+    flags_for_later: List[str] = Field(default_factory=list, sa_column=Column(JSONB), description="What this sets up for future scenes")
+
     # Metadata
     pov_character_id: Optional[UUID] = Field(default=None) # Link to Entity
     location_id: Optional[UUID] = Field(default=None)      # Link to Entity
-    
+
     # Vector Search
     embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(1536)))
 
@@ -132,6 +152,9 @@ class Document(UUIDMixin, TimestampMixin, table=True):
     Generic storage for Notes, Craft Advice, or loose drafts.
     """
     __tablename__ = "documents"
+    __table_args__ = (
+        Index("ix_documents_embedding", "embedding", postgresql_using="hnsw", postgresql_with={"m": 16, "ef_construction": 64}, postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
     vault_id: UUID = Field(index=True)
 
     title: str

@@ -32,4 +32,8 @@ class Anchor(UUIDMixin, TimestampMixin, table=True):
     chapters_remaining: Optional[int] = None
     on_track_score: float = 1.0 # 0.0 to 1.0 probability of hitting anchor
 
+    # Prerequisites tracking (used by ArchitectAgent)
+    prerequisites_met: int = Field(default=0)
+    prerequisites_total: int = Field(default=0)
+
     canon: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))

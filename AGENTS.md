@@ -1,7 +1,7 @@
 # WriterOS Agents Registry
 
 **System Intelligence Level:** Targeting **GPT-5.1** class reasoning.
-**Knowledge Retrieval:** Hybrid RAG (Vector via pgvector) + GraphRAG (Knowledge Graph).
+**Knowledge Retrieval:** Hybrid RAG (Vector via pgvector) + GraphRAG (Knowledge Graph), also SQL.
 
 This document defines the personalities, responsibilities, and domains of the 11 specialized agents within WriterOS.
 
@@ -9,6 +9,14 @@ This document defines the personalities, responsibilities, and domains of the 11
 **Role:** The Director / Traffic Cop
 **Voice:** Professional, concise, decisive.
 **Responsibility:** Receives user input via the **Obsidian Plugin**, determines intent, and routes tasks to the appropriate sub-agent. Never attempts to solve complex creative problems itself; it delegates.
+
+**Technical Architecture (Updated 2025-11-29):**
+- **Framework:** LangGraph with checkpointing for resumable workflows
+- **RAG Configuration:** 15 hops × 15 docs/hop (converges at ~5 hops, retrieves 20-40 docs)
+- **Context Quality:** 9000 chars/doc (~1500 words) - preserves full scenes instead of fragments
+- **Context Formatting:** SmartContextFormatter - entity-focused, hierarchical structure (replaces text blobs)
+- **Response Formatting:** AgentResponseFormatter converts Pydantic models → clean markdown
+- **Agent Communication:** Parallel execution via asyncio with state management
 
 ---
 
@@ -29,6 +37,13 @@ This document defines the personalities, responsibilities, and domains of the 11
 **Input:** Entity + Scene content.
 **Output:** Psychological Profiles, Emotional States, Hidden Drives.
 **Focus:** Why did they do that? Is this consistent with their trauma?
+
+**POV-Aware Analysis:**
+- `analyze_character()`: Generates psychological analysis respecting POVBoundary constraints
+- Queries `POVBoundary` table to filter facts the character should not know
+- Supports temporal knowledge filtering via `scene_id` (what they knew at specific story moments)
+- Prevents omniscient narrator errors by strictly limiting analysis to character's known facts
+- Returns both known facts and blocked facts for debugging and validation
 
 ### 3. The Theorist
 **Role:** Theme & Symbolism Analyst
@@ -109,3 +124,346 @@ This document defines the personalities, responsibilities, and domains of the 11
 **Input:** Word counts, Session times.
 **Output:** Sprints, Goals, Progress Reports.
 **Focus:** You need 500 words to hit your daily goal. Let's sprint.
+
+---
+
+## 📚 Schema Reference
+
+The WriterOS database is organized into logical domains.
+
+### 1. World & Entities (The "Truth")
+Defines the objective reality of the story world.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Entity** | Core object (Character, Location, Object). | `name`, `type`, `status`, `embedding`, `metadata_` |
+| **Chunk** | Source of truth for all knowledge (text fragments). | `content`, `primary_source_chunk_id`, `mentioned_entity_ids`, `narrative_sequence` |
+| **Relationship** | Connection between entities. | `from_entity`, `to_entity`, `rel_type`, `primary_source_chunk_id` |
+| **Fact** | Atomic unit of world truth. | `content`, `fact_type`, `confidence` |
+| **Event** | Major plot beat or historical event. | `name`, `story_time`, `causes_event_ids` |
+| **Conflict** | Dramatic conflict tracking. | `conflict_type`, `status`, `intensity`, `stakes` |
+| **Organization** | Structured institutions (Houses, Guilds). | `leader_id`, `member_ids`, `organization_type` |
+| **Faction** | Political/military alliances between orgs. | `member_organization_ids`, `alliance_type`, `treaty_terms` |
+| **Family** | Bloodlines with legitimacy tracking. | `legitimate_member_ids`, `bastard_member_ids`, `inheritance_rules` |
+| **Group** | Vague social categories (Smallfolk, Nobles). | `category_type`, `membership_criteria`, `social_hierarchy_level` |
+| **SystemRule** | Magic/Tech system rules. | `name`, `cost_value`, `consequences` |
+| **LoreEntry** | Advanced worldbuilding (culture, history). | `title`, `category`, `content` |
+
+**IMPORTANT - Entity Attributes Design Decision (2025-11-29):**
+WriterOS does NOT use a separate `EntityAttribute` table. This is an intentional architectural choice:
+- **Chunk-Centric Philosophy**: All knowledge derives from source material (chunks), not extracted key-value pairs
+- **Narrative Context Preservation**: Attributes like "Jon Snow has dark hair" are better understood in their narrative context ("bastard's coloring, like his father") rather than as isolated data points
+- **Provenance First**: Everything links back to `primary_source_chunk_id` for evidence-based reasoning
+- **No Redundancy**: Chunks already contain attribute information; extracting them separately would duplicate data
+- **Flexibility via metadata_**: When structured attributes ARE needed (e.g., "house": "Stark", "born": "283 AC"), use the `Entity.metadata_` JSONB field
+- **Domain Fit**: This works for narrative fiction where attributes are descriptive and contextual, unlike game engines (stats) or product catalogs (specs) where structured attributes make sense
+
+### 2. Narrative Structure (The "Book")
+Defines how the story is told and organized.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Chapter** | Manuscript container. | `chapter_number`, `title`, `word_count` |
+| **Scene** | Atomic unit of storytelling. | `scene_number`, `tension_level`, `pacing` |
+| **Subplot** | Parallel storyline tracking. | `name`, `status`, `priority`, `health_score` |
+| **Anchor** | Mandatory plot points (The Outline). | `name`, `target_location`, `status` |
+| **TimeFrame** | Links Scene to World Time (Two-Clock System). | `real_world_date`, `world_date` |
+| **OrderingConstraint** | Explicit "Before/After" logic. | `source_scene_id`, `target_scene_id` |
+
+### 3. Psychology & Identity (The "Mind")
+Defines character interiority and narrative voice.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **CharacterState** | Snapshot of character at a specific time. | `story_location`, `psych_data` |
+| **CharacterArc** | Long-term character growth. | `arc_type`, `starting_state`, `ending_state` |
+| **POVBoundary** | Tracks what a character knows (vs Truth). Prevents omniscient POV errors. | `character_id`, `known_fact_id`, `certainty`, `learned_at_scene_id`, `forgotten_at_scene_id`, `is_false_belief`, `source` |
+| **Narrator** | Narrative voice definition. | `name`, `reliability_score`, `biases` |
+| **User / Vault** | Author identity and project container. | `username`, `tier`, `connection_type` |
+
+### 4. Analysis & Themes (The "Critique")
+Derived data produced by agents.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Theme / Symbol** | Thematic resonance tracking. | `name`, `strength`, `meaning` |
+| **StyleReport** | Prose quality analysis. | `readability_score`, `passive_voice_count` |
+| **TimelineEvent** | Chronologist's linear timeline. | `date_str`, `absolute_timestamp` |
+| **TravelRoute** | Navigator's distance calculations. | `origin`, `destination`, `distance_km` |
+| **ProphecyVision** | Future prediction tracking. | `description`, `status`, `fulfilled_at` |
+
+### 5. Provenance System (The "Time Machine")
+Tracks the origin, evolution, and usage of facts.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **StateChangeEvent** | Logs *changes* to entity state over time. | `event_type`, `payload`, `world_timestamp` |
+| **CharacterKnowledge** | Subjective belief tracking. | `knowledge_content`, `source_type` |
+| **ContentDependency** | Tracks assumptions in text. | `assumption`, `dependency_id`, `is_valid` |
+| **ScenePresence** | Who was where, when. | `presence_type`, `location_id` |
+| **IngestionRecord** | Data origin tracking. | `source_type`, `source_path` |
+
+**Enums**: `StateChangeEventType`, `KnowledgeSourceType`, `DependencyType`, `PresenceType`, `IngestionSourceType`
+
+### 6. System & Session (The "Engine")
+Operational data for the agent system.
+
+| Schema | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **Conversation** | Chat session container. | `title`, `vault_id` |
+| **Message** | Individual chat message. | `role`, `content`, `agent` |
+| **Sprint** | Project management goals. | `goal_word_count`, `current_word_count` |
+| **UniverseManifest** | Multi-book ingestion config. | `universe_name`, `works`, `eras` |
+
+---
+
+## 🛠️ Service Reference
+
+The logic layer that powers the agents.
+
+### 1. Core Services (`src/writeros/services/`)
+Business logic for complex narrative operations.
+
+| Service | Purpose | Key Methods |
+| :--- | :--- | :--- |
+| **ProvenanceService** | The "Time Machine". Replays history and tracks causality. | `compute_character_state`, `detect_retcon_impact`, `get_character_knowledge` |
+| **ConflictEngine** | Manages dramatic tension and conflict lifecycles. | `get_active_conflicts`, `get_tension_map`, `update_conflict_status` |
+
+### 2. RAG & Ingestion (`src/writeros/rag/` & `utils/`)
+Handling data flow, indexing, and retrieval.
+
+| Service | Purpose | Key Methods |
+| :--- | :--- | :--- |
+| **RAGRetriever** | Unified vector search across all data types. | `retrieve(query)`, `format_results()` |
+| **Indexer** | Ingests content into the Vector DB. | `index_vault()`, `process_file()` |
+| **PDFProcessor** | Extracts text/metadata from PDFs. | `process_pdf()` |
+| **VaultReader** | Reads raw files from the Obsidian vault. | `read_all_files()`, `get_file_content()` |
+
+### 3. Infrastructure (`src/writeros/utils/`)
+Low-level utilities and wrappers.
+
+| Service | Purpose | Key Methods |
+| :--- | :--- | :--- |
+| **LLMClient** | Unified interface for AI models (OpenAI/Anthropic). | `achat()`, `astructured()` |
+| **DBUtils** | Database connection and session management. | `get_session()`, `init_db()` |
+| **AgentResponseFormatter** | Converts structured agent outputs to readable markdown. | `format_timeline()`, `format_psychology()`, `format_stylist()` |
+
+---
+
+## 📈 Recent Improvements (2025-11-28)
+
+### Phase 1: Agent Response Formatting
+**Developer:** Dev1
+**Impact:** CRITICAL - Fixed unreadable agent outputs
+
+**Problem:** Agents returned Python repr() strings like:
+```
+events=[TimelineEvent(order=1, timestamp=None, title='...')]
+```
+
+**Solution:** Created `AgentResponseFormatter` with 10 specialized format methods:
+- `format_timeline()` - Chronological events with titles, summaries, impact
+- `format_psychology()` - Character profiles, motivations, internal conflicts
+- `format_profiler()` - Entity extraction and relationships
+- `format_architect()` - Plot structure analysis
+- `format_dramatist()` - Conflict and dramatic tension
+- `format_mechanic()` - Scene mechanics and world rules
+- `format_theorist()` - Thematic analysis and symbols
+- `format_navigator()` - Travel and journey logistics
+- `format_stylist()` - Prose critique with craft concepts
+- `format_chronologist()` - Timeline ordering
+
+**Result:** Clean markdown sections with hierarchical structure:
+```markdown
+## Timeline Analysis
+
+### Bran reflects on his father as Lord Stark
+
+### Catelyn's reaction to Ned's bastard
+```
+
+**Files:**
+- Created: `src/writeros/agents/formatters.py` (229 lines)
+- Modified: `src/writeros/agents/langgraph_orchestrator.py` (formatting integration)
+
+### Phase 2: RAG Context Enhancement
+**Developer:** Dev1
+**Impact:** HIGH - 247x improvement in context quality
+
+**Problem:** Agents received truncated 200-char fragments, destroying narrative comprehension
+
+**Solution:**
+1. Increased RAG retrieval: 10 hops → **15 hops**, 3 docs/hop → **15 docs/hop**
+2. Removed truncation: 200 chars → **9000 chars** (~1500 words per document)
+3. Preserves full scenes instead of sentence fragments
+
+**Metrics:**
+- Documents retrieved: 4-13 → **22** (5.5x improvement)
+- Context per doc: 200 chars → **9000 chars** (45x improvement)
+- Total context: ~800 chars → **~198,000 chars** (247x improvement)
+
+**Example - Before (truncated):**
+```
+...but not if she were injured or blown.
+He would need to find new clothes soon; most like, he'd need to steal them...
+```
+
+**Example - After (full scene):**
+```
+the story of what had happened in the grasses today. By the time Viserys came limping back among them, every man, woman, and child in the camp would know him for a walker. There were no secrets in the khalasar.
+Dany gave the silver over to the slaves for grooming and entered her tent. It was cool and
+dim beneath the silk. As she let the door flap close behind her, Dany saw a finger of dusty red light reach out to touch her dragon's eggs across the tent. For an instant a thousand droplets of scarlet flame swam before her eyes. She blinked, and they were gone.
+Stone, she told herself. They are only stone, even Illyrio said so, the dragons are all
+dead. She put her palm against the black egg, fingers spread gently across the curve of the shell. The stone was warm. Almost hot. "The sun," Dany whispered. "The sun warmed them as they rode."
+[...full scene continues...]
+```
+
+**Files:**
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:181-186` (RAG params)
+- Modified: `src/writeros/rag/retriever.py:243` (truncation limit)
+
+### Phase 3: Smart Context Formatting (Text Blob Solution)
+**Developer:** Claude Code
+**Impact:** CRITICAL - Replaced unstructured text blobs with intelligent, hierarchical context
+
+**Problem:** RAG system dumped 135,000+ chars of concatenated documents/entities as one giant text blob:
+- No structure or hierarchy
+- No prioritization
+- Hard for LLMs to parse
+- Wasted context window on irrelevant content
+
+**Solution:** Created SmartContextFormatter:
+- Entity-focused context building using EntityContextBuilder
+- Hierarchical markdown structure (Definition → Relationships → Context)
+- Token budget management (60% entities, 40% general docs)
+- 75-85% reduction in token usage with higher quality
+
+**Example Output:**
+```markdown
+## Key Entities
+
+### Ned Stark (CHARACTER)
+**Definition:**
+Eddard "Ned" Stark is Lord of Winterfell...
+
+**Relationships:**
+- Married to Catelyn Tully
+- Father of Robb, Sansa, Arya, Bran, Rickon
+
+**Context:**
+- Ned became Hand of the King
+- Discovered truth about Joffrey's parentage
+```
+
+**Results:**
+- Clean, structured context vs unmanageable blobs
+- Entity-focused prioritization
+- Token budget enforcement
+- Better LLM comprehension
+
+**Files:**
+- Created: `src/writeros/rag/smart_context_formatter.py` (340 lines)
+- Created: `tests/rag/test_smart_context_formatter.py` (260 lines, 4/4 tests passing)
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:235-245` (RAG integration)
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:605-669` (Synthesis node)
+- Documentation: `.claude/SMART_CONTEXT_FORMATTER.md`
+
+### Phase 3.1: Synthesis Node Optimization & Output Cleanup
+**Developer:** Claude Code
+**Impact:** CRITICAL - Eliminated all text blobs, clean conversational output only
+
+**Problem 1:** Synthesis node was dumping raw agent analysis outputs (Pydantic models, dicts) as text
+**Problem 2:** Character profiles outputting as blob: `WorldExtractionSchema(characters=[...])`
+**Problem 3:** Users seeing verbose structured dumps alongside synthesis
+
+**Solution:** Complete output pipeline overhaul:
+
+**1. Synthesis LLM Upgrade (langgraph_orchestrator.py:653)**
+```python
+# Before: Fast but lower quality
+synthesis_llm = get_llm(model_name="gpt-4o-mini")
+
+# After: High quality synthesis
+synthesis_llm = get_llm(model_name="gpt-5.1")
+```
+
+**2. Full Context for Synthesis (langgraph_orchestrator.py:633-648)**
+```python
+# Pass FULL structured summary to synthesis LLM (no truncation)
+synthesis_prompt = f"""
+User Question: {state["user_message"]}
+
+Detailed Agent Analyses:
+{state["structured_summary"]}  # ✅ ALL agent outputs in formatted markdown
+
+Your task: Synthesize a natural, conversational response...
+"""
+```
+
+**3. Hide Structured Output (langgraph_orchestrator.py:664-684)**
+```python
+# Design Decision: Only show LLM synthesis, not structured dumps
+# Reasoning: LLM reads ALL data to synthesize, users want answers not debug output
+final_output = narrative_summary  # Just the synthesis, no structured dump
+```
+
+**4. Fix Profiler Formatting (formatters.py:143-214)**
+```python
+# Before: Fallback blob
+return f"## Character Profiles\n\n{str(profile)}"  # ❌ Blob
+
+# After: Properly extract WorldExtractionSchema
+for char in profile.characters:
+    lines.append(f"### {char.name}")
+    lines.append(f"**Role:** {char.role}")
+    # Format visual traits, relationships, etc.
+```
+
+**Output Comparison:**
+
+**Before (verbose blobs):**
+```
+## SUMMARY
+[Natural answer]
+
+## SYSTEMATIC ANALYSIS
+
+## Character Profiles
+WorldExtractionSchema(characters=[CharacterProfile(name='Ned', role='Protagonist'...)])
+
+## Timeline Analysis
+[3000 chars of timeline data]
+
+## Psychology Analysis
+[2000 chars of psychology data]
+```
+
+**After (clean conversational):**
+```
+Ned Stark serves as Lord of Winterfell and becomes Hand of the King, creating
+tension between his honor-bound nature and political realities. His relationships
+with Catelyn (his wife) and Robert (his childhood friend) define his character arc.
+Jon Snow, his bastard son, joins the Night's Watch due to social stigma.
+```
+
+**Key Design Decisions:**
+1. **Full context to LLM**: Use entire `structured_summary` (no truncation = no information loss)
+2. **Hide structured output**: Users see natural answers, not debug dumps
+3. **Upgrade to gpt-5.1**: Higher quality synthesis
+4. **Proper formatting**: Extract Pydantic models correctly (no str() fallbacks)
+
+**Results:**
+- 100% elimination of text blobs
+- Conversational, user-friendly responses
+- LLM synthesizes from complete agent data
+- Structured data preserved in state for debugging
+
+**Files:**
+- Modified: `src/writeros/agents/langgraph_orchestrator.py:605-684` (synthesis)
+- Modified: `src/writeros/agents/formatters.py:143-214` (profiler formatting)
+
+**Next Priority:** Phase 4 - LLM-based synthesis to weave agent outputs into cohesive narratives
+
+**Documentation:** See `.claude/SMART_CONTEXT_FORMATTER.md` for complete design and usage guide
+
+

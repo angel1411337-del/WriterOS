@@ -69,3 +69,10 @@ data/outputs/*
 
 data/cache/*
 !data/cache/.gitkeep
+
+# Temporary utility scripts
+process_*.py
+rechunk_*.py
+reproduce_*.py
+test_openai*.py
+nul

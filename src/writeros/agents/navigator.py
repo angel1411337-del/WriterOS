@@ -1,59 +1,317 @@
-from typing import List, Optional
+from typing import List, Optional, Literal, Dict, Any
+from uuid import UUID
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
-from .base import BaseAgent, logger
+from langchain_core.output_parsers import StrOutputParser
+import networkx as nx
+
+from .base import BaseAgent, BaseAgentOutput, logger
+from writeros.rag.retriever import retriever
+from sqlmodel import Session, select
+from writeros.utils.db import engine
+from writeros.schema import Relationship, Entity
+from writeros.schema.enums import RelationType, EntityType
 
 # --- EXTRACTOR SCHEMAS ---
 
-class Connection(BaseModel):
-    target_location: str = Field(..., description="Name of the connected place")
-    travel_time: str = Field(..., description="Time to travel (e.g., '3 days', '2 weeks')")
-    distance: Optional[str] = Field(None, description="Physical distance if mentioned (e.g., '500 miles')")
-    travel_method: str = Field(..., description="How to get there (Horse, Ship, Walking, Portal)")
+class TravelRequest(BaseModel):
+    """Schema for extracting travel details from the user query."""
+    origin: Optional[str] = Field(None, description="Starting location")
+    destination: Optional[str] = Field(None, description="Ending location")
+    travel_method: Optional[str] = Field(None, description="Method of travel (raven, horse, ship, foot)")
 
-    # ✅ NEW: Captured for Drift/Strategic Context
-    context: Optional[str] = Field(
-        None,
-        description="Why this route exists or its nature (e.g. 'Trade route', 'Smugglers path', 'Dangerous military road')"
-    )
+class ProvenanceData(BaseModel):
+    """Provenance metadata for the analysis."""
+    expert: str = "Navigator Agent"
+    question: str
+    goal: str = "Assess feasibility of travel scenario"
+    plan: str
+    assumptions: List[str] = Field(default_factory=list)
 
-class LocationExtraction(BaseModel):
-    name: str = Field(..., description="Name of the location (City, Region, Planet)")
-    region: str = Field(..., description="Broader region it belongs to (e.g. 'The North', 'Outer Rim')")
-    description: str = Field(..., description="Visual/Atmospheric description")
-    connections: List[Connection] = Field(default_factory=list, description="Routes to other places")
-
-class NavigationSchema(BaseModel):
-    locations: List[LocationExtraction] = Field(default_factory=list)
+class NavigationOutput(BaseAgentOutput):
+    """Concrete output for travel analysis with provenance."""
+    route_analyzed: bool = False
+    origin: Optional[str] = None
+    destination: Optional[str] = None
+    travel_method: Optional[str] = None
+    
+    canonical_data_available: bool = False
+    data_source: str = "No canonical data"
+    
+    distance_miles: Optional[int] = None
+    travel_time_days: Optional[float] = None
+    travel_time_range: Optional[str] = None
+    
+    rag_queries_attempted: List[str] = Field(default_factory=list)
+    assumptions_made: List[str] = Field(default_factory=list)
+    canonical_evidence: List[str] = Field(default_factory=list)
+    
+    recommendation: Optional[str] = None
+    caveats: List[str] = Field(default_factory=list)
+    
+    provenance: Optional[ProvenanceData] = None
 
 # --- THE AGENT ---
 
 class NavigatorAgent(BaseAgent):
-    # ✅ UPDATED: Use gpt-5.1 for superior spatial reasoning
-    def __init__(self, model_name="gpt-5.1"):
+    def __init__(self, model_name="gpt-4o"):
         super().__init__(model_name)
-        self.extractor = self.llm.with_structured_output(NavigationSchema)
+        
+        # Extractors
+        self.travel_extractor = self.llm.with_structured_output(TravelRequest)
+        
+        # Load distances on init
+        self.distances_data = self.load_data("distances.json")
+        
+        # Retriever
+        self.retriever = retriever
+
+    async def should_respond(self, query: str, context: str = "") -> tuple[bool, float, str]:
+        """
+        Navigator responds to travel/logistics queries.
+        """
+        travel_keywords = [
+            "travel", "journey", "ride", "sail", "fly",
+            "distance", "miles", "leagues", "arrive", "depart",
+            "route", "path", "days", "weeks", "months",
+            "horse", "ship", "raven", "walk", "march",
+            "from", "to", "reach", "get to", "how long"
+        ]
+        
+        query_lower = query.lower()
+        matches = sum(1 for kw in travel_keywords if kw in query_lower)
+        
+        if matches >= 3:
+            return (True, 0.9, f"High travel relevance ({matches} keywords)")
+        elif matches >= 2:
+            return (True, 0.7, f"Moderate travel relevance ({matches} keywords)")
+        elif matches == 1:
+            return (True, 0.5, "Possible travel query (1 keyword)")
+        else:
+            return (False, 0.2, "No travel-related content")
+
+    def calculate_travel(self, origin: str, destination: str, method: str) -> Dict[str, Any]:
+        """
+        Calculates travel time using hardcoded graph data.
+        Returns dict with distance, time, and success status.
+        """
+        if not self.distances_data:
+            return {"success": False, "reason": "Distance data file missing"}
+
+        origin_norm = origin.lower().strip()
+        dest_norm = destination.lower().strip()
+
+        # Find edge in distances data
+        edges = self.distances_data.get("edges", [])
+        found_edge = None
+
+        for edge in edges:
+            s = edge["source"].lower().strip()
+            t = edge["target"].lower().strip()
+            if (s == origin_norm and t == dest_norm) or (s == dest_norm and t == origin_norm):
+                found_edge = edge
+                break
+
+        if not found_edge:
+            return {"success": False, "reason": "No direct route found in DB"}
+
+        # Get speed for travel method
+        speeds = self.distances_data.get("speeds", {})
+        method_norm = method.lower().strip()
+
+        if not method_norm or method_norm not in speeds:
+            method_norm = "horse" if not method_norm else method_norm
+            if method_norm not in speeds:
+                return {"success": False, "reason": f"Unknown method: {method}"}
+
+        speed = speeds[method_norm]
+        distance = found_edge["miles"]
+        time_days = distance / speed
+
+        return {
+            "success": True,
+            "distance": distance,
+            "time": time_days,
+            "method": method_norm
+        }
+
+    async def find_route(self, origin_id: UUID, destination_id: UUID, max_depth: int = 10) -> Dict[str, Any]:
+        """
+        Finds the shortest path between two locations using the graph of connected entities.
+        
+        Args:
+            origin_id: Starting location UUID.
+            destination_id: Destination location UUID.
+            max_depth: Maximum hops.
+            
+        Returns:
+            Dict with 'path' (list of location names) and 'distance' (hops).
+        """
+        self.log.info("finding_route", origin=str(origin_id), dest=str(destination_id))
+        
+        with Session(engine) as session:
+            # 1. Fetch all location connections
+            # Optimization: In a huge graph, we'd use a graph DB or recursive CTE.
+            # Here, we fetch all CONNECTED_TO relationships.
+            # Get location connections
+            connections = session.exec(
+                select(Relationship).where(
+                    Relationship.relationship_type == RelationType.CONNECTED_TO
+                )
+            ).all()
+            
+            # 2. Build Graph
+            G = nx.Graph() # Undirected for travel usually, or DiGraph if one-way
+            
+            # We also need entity names for the path
+            entity_ids = set()
+            for conn in connections:
+                entity_ids.add(conn.to_entity_id)
+                
+            if not entity_ids:
+                 return {"error": "No location connections found in database."}
+
+            entities = session.exec(select(Entity).where(Entity.id.in_(entity_ids))).all()
+            entity_map = {e.id: e.name for e in entities}
+            
+            for conn in connections:
+                G.add_edge(str(conn.from_entity_id), str(conn.to_entity_id), weight=1)
+                
+            # 3. Find Path
+            try:
+                path_ids = nx.shortest_path(G, source=str(origin_id), target=str(destination_id))
+                path_names = [entity_map.get(UUID(pid), "Unknown") for pid in path_ids]
+                
+                return {
+                    "found": True,
+                    "path": path_names,
+                    "hops": len(path_ids) - 1
+                }
+            except nx.NetworkXNoPath:
+                return {
+                    "found": False,
+                    "reason": "No path exists between these locations."
+                }
+            except nx.NodeNotFound:
+                 return {
+                    "found": False,
+                    "reason": "One or both locations not found in the connectivity graph."
+                }
+
+    async def agentic_rag_traversal(self, query: str, origin: Optional[str], destination: Optional[str]) -> Dict[str, Any]:
+        """
+        Iteratively queries RAG to gather scattered travel info.
+        """
+        rag_log = []
+        findings = []
+        
+        # Define queries based on what we know
+        queries_to_run = []
+        
+        if origin:
+            queries_to_run.append(f"What do we know about {origin} location?")
+        if destination:
+            queries_to_run.append(f"What do we know about {destination} location?")
+        if origin and destination:
+            queries_to_run.append(f"Travel between {origin} and {destination}")
+            queries_to_run.append(f"Distance from {origin} to {destination}")
+        
+        queries_to_run.append("Raven speed and travel times")
+        queries_to_run.append("Horse travel speed long distance")
+        
+        # Execute queries (limited to 4 to save time/tokens)
+        for q in queries_to_run[:4]:
+            rag_log.append(q)
+            try:
+                result = await self.retriever.retrieve(query=q, limit=2)
+                text_result = self.retriever.format_results(result, max_content_length=300)
+                if "No relevant information" not in text_result:
+                    findings.append(f"Query: '{q}' -> Found: {text_result[:200]}...")
+            except Exception as e:
+                self.log.warning("rag_query_failed", query=q, error=str(e))
+                
+        return {
+            "queries": rag_log,
+            "findings": findings,
+            "context_str": "\n\n".join(findings)
+        }
 
     async def run(self, full_text: str, existing_notes: str, title: str):
-        logger.info(f"🗺️ Navigator mapping geography in: {title}...")
+        logger.info(f"🗺️ Navigator analyzing travel in: {title}...")
 
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are the Royal Cartographer.
-            Your job is to extract geographical data to build a Master Map.
-            
-            ### RULES:
-            1. **Identify Locations:** Extract cities, landmarks, and regions.
-            2. **Map Connections:** Extract travel times and methods.
-            3. **Context (Critical):** If a route is dangerous, secret, or heavily traveled, note that in the context.
-            4. **Ignore:** Temporary locations like "a random tavern" unless named.
-            """),
-            ("user", f"""
-            Existing Map Context: {existing_notes}
-            
-            Transcript to Analyze:
-            {full_text}
-            """)
+        # 1. Initial Extraction (Fast Pass)
+        extract_prompt = ChatPromptTemplate.from_messages([
+            ("system", "Extract origin, destination, and travel method. Return nulls if unsure."),
+            ("user", "{full_text}")
         ])
+        request: TravelRequest = await (extract_prompt | self.travel_extractor).ainvoke({"full_text": full_text})
+        
+        origin = request.origin
+        destination = request.destination
+        method = request.travel_method or "horse"
 
-        chain = prompt | self.extractor
-        return await chain.ainvoke({})
+        # 2. Agentic RAG Traversal
+        rag_data = await self.agentic_rag_traversal(full_text, origin, destination)
+        
+        # 3. Check Canonical Data
+        calc_result = {"success": False}
+        if origin and destination:
+            calc_result = self.calculate_travel(origin, destination, method)
+
+        # 4. Final Analysis with RISEN Prompt
+        system_prompt = """
+# ROLE
+You are the Navigator Agent, a specialist in travel logistics.
+Your role is to assess the plausibility of travel scenarios using Socratic reasoning and available data.
+
+# INPUT
+User Query: {query}
+Extracted Origin: {origin}
+Extracted Destination: {destination}
+Extracted Method: {method}
+
+# CONTEXT
+Canonical Calculation: {calc_result}
+RAG Findings:
+{rag_context}
+
+# STEPS
+1. **Extract**: Confirm origin/destination/method from query and context.
+2. **Check Canon**: Use the calculation result if successful.
+3. **Synthesize**: If canon fails, use RAG findings to estimate.
+4. **Assess**: Determine feasibility.
+5. **Construct**: Build the JSON response.
+
+# OUTPUT SCHEMA
+Return a JSON object matching `NavigationOutput`.
+Include `provenance` object with:
+- expert: "Navigator Agent"
+- question: {query}
+- goal: "Assess feasibility"
+- plan: "Extracted -> RAG Traversal -> Calculation/Estimation -> Verdict"
+- assumptions: List any assumptions made.
+"""
+        
+        final_prompt = ChatPromptTemplate.from_messages([
+            ("system", system_prompt),
+            ("user", "Analyze this travel scenario.")
+        ])
+        
+        # We need a structured output parser for the final result
+        # Since we have a complex schema, we'll use the LLM's structured output capability again
+        analyzer = self.llm.with_structured_output(NavigationOutput)
+        
+        result: NavigationOutput = await (final_prompt | analyzer).ainvoke({
+            "query": full_text,
+            "origin": origin,
+            "destination": destination,
+            "method": method,
+            "calc_result": str(calc_result),
+            "rag_context": rag_data["context_str"]
+        })
+        
+        # Fill in missing fields from our side if LLM missed them
+        if not result.rag_queries_attempted:
+            result.rag_queries_attempted = rag_data["queries"]
+            
+        return result

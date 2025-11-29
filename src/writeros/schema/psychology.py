@@ -44,14 +44,15 @@ class TransformationMoment(UUIDMixin, table=True):
     Specific scenes or events where a character's values/beliefs shift.
     """
     __tablename__ = "transformation_moments"
-    
+    vault_id: UUID = Field(index=True)
+
     character_id: UUID = Field(index=True, foreign_key="entities.id")
     scene_id: Optional[UUID] = Field(default=None, foreign_key="scenes.id")
-    
+
     trigger_event: str
     old_belief: str
     new_belief: str
-    
-    impact_score: int = Field(ge=1, le=10) # How big was this change?
-    
+
+    impact_score: int = Field(ge=1, le=10)  # How big was this change?
+
     created_at: datetime = Field(default_factory=datetime.utcnow)

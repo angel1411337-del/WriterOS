@@ -17,12 +17,16 @@ class TestGraphRAGTraversal:
     """Test suite for GraphRAG traversal operations."""
 
     @pytest.fixture(autouse=True)
-    def mock_profiler_engine(self, test_engine, mocker):
+    def mock_session(self, db_session, mocker):
         """
-        Mock the ProfilerAgent's engine to use test database.
-        This ensures ProfilerAgent queries run against test DB, not production.
+        Patches Session in profiler to return the test db_session.
+        This ensures the ProfilerAgent sees the uncommitted data from the test setup.
         """
-        mocker.patch("writeros.agents.profiler.engine", test_engine)
+        from unittest.mock import MagicMock
+        mock_ctx = MagicMock()
+        mock_ctx.__enter__.return_value = db_session
+        mock_ctx.__exit__.return_value = None
+        mocker.patch("writeros.agents.profiler.Session", return_value=mock_ctx)
 
     @pytest.fixture
     def sample_graph(self, db_session, sample_vault_id):
@@ -268,9 +272,13 @@ class TestFamilyTreeConstruction:
     """Test family tree construction with recursive queries."""
 
     @pytest.fixture(autouse=True)
-    def mock_profiler_engine(self, test_engine, mocker):
-        """Mock the ProfilerAgent's engine to use test database."""
-        mocker.patch("writeros.agents.profiler.engine", test_engine)
+    def mock_session(self, db_session, mocker):
+        """Mock the ProfilerAgent's Session to use test database."""
+        from unittest.mock import MagicMock
+        mock_ctx = MagicMock()
+        mock_ctx.__enter__.return_value = db_session
+        mock_ctx.__exit__.return_value = None
+        mocker.patch("writeros.agents.profiler.Session", return_value=mock_ctx)
 
     @pytest.fixture
     def family_tree(self, db_session, sample_vault_id):
@@ -425,9 +433,13 @@ class TestCycleDetection:
     """Test that graph traversal handles cycles correctly."""
 
     @pytest.fixture(autouse=True)
-    def mock_profiler_engine(self, test_engine, mocker):
-        """Mock the ProfilerAgent's engine to use test database."""
-        mocker.patch("writeros.agents.profiler.engine", test_engine)
+    def mock_session(self, db_session, mocker):
+        """Mock the ProfilerAgent's Session to use test database."""
+        from unittest.mock import MagicMock
+        mock_ctx = MagicMock()
+        mock_ctx.__enter__.return_value = db_session
+        mock_ctx.__exit__.return_value = None
+        mocker.patch("writeros.agents.profiler.Session", return_value=mock_ctx)
 
     @pytest.fixture
     def circular_graph(self, db_session, sample_vault_id):

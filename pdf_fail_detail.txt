@@ -1,0 +1,1516 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rahme\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\rahme\IdeaProjects\YouTube Transcript Agent
+configfile: pyproject.toml
+plugins: anyio-4.11.0, Faker-38.2.0, langsmith-0.4.45, asyncio-1.3.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 44 items
+
+tests/pdf/test_entity_resolution.py::TestEntityResolution::test_resolve_entity_by_era_single_match FAILED [  2%]
+tests/pdf/test_entity_resolution.py::TestEntityResolution::test_resolve_entity_by_era_temporal_disambiguation FAILED [  4%]
+tests/pdf/test_entity_resolution.py::TestEntityResolution::test_resolve_entity_by_era_fallback FAILED [  6%]
+tests/pdf/test_entity_resolution.py::TestEntityResolution::test_find_or_create_entity_existing FAILED [  9%]
+tests/pdf/test_entity_resolution.py::TestEntityResolution::test_find_or_create_entity_new FAILED [ 11%]
+tests/pdf/test_entity_resolution.py::TestEntityResolution::test_prevent_duplicate_entities_across_eras FAILED [ 13%]
+tests/pdf/test_narrator_extraction.py::TestNarratorExtraction::test_extract_narrator_claims_pattern_1 PASSED [ 15%]
+tests/pdf/test_narrator_extraction.py::TestNarratorExtraction::test_extract_narrator_claims_pattern_2 PASSED [ 18%]
+tests/pdf/test_narrator_extraction.py::TestNarratorExtraction::test_extract_narrator_claims_pattern_3 PASSED [ 20%]
+tests/pdf/test_narrator_extraction.py::TestNarratorExtraction::test_extract_narrator_claims_no_false_positives PASSED [ 22%]
+tests/pdf/test_narrator_extraction.py::TestNarratorExtraction::test_extract_narrator_claims_mixed_patterns PASSED [ 25%]
+tests/pdf/test_pdf_chunking.py::TestPDFChunking::test_chunk_pdf_text PASSED [ 27%]
+tests/pdf/test_pdf_chunking.py::TestPDFChunking::test_chunk_embeddings PASSED [ 29%]
+tests/pdf/test_pdf_chunking.py::TestPDFChunking::test_chunk_metadata PASSED [ 31%]
+tests/pdf/test_pdf_chunking.py::TestPDFChunking::test_chunk_multi_era_pdf PASSED [ 34%]
+tests/pdf/test_pdf_chunking.py::TestPDFChunking::test_chunk_empty_pdf PASSED [ 36%]
+tests/pdf/test_pdf_extraction.py::TestPDFExtraction::test_extract_pdf_basic PASSED [ 38%]
+tests/pdf/test_pdf_extraction.py::TestPDFExtraction::test_extract_pdf_metadata PASSED [ 40%]
+tests/pdf/test_pdf_extraction.py::TestPDFExtraction::test_extract_pdf_multi_era PASSED [ 43%]
+tests/pdf/test_pdf_extraction.py::TestPDFExtraction::test_extract_pdf_empty PASSED [ 45%]
+tests/pdf/test_pdf_extraction.py::TestPDFExtraction::test_extract_pdf_with_narrators PASSED [ 47%]
+tests/pdf/test_pdf_extraction.py::TestPDFExtraction::test_extract_pdf_nonexistent_file PASSED [ 50%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestPDFPipelineBasic::test_process_pdf_end_to_end PASSED [ 52%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestPDFPipelineBasic::test_process_pdf_chunks_only PASSED [ 54%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestPDFPipelineBasic::test_process_pdf_with_override_metadata FAILED [ 56%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestPDFEntityGraph::test_pdf_creates_entities FAILED [ 59%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestPDFEntityGraph::test_pdf_entity_deduplication FAILED [ 61%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestMultiPDFProcessing::test_process_multiple_pdfs FAILED [ 63%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestMultiPDFProcessing::test_vault_indexer_pdf_integration FAILED [ 65%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestTemporalScenarios::test_multi_era_pdf_processing FAILED [ 68%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestTemporalScenarios::test_temporal_entity_resolution_in_pipeline FAILED [ 70%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestErrorHandling::test_pdf_processing_error_handling PASSED [ 72%]
+tests/pdf/test_pdf_pipeline_e2e.py::TestErrorHandling::test_pdf_reindexing FAILED [ 75%]
+tests/pdf/test_pdf_processor.py::TestPDFExtraction::test_extract_pdf_text ERROR [ 77%]
+tests/pdf/test_pdf_processor.py::TestPDFExtraction::test_extract_pdf_metadata ERROR [ 79%]
+tests/pdf/test_pdf_processor.py::TestPDFChunking::test_chunk_pdf_text ERROR [ 81%]
+tests/pdf/test_pdf_processor.py::TestPDFChunking::test_chunks_stored_in_database ERROR [ 84%]
+tests/pdf/test_pdf_processor.py::TestEntityExtraction::test_extract_entities_from_pdf ERROR [ 86%]
+tests/pdf/test_pdf_processor.py::TestEntityExtraction::test_relationships_created_from_pdf ERROR [ 88%]
+tests/pdf/test_pdf_processor.py::TestVaultIndexerIntegration::test_vault_indexer_processes_pdfs ERROR [ 90%]
+tests/pdf/test_pdf_processor.py::TestVaultIndexerIntegration::test_vault_indexer_skips_pdfs_when_disabled ERROR [ 93%]
+tests/pdf/test_pdf_processor.py::TestPDFProcessorEndToEnd::test_full_pdf_workflow ERROR [ 95%]
+tests/pdf/test_pdf_processor.py::TestPDFProcessorEndToEnd::test_process_pdf_directory ERROR [ 97%]
+tests/pdf/test_pdf_processor.py::TestPDFProcessorEndToEnd::test_pdf_with_metadata_override ERROR [100%]
+
+=================================== ERRORS ====================================
+__________ ERROR at setup of TestPDFExtraction.test_extract_pdf_text __________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 0, 904129), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 0, 904244), 'id': UUID('a9c53e69-1b81-42af-be31-cc721ccfd31f'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+________ ERROR at setup of TestPDFExtraction.test_extract_pdf_metadata ________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 1, 669279), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 1, 669397), 'id': UUID('969cf3d2-8e89-4eeb-a8cf-4ca26dde7090'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+____________ ERROR at setup of TestPDFChunking.test_chunk_pdf_text ____________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 2, 552704), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 2, 552858), 'id': UUID('a7d6e835-b43f-4301-8adf-9eb848d1aff4'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+______ ERROR at setup of TestPDFChunking.test_chunks_stored_in_database _______
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 3, 312261), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 3, 312397), 'id': UUID('0c5c546a-af8e-4d4c-8340-c5a84f3584c7'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+____ ERROR at setup of TestEntityExtraction.test_extract_entities_from_pdf ____
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 159233), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 159458), 'id': UUID('2028a454-5d93-484b-8def-f856cd505b7f'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_ ERROR at setup of TestEntityExtraction.test_relationships_created_from_pdf __
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 994104), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 994213), 'id': UUID('9b7cd6b0-99d0-4a07-a4bb-5f7353739a03'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_ ERROR at setup of TestVaultIndexerIntegration.test_vault_indexer_processes_pdfs _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 5, 770580), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 5, 770699), 'id': UUID('9d3aca90-8056-4456-8227-214dabd4ee71'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_ ERROR at setup of TestVaultIndexerIntegration.test_vault_indexer_skips_pdfs_when_disabled _
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 6, 792751), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 6, 792996), 'id': UUID('93fadf24-085b-45f4-8673-d1797f0020ed'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+______ ERROR at setup of TestPDFProcessorEndToEnd.test_full_pdf_workflow ______
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 7, 677382), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 7, 677639), 'id': UUID('f2fb5ac6-e6f7-446a-b934-8a628cfba5dc'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+____ ERROR at setup of TestPDFProcessorEndToEnd.test_process_pdf_directory ____
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 8, 614723), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 8, 615044), 'id': UUID('93e76151-2000-4494-bfe0-518afe94cdad'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_ ERROR at setup of TestPDFProcessorEndToEnd.test_pdf_with_metadata_override __
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UndefinedTable: relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_processor.py:39: in sample_vault
+    db_session.commit()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1311: in commit
+    self._prepare_impl()
+<string>:2: in _prepare_impl
+    ???
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:1286: in _prepare_impl
+    self.session.flush()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4331: in flush
+    self._flush(objects)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:4427: in _flush
+    flush_context.execute()
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+E   LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+E                       ^
+E   
+E   [SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+E   [parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 9, 390815), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 9, 390924), 'id': UUID('dc83b527-6c18-4b6f-95a6-387b90ecac37'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+================================== FAILURES ===================================
+________ TestEntityResolution.test_resolve_entity_by_era_single_match _________
+tests\pdf\test_entity_resolution.py:45: in test_resolve_entity_by_era_single_match
+    assert result is not None
+E   assert None is not None
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:41 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:41 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:41 [info     ] resolving_entity_by_era        agent=ProfilerAgent name=Rhaenyra story_time=None
+2025-11-25 19:12:41 [info     ] no_entity_match                agent=ProfilerAgent name=Rhaenyra
+___ TestEntityResolution.test_resolve_entity_by_era_temporal_disambiguation ___
+tests\pdf\test_entity_resolution.py:92: in test_resolve_entity_by_era_temporal_disambiguation
+    assert result is not None
+E   assert None is not None
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:42 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:42 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:42 [info     ] resolving_entity_by_era        agent=ProfilerAgent name=Aegon story_time={'year': 130}
+2025-11-25 19:12:42 [info     ] no_entity_match                agent=ProfilerAgent name=Aegon
+__________ TestEntityResolution.test_resolve_entity_by_era_fallback ___________
+tests\pdf\test_entity_resolution.py:133: in test_resolve_entity_by_era_fallback
+    assert result is not None
+E   assert None is not None
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:42 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:42 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:42 [info     ] resolving_entity_by_era        agent=ProfilerAgent name=Aegon story_time=None
+2025-11-25 19:12:42 [info     ] no_entity_match                agent=ProfilerAgent name=Aegon
+__________ TestEntityResolution.test_find_or_create_entity_existing ___________
+tests\pdf\test_entity_resolution.py:161: in test_find_or_create_entity_existing
+    assert result.id == existing.id
+E   AssertionError: assert UUID('d4a13ee2-0c3a-42ff-888a-e98be4ccc3e7') == UUID('fa8b3cad-c41b-4103-93ed-7ca87db4432a')
+E    +  where UUID('d4a13ee2-0c3a-42ff-888a-e98be4ccc3e7') = Entity(id=UUID('d4a13ee2-0c3a-42ff-888a-e98be4ccc3e7'), type=<EntityType.CHARACTER: 'character'>, created_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 436652), description='Prince Daemon', aliases=[], species=None, death_date=None, tags=[], embedding=array([ 0.01033314,  0.02874373,  0.03672094, ..., -0.00818487,\n       -0.0016282 , -0.01384912], shape=(1536,), dtype=float32), updated_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 436865), vault_id=UUID('c81910d2-6b05-4160-a93b-d09db621dd1a'), name='Daemon', status=<EntityStatus.ALIVE: 'alive'>, birth_date=None, properties={}, canon={'layer': 'primary', 'status': 'active'}).id
+E    +  and   UUID('fa8b3cad-c41b-4103-93ed-7ca87db4432a') = Entity(embedding=array([0.1, 0.1, 0.1, ..., 0.1, 0.1, 0.1], shape=(1536,), dtype=float32), created_at=datetime.datetime(2025, 11, 26, 0, 12, 42, 416625), species=None, aliases=[], death_date=None, id=UUID('fa8b3cad-c41b-4103-93ed-7ca87db4432a'), description='Prince Daemon Targaryen', type=<EntityType.CHARACTER: 'character'>, tags=[], name='Daemon', canon={'layer': 'primary', 'status': 'active'}, updated_at=datetime.datetime(2025, 11, 26, 0, 12, 42, 416818), birth_date=None, status=<EntityStatus.ALIVE: 'alive'>, properties={}, vault_id=UUID('c81910d2-6b05-4160-a93b-d09db621dd1a')).id
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:42 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:42 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:42 [info     ] resolving_entity_by_era        agent=ProfilerAgent name=Daemon story_time=None
+2025-11-25 19:12:42 [info     ] no_entity_match                agent=ProfilerAgent name=Daemon
+2025-11-25 19:12:42 [info     ] entity_not_found_creating      agent=ProfilerAgent name=Daemon type=character
+2025-11-25 19:12:43 [info     ] entity_created                 agent=ProfilerAgent entity_id=d4a13ee2-0c3a-42ff-888a-e98be4ccc3e7 name=Daemon type=character
+_____________ TestEntityResolution.test_find_or_create_entity_new _____________
+tests\pdf\test_entity_resolution.py:191: in test_find_or_create_entity_new
+    assert result.metadata_["era_start_year"] == 103
+           ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\pydantic\main.py:1026: in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+E   AttributeError: 'Entity' object has no attribute 'metadata_'. Did you mean: 'metadata'?
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:43 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:43 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:43 [info     ] resolving_entity_by_era        agent=ProfilerAgent name=Viserys story_time=None
+2025-11-25 19:12:43 [info     ] no_entity_match                agent=ProfilerAgent name=Viserys
+2025-11-25 19:12:43 [info     ] entity_not_found_creating      agent=ProfilerAgent name=Viserys type=character
+2025-11-25 19:12:43 [info     ] entity_created                 agent=ProfilerAgent entity_id=48c9ccdd-e039-4fbb-8736-0e57b335793a name=Viserys type=character
+______ TestEntityResolution.test_prevent_duplicate_entities_across_eras _______
+tests\pdf\test_entity_resolution.py:222: in test_prevent_duplicate_entities_across_eras
+    assert aegon_i.id != aegon_ii.id
+E   AssertionError: assert UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6') != UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6')
+E    +  where UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6') = Entity(id=UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6'), type=<EntityType.CHARACTER: 'character'>, created_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983213), description='Aegon I', aliases=[], species=None, death_date=None, tags=[], embedding=array([ 0.054375  , -0.0282103 ,  0.04136401, ..., -0.00712988,\n        0.00796834, -0.02152641], shape=(1536,), dtype=float32), updated_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983309), vault_id=UUID('b163d8aa-877e-4b57-8221-75af8c74a84d'), name='Aegon', status=<EntityStatus.ALIVE: 'alive'>, birth_date=None, properties={}, canon={'layer': 'primary', 'status': 'active'}).id
+E    +  and   UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6') = Entity(id=UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6'), type=<EntityType.CHARACTER: 'character'>, created_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983213), description='Aegon I', aliases=[], species=None, death_date=None, tags=[], embedding=array([ 0.054375  , -0.0282103 ,  0.04136401, ..., -0.00712988,\n        0.00796834, -0.02152641], shape=(1536,), dtype=float32), updated_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983309), vault_id=UUID('b163d8aa-877e-4b57-8221-75af8c74a84d'), name='Aegon', status=<EntityStatus.ALIVE: 'alive'>, birth_date=None, properties={}, canon={'layer': 'primary', 'status': 'active'}).id
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:43 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:43 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:43 [info     ] resolving_entity_by_era        agent=ProfilerAgent name=Aegon story_time=None
+2025-11-25 19:12:43 [info     ] no_entity_match                agent=ProfilerAgent name=Aegon
+2025-11-25 19:12:43 [info     ] entity_not_found_creating      agent=ProfilerAgent name=Aegon type=character
+2025-11-25 19:12:43 [info     ] entity_created                 agent=ProfilerAgent entity_id=26c4dea6-e44d-4377-8b94-ccd6878a78a6 name=Aegon type=character
+2025-11-25 19:12:43 [info     ] resolving_entity_by_era        agent=ProfilerAgent name=Aegon story_time={'year': 130}
+2025-11-25 19:12:44 [info     ] entity_found_reusing           agent=ProfilerAgent entity_id=26c4dea6-e44d-4377-8b94-ccd6878a78a6 name=Aegon
+________ TestPDFPipelineBasic.test_process_pdf_with_override_metadata _________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_pipeline_e2e.py:106: in test_process_pdf_with_override_metadata
+    chunks = db_session.exec(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlmodel\orm\session.py:83: in exec
+    results = super().execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2351: in execute
+    return self._execute_internal(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2249: in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\context.py:306: in orm_execute_statement
+    result = conn.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+E   
+E   [SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+E   FROM documents 
+E   WHERE documents.vault_id = %(vault_id_1)s::UUID]
+E   [parameters: {'vault_id_1': UUID('c3f3a9bf-8731-4258-a250-8fc2f1e856ba')}]
+E   (Background on this error at: https://sqlalche.me/e/20/2j85)
+---------------------------- Captured stdout setup ----------------------------
+2025-11-25 19:12:53 [info     ] unified_chunker_initialized    cache_enabled=False cache_size=1000 strategy=auto
+2025-11-25 19:12:53 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:53 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:53 [info     ] pdf_processor_initialized      strategy=auto vault_id=c3f3a9bf-8731-4258-a250-8fc2f1e856ba
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:53 [info     ] processing_pdf                 extract_entities=False file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_pdf_with_override0\simple_test.pdf
+2025-11-25 19:12:53 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_pdf_with_override0\simple_test.pdf
+2025-11-25 19:12:53 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_pdf_with_override0\simple_test.pdf pages=1 text_length=209
+2025-11-25 19:12:53 [info     ] chunking_pdf_text              text_length=209 title='Simple Test Document'
+2025-11-25 19:12:53 [info     ] chunking_document              strategy=cluster_semantic text_length=209
+2025-11-25 19:12:53 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:53 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:53 [info     ] chunking_complete              chunks=1 duration=0.00038552284240722656 strategy=cluster_semantic
+2025-11-25 19:12:53 [info     ] pdf_text_chunked               chunks=1 duration=0.00038552284240722656 strategy=cluster_semantic
+2025-11-25 19:12:53 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_pdf_with_override0\simple_test.pdf
+2025-11-25 19:12:53 [error    ] pdf_processing_failed          error='(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'c3f3a9bf-8...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'c3f3a9bf-8731-4258-a250-8fc2f1e856ba\'), \'metadata_1\': \'source_file\', \'param_1\': \'simple_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)' file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_pdf_with_override0\simple_test.pdf
+________________ TestPDFEntityGraph.test_pdf_creates_entities _________________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_pipeline_e2e.py:140: in test_pdf_creates_entities
+    entities = db_session.exec(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlmodel\orm\session.py:83: in exec
+    results = super().execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2351: in execute
+    return self._execute_internal(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2249: in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\context.py:306: in orm_execute_statement
+    result = conn.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+E   
+E   [SQL: SELECT entities.created_at, entities.updated_at, entities.id, entities.vault_id, entities.type, entities.name, entities.description, entities.status, entities.aliases, entities.species, entities.birth_date, entities.death_date, entities.properties, entities.tags, entities.canon, entities.embedding 
+E   FROM entities 
+E   WHERE entities.vault_id = %(vault_id_1)s::UUID]
+E   [parameters: {'vault_id_1': UUID('f55721e6-93b3-46d6-a655-85458362d6e7')}]
+E   (Background on this error at: https://sqlalche.me/e/20/2j85)
+---------------------------- Captured stdout setup ----------------------------
+2025-11-25 19:12:54 [info     ] unified_chunker_initialized    cache_enabled=False cache_size=1000 strategy=auto
+2025-11-25 19:12:54 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:54 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:54 [info     ] pdf_processor_initialized      strategy=auto vault_id=f55721e6-93b3-46d6-a655-85458362d6e7
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:54 [info     ] processing_pdf                 extract_entities=True file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_creates_entities0\simple_test.pdf
+2025-11-25 19:12:54 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_creates_entities0\simple_test.pdf
+2025-11-25 19:12:54 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_creates_entities0\simple_test.pdf pages=1 text_length=209
+2025-11-25 19:12:54 [info     ] chunking_pdf_text              text_length=209 title='Simple Test Document'
+2025-11-25 19:12:54 [info     ] chunking_document              strategy=cluster_semantic text_length=209
+2025-11-25 19:12:54 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:54 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:54 [info     ] chunking_complete              chunks=1 duration=0.0002903938293457031 strategy=cluster_semantic
+2025-11-25 19:12:54 [info     ] pdf_text_chunked               chunks=1 duration=0.0002903938293457031 strategy=cluster_semantic
+2025-11-25 19:12:54 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_creates_entities0\simple_test.pdf
+2025-11-25 19:12:54 [error    ] pdf_processing_failed          error='(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'f55721e6-9...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'f55721e6-93b3-46d6-a655-85458362d6e7\'), \'metadata_1\': \'source_file\', \'param_1\': \'simple_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)' file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_creates_entities0\simple_test.pdf
+______________ TestPDFEntityGraph.test_pdf_entity_deduplication _______________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_pipeline_e2e.py:168: in test_pdf_entity_deduplication
+    chunks = db_session.exec(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlmodel\orm\session.py:83: in exec
+    results = super().execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2351: in execute
+    return self._execute_internal(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2249: in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\context.py:306: in orm_execute_statement
+    result = conn.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+E   
+E   [SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+E   FROM documents 
+E   WHERE documents.vault_id = %(vault_id_1)s::UUID]
+E   [parameters: {'vault_id_1': UUID('7cbfc6bd-ac38-4df1-8fb6-be7c70bc8a53')}]
+E   (Background on this error at: https://sqlalche.me/e/20/2j85)
+---------------------------- Captured stdout setup ----------------------------
+2025-11-25 19:12:55 [info     ] unified_chunker_initialized    cache_enabled=False cache_size=1000 strategy=auto
+2025-11-25 19:12:55 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:55 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:55 [info     ] pdf_processor_initialized      strategy=auto vault_id=7cbfc6bd-ac38-4df1-8fb6-be7c70bc8a53
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:55 [info     ] processing_pdf                 extract_entities=True file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+2025-11-25 19:12:55 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+2025-11-25 19:12:55 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf pages=1 text_length=209
+2025-11-25 19:12:55 [info     ] chunking_pdf_text              text_length=209 title='Simple Test Document'
+2025-11-25 19:12:55 [info     ] chunking_document              strategy=cluster_semantic text_length=209
+2025-11-25 19:12:55 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:55 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:55 [info     ] chunking_complete              chunks=1 duration=0.000423431396484375 strategy=cluster_semantic
+2025-11-25 19:12:55 [info     ] pdf_text_chunked               chunks=1 duration=0.000423431396484375 strategy=cluster_semantic
+2025-11-25 19:12:55 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+2025-11-25 19:12:55 [error    ] pdf_processing_failed          error='(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'7cbfc6bd-a...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'7cbfc6bd-ac38-4df1-8fb6-be7c70bc8a53\'), \'metadata_1\': \'source_file\', \'param_1\': \'simple_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)' file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+2025-11-25 19:12:55 [info     ] processing_pdf                 extract_entities=True file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+2025-11-25 19:12:55 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+2025-11-25 19:12:55 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf pages=1 text_length=209
+2025-11-25 19:12:55 [info     ] chunking_pdf_text              text_length=209 title='Simple Test Document'
+2025-11-25 19:12:55 [info     ] chunking_document              strategy=cluster_semantic text_length=209
+2025-11-25 19:12:55 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:55 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:55 [info     ] chunking_complete              chunks=1 duration=0.00032711029052734375 strategy=cluster_semantic
+2025-11-25 19:12:55 [info     ] pdf_text_chunked               chunks=1 duration=0.00032711029052734375 strategy=cluster_semantic
+2025-11-25 19:12:55 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+2025-11-25 19:12:55 [error    ] pdf_processing_failed          error="(psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {'vault_id_1': UUID('7cbfc6bd-ac38-4df1-8fb6-be7c70bc8a53'), 'metadata_1': 'source_file', 'param_1': 'simple_test.pdf'}]\n(Background on this error at: https://sqlalche.me/e/20/2j85)" file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_entity_deduplication0\simple_test.pdf
+______________ TestMultiPDFProcessing.test_process_multiple_pdfs ______________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_pipeline_e2e.py:209: in test_process_multiple_pdfs
+    total_chunks = db_session.exec(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlmodel\orm\session.py:83: in exec
+    results = super().execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2351: in execute
+    return self._execute_internal(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2249: in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\context.py:306: in orm_execute_statement
+    result = conn.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+E   
+E   [SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+E   FROM documents 
+E   WHERE documents.vault_id = %(vault_id_1)s::UUID]
+E   [parameters: {'vault_id_1': UUID('9ac475aa-dc81-4db9-8d45-10da6af4cd2b')}]
+E   (Background on this error at: https://sqlalche.me/e/20/2j85)
+---------------------------- Captured stdout setup ----------------------------
+2025-11-25 19:12:56 [info     ] unified_chunker_initialized    cache_enabled=False cache_size=1000 strategy=auto
+2025-11-25 19:12:56 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:56 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:56 [info     ] pdf_processor_initialized      strategy=auto vault_id=9ac475aa-dc81-4db9-8d45-10da6af4cd2b
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:56 [info     ] processing_pdf                 extract_entities=False file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\simple_test.pdf
+2025-11-25 19:12:56 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\simple_test.pdf
+2025-11-25 19:12:56 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\simple_test.pdf pages=1 text_length=209
+2025-11-25 19:12:56 [info     ] chunking_pdf_text              text_length=209 title='Simple Test Document'
+2025-11-25 19:12:56 [info     ] chunking_document              strategy=cluster_semantic text_length=209
+2025-11-25 19:12:56 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:56 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:56 [info     ] chunking_complete              chunks=1 duration=0.0003914833068847656 strategy=cluster_semantic
+2025-11-25 19:12:56 [info     ] pdf_text_chunked               chunks=1 duration=0.0003914833068847656 strategy=cluster_semantic
+2025-11-25 19:12:56 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\simple_test.pdf
+2025-11-25 19:12:56 [error    ] pdf_processing_failed          error='(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'9ac475aa-d...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'9ac475aa-dc81-4db9-8d45-10da6af4cd2b\'), \'metadata_1\': \'source_file\', \'param_1\': \'simple_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)' file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\simple_test.pdf
+2025-11-25 19:12:56 [info     ] processing_pdf                 extract_entities=False file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\narrator_test.pdf
+2025-11-25 19:12:56 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\narrator_test.pdf
+2025-11-25 19:12:56 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\narrator_test.pdf pages=1 text_length=397
+2025-11-25 19:12:56 [info     ] chunking_pdf_text              text_length=397 title='Conflicting Accounts of the Dance'
+2025-11-25 19:12:56 [info     ] chunking_document              strategy=cluster_semantic text_length=397
+2025-11-25 19:12:56 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:56 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:56 [info     ] chunking_complete              chunks=1 duration=0.0004456043243408203 strategy=cluster_semantic
+2025-11-25 19:12:56 [info     ] pdf_text_chunked               chunks=1 duration=0.0004456043243408203 strategy=cluster_semantic
+2025-11-25 19:12:56 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\narrator_test.pdf
+2025-11-25 19:12:56 [error    ] pdf_processing_failed          error="(psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {'vault_id_1': UUID('9ac475aa-dc81-4db9-8d45-10da6af4cd2b'), 'metadata_1': 'source_file', 'param_1': 'narrator_test.pdf'}]\n(Background on this error at: https://sqlalche.me/e/20/2j85)" file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_process_multiple_pdfs0\narrator_test.pdf
+__________ TestMultiPDFProcessing.test_vault_indexer_pdf_integration __________
+tests\pdf\test_pdf_pipeline_e2e.py:253: in test_vault_indexer_pdf_integration
+    assert results["pdfs_processed"] >= 1
+E   assert 0 >= 1
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:57 [info     ] unified_chunker_initialized    cache_enabled=True cache_size=1000 strategy=auto
+2025-11-25 19:12:57 [info     ] vault_indexer_initialized      cache_enabled=True has_override_metadata=False strategy=auto vault_id=0401b9b4-1960-4458-bd49-583823c3d217 vault_path=C:\Users\rahme\AppData\Local\Temp\tmpzyvmf43q
+2025-11-25 19:12:57 [info     ] vault_indexing_complete        chunks=0 errors=0 files=0 pdfs=0
+_____________ TestTemporalScenarios.test_multi_era_pdf_processing _____________
+tests\pdf\test_pdf_pipeline_e2e.py:280: in test_multi_era_pdf_processing
+    assert len(results["errors"]) == 0
+E   assert 1 == 0
+E    +  where 1 = len(['(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'19334514-4...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'19334514-40ea-40b6-8843-44f700d9c73b\'), \'metadata_1\': \'source_file\', \'param_1\': \'multi_era_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)'])
+---------------------------- Captured stdout setup ----------------------------
+2025-11-25 19:12:57 [info     ] unified_chunker_initialized    cache_enabled=False cache_size=1000 strategy=auto
+2025-11-25 19:12:57 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:57 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:57 [info     ] pdf_processor_initialized      strategy=auto vault_id=19334514-40ea-40b6-8843-44f700d9c73b
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:57 [info     ] processing_pdf                 extract_entities=True file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_multi_era_pdf_processing0\multi_era_test.pdf
+2025-11-25 19:12:57 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_multi_era_pdf_processing0\multi_era_test.pdf
+2025-11-25 19:12:57 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_multi_era_pdf_processing0\multi_era_test.pdf pages=1 text_length=606
+2025-11-25 19:12:57 [info     ] chunking_pdf_text              text_length=606 title='The Three Aegons'
+2025-11-25 19:12:57 [info     ] chunking_document              strategy=cluster_semantic text_length=606
+2025-11-25 19:12:57 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:57 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:57 [info     ] base_segments_created          count=2
+2025-11-25 19:12:57 [info     ] embedding_segments             count=2
+2025-11-25 19:12:57 [info     ] building_similarity_matrix
+2025-11-25 19:12:57 [debug    ] similarity_matrix_built        max=0.0 mean=0.6484640836715698 min=0.0 size=2
+2025-11-25 19:12:57 [info     ] finding_optimal_segmentation   max_cluster=6
+2025-11-25 19:12:57 [info     ] optimal_segmentation_found     num_chunks=2 total_reward=0.0
+2025-11-25 19:12:57 [info     ] chunking_complete              avg_chunk_size=302 chunks=2 segments=2
+2025-11-25 19:12:57 [info     ] chunking_complete              chunks=2 duration=0.32457423210144043 strategy=cluster_semantic
+2025-11-25 19:12:58 [info     ] pdf_text_chunked               chunks=2 duration=0.32457423210144043 strategy=cluster_semantic
+2025-11-25 19:12:58 [info     ] storing_pdf_chunks             chunks=2 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_multi_era_pdf_processing0\multi_era_test.pdf
+2025-11-25 19:12:58 [error    ] pdf_processing_failed          error='(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'19334514-4...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'19334514-40ea-40b6-8843-44f700d9c73b\'), \'metadata_1\': \'source_file\', \'param_1\': \'multi_era_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)' file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_multi_era_pdf_processing0\multi_era_test.pdf
+______ TestTemporalScenarios.test_temporal_entity_resolution_in_pipeline ______
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_pipeline_e2e.py:317: in test_temporal_entity_resolution_in_pipeline
+    aegons = db_session.exec(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlmodel\orm\session.py:83: in exec
+    results = super().execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2351: in execute
+    return self._execute_internal(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2249: in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\context.py:306: in orm_execute_statement
+    result = conn.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+E   
+E   [SQL: SELECT entities.created_at, entities.updated_at, entities.id, entities.vault_id, entities.type, entities.name, entities.description, entities.status, entities.aliases, entities.species, entities.birth_date, entities.death_date, entities.properties, entities.tags, entities.canon, entities.embedding 
+E   FROM entities 
+E   WHERE entities.vault_id = %(vault_id_1)s::UUID AND (entities.name LIKE '%%' || %(name_1)s || '%%')]
+E   [parameters: {'vault_id_1': UUID('9ac31e2f-93ae-428a-a578-f7bf5376920f'), 'name_1': 'Aegon'}]
+E   (Background on this error at: https://sqlalche.me/e/20/2j85)
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:58 [info     ] unified_chunker_initialized    cache_enabled=False cache_size=1000 strategy=auto
+2025-11-25 19:12:58 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:58 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:58 [info     ] pdf_processor_initialized      strategy=auto vault_id=9ac31e2f-93ae-428a-a578-f7bf5376920f
+2025-11-25 19:12:58 [info     ] processing_pdf                 extract_entities=True file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_temporal_entity_resolutio0\multi_era_test.pdf
+2025-11-25 19:12:58 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_temporal_entity_resolutio0\multi_era_test.pdf
+2025-11-25 19:12:58 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_temporal_entity_resolutio0\multi_era_test.pdf pages=1 text_length=606
+2025-11-25 19:12:58 [info     ] chunking_pdf_text              text_length=606 title='The Three Aegons'
+2025-11-25 19:12:58 [info     ] chunking_document              strategy=cluster_semantic text_length=606
+2025-11-25 19:12:58 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:58 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:58 [info     ] base_segments_created          count=2
+2025-11-25 19:12:58 [info     ] embedding_segments             count=2
+2025-11-25 19:12:58 [info     ] building_similarity_matrix
+2025-11-25 19:12:58 [debug    ] similarity_matrix_built        max=0.0 mean=0.6486203670501709 min=0.0 size=2
+2025-11-25 19:12:58 [info     ] finding_optimal_segmentation   max_cluster=6
+2025-11-25 19:12:58 [info     ] optimal_segmentation_found     num_chunks=2 total_reward=0.0
+2025-11-25 19:12:58 [info     ] chunking_complete              avg_chunk_size=302 chunks=2 segments=2
+2025-11-25 19:12:58 [info     ] chunking_complete              chunks=2 duration=0.41416263580322266 strategy=cluster_semantic
+2025-11-25 19:12:59 [info     ] pdf_text_chunked               chunks=2 duration=0.41416263580322266 strategy=cluster_semantic
+2025-11-25 19:12:59 [info     ] storing_pdf_chunks             chunks=2 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_temporal_entity_resolutio0\multi_era_test.pdf
+2025-11-25 19:12:59 [error    ] pdf_processing_failed          error='(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'9ac31e2f-9...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'9ac31e2f-93ae-428a-a578-f7bf5376920f\'), \'metadata_1\': \'source_file\', \'param_1\': \'multi_era_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)' file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_temporal_entity_resolutio0\multi_era_test.pdf
+____________________ TestErrorHandling.test_pdf_reindexing ____________________
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+The above exception was the direct cause of the following exception:
+tests\pdf\test_pdf_pipeline_e2e.py:381: in test_pdf_reindexing
+    total_chunks = db_session.exec(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlmodel\orm\session.py:83: in exec
+    results = super().execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2351: in execute
+    return self._execute_internal(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py:2249: in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\context.py:306: in orm_execute_statement
+    result = conn.execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1419: in execute
+    return meth(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py:951: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+E   
+E   [SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+E   FROM documents 
+E   WHERE documents.vault_id = %(vault_id_1)s::UUID]
+E   [parameters: {'vault_id_1': UUID('a94dbfe9-f974-4b87-857f-637276fddad3')}]
+E   (Background on this error at: https://sqlalche.me/e/20/2j85)
+---------------------------- Captured stdout setup ----------------------------
+2025-11-25 19:12:59 [info     ] unified_chunker_initialized    cache_enabled=False cache_size=1000 strategy=auto
+2025-11-25 19:12:59 [info     ] llm_client_initialized         model=gpt-5.1
+2025-11-25 19:12:59 [info     ] agent_initialized              agent=ProfilerAgent model=gpt-5.1
+2025-11-25 19:12:59 [info     ] pdf_processor_initialized      strategy=auto vault_id=a94dbfe9-f974-4b87-857f-637276fddad3
+---------------------------- Captured stdout call -----------------------------
+2025-11-25 19:12:59 [info     ] processing_pdf                 extract_entities=False file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+2025-11-25 19:12:59 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+2025-11-25 19:12:59 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf pages=1 text_length=209
+2025-11-25 19:12:59 [info     ] chunking_pdf_text              text_length=209 title='Simple Test Document'
+2025-11-25 19:12:59 [info     ] chunking_document              strategy=cluster_semantic text_length=209
+2025-11-25 19:12:59 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:12:59 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:12:59 [info     ] chunking_complete              chunks=1 duration=0.00027489662170410156 strategy=cluster_semantic
+2025-11-25 19:13:00 [info     ] pdf_text_chunked               chunks=1 duration=0.00027489662170410156 strategy=cluster_semantic
+2025-11-25 19:13:00 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+2025-11-25 19:13:00 [error    ] pdf_processing_failed          error='(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'a94dbfe9-f...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'a94dbfe9-f974-4b87-857f-637276fddad3\'), \'metadata_1\': \'source_file\', \'param_1\': \'simple_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)' file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+2025-11-25 19:13:00 [info     ] processing_pdf                 extract_entities=False file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+2025-11-25 19:13:00 [info     ] extracting_pdf                 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+2025-11-25 19:13:00 [info     ] pdf_extracted                  file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf pages=1 text_length=209
+2025-11-25 19:13:00 [info     ] chunking_pdf_text              text_length=209 title='Simple Test Document'
+2025-11-25 19:13:00 [info     ] chunking_document              strategy=cluster_semantic text_length=209
+2025-11-25 19:13:00 [info     ] cluster_semantic_chunker_initialized max_chunk_size=600 max_cluster=6 min_chunk_size=100
+2025-11-25 19:13:00 [info     ] splitting_base_segments        min_chunk_size=100
+2025-11-25 19:13:00 [info     ] chunking_complete              chunks=1 duration=0.0003287792205810547 strategy=cluster_semantic
+2025-11-25 19:13:00 [info     ] pdf_text_chunked               chunks=1 duration=0.0003287792205810547 strategy=cluster_semantic
+2025-11-25 19:13:00 [info     ] storing_pdf_chunks             chunks=1 file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+2025-11-25 19:13:00 [error    ] pdf_processing_failed          error="(psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {'vault_id_1': UUID('a94dbfe9-f974-4b87-857f-637276fddad3'), 'metadata_1': 'source_file', 'param_1': 'simple_test.pdf'}]\n(Background on this error at: https://sqlalche.me/e/20/2j85)" file=C:\Users\rahme\AppData\Local\Temp\pytest-of-rahme\pytest-73\test_pdf_reindexing0\simple_test.pdf
+============================== warnings summary ===============================
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\PyPDF2\__init__.py:21
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\PyPDF2\__init__.py:21: DeprecationWarning: PyPDF2 is deprecated. Please move to the pypdf library instead.
+    warnings.warn(
+
+src\writeros\config.py:4
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+tests/pdf/test_entity_resolution.py: 18 warnings
+tests/pdf/test_pdf_pipeline_e2e.py: 22 warnings
+tests/pdf/test_pdf_processor.py: 22 warnings
+  C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\pydantic\fields.py:747: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return fac()
+
+tests/pdf/test_pdf_processor.py: 11 warnings
+  C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\tests\conftest.py:50: SAWarning: transaction already deassociated from connection
+    transaction.rollback()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                                     Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------
+src\writeros\__init__.py                                     1      0   100%
+src\writeros\agents\__init__.py                             22     10    55%   14-23
+src\writeros\agents\architect.py                           136    116    15%   15-16, 22-27, 36-158, 173-210, 220-251, 261-281, 287-305, 311-327
+src\writeros\agents\base.py                                 19      2    89%   28-29
+src\writeros\agents\chronologist.py                         22      6    73%   25-26, 30-57
+src\writeros\agents\dramatist.py                           150    128    15%   22-27, 38-53, 64-87, 91-114, 118-141, 154-191, 204-248, 252-268, 272-289, 300-317
+src\writeros\agents\mechanic.py                             31      6    81%   39-40, 43-68
+src\writeros\agents\navigator.py                            26      6    77%   34-35, 38-59
+src\writeros\agents\orchestrator.py                        118    118     0%   6-315
+src\writeros\agents\producer.py                            203    170    16%   19-27, 30-32, 36-45, 53-63, 67-85, 89-97, 101-110, 114-121, 129-159, 163-199, 207-219, 223-243, 247-264, 272-279, 283-291, 295-305, 313-331, 339-382
+src\writeros\agents\profiler.py                            246    168    32%   106-274, 285-303, 359-391, 501-632, 646, 652-700, 712-751
+src\writeros\agents\psychologist.py                         40     16    60%   38-39, 42-66, 73-92
+src\writeros\agents\stylist.py                              14      7    50%   8, 12-13, 16-49
+src\writeros\agents\theorist.py                             34      6    82%   37-39, 42-65
+src\writeros\agents\tools.py                                31     31     0%   5-76
+src\writeros\agents\tools_registry.py                      129    129     0%   7-660
+src\writeros\api\__init__.py                                 0      0   100%
+src\writeros\api\app.py                                    242    242     0%   13-658
+src\writeros\cli\__init__.py                                 0      0   100%
+src\writeros\cli\main.py                                    41     41     0%   1-83
+src\writeros\config.py                                      16      2    88%   26, 33
+src\writeros\core\__init__.py                                0      0   100%
+src\writeros\core\logging.py                                13      6    54%   14-42
+src\writeros\graphs\__init__.py                              0      0   100%
+src\writeros\preprocessing\__init__.py                       4      0   100%
+src\writeros\preprocessing\chunker.py                       78     61    22%   24-30, 34-39, 46-57, 70-72, 78-114, 117-143
+src\writeros\preprocessing\cluster_semantic_chunker.py     155     28    82%   58-60, 83, 90, 103-104, 156, 213-216, 252, 283, 385-406
+src\writeros\preprocessing\unified_chunker.py              160     58    64%   41, 59-63, 74-75, 79, 101-104, 197-200, 240-243, 251, 290-329, 337-351, 365-366, 372-374, 404-405
+src\writeros\rag\__init__.py                                 2      2     0%   1-3
+src\writeros\rag\retriever.py                              124    124     0%   6-298
+src\writeros\schema\__init__.py                             19      0   100%
+src\writeros\schema\api.py                                  22      0   100%
+src\writeros\schema\base.py                                 12      0   100%
+src\writeros\schema\enums.py                               134      0   100%
+src\writeros\schema\extended_universe.py                    90      0   100%
+src\writeros\schema\graph.py                                16      0   100%
+src\writeros\schema\identity.py                             41      0   100%
+src\writeros\schema\library.py                              74      9    88%   51-61, 127
+src\writeros\schema\logistics.py                            17      0   100%
+src\writeros\schema\mechanics.py                            20      0   100%
+src\writeros\schema\narrative.py                            19      0   100%
+src\writeros\schema\project.py                              13      0   100%
+src\writeros\schema\prose.py                                14      0   100%
+src\writeros\schema\psychology.py                           37      0   100%
+src\writeros\schema\session.py                              27      0   100%
+src\writeros\schema\temporal_anchoring.py                   54      0   100%
+src\writeros\schema\theme.py                                16      0   100%
+src\writeros\schema\universe_manifest.py                    32      2    94%   147, 151
+src\writeros\schema\world.py                                80      0   100%
+src\writeros\services\__init__.py                            0      0   100%
+src\writeros\services\conflict_engine.py                    31     21    32%   11-16, 20-44, 48-64
+src\writeros\tasks\__init__.py                               0      0   100%
+src\writeros\utils\db.py                                   143    121    15%   17-23, 70-148, 162-241, 251-252, 262-284, 291-302, 310-325, 336-346
+src\writeros\utils\embeddings.py                            41      5    88%   34-35, 50, 54, 65
+src\writeros\utils\indexer.py                              148     73    51%   85-89, 105-115, 127-133, 157-264, 268-281, 290, 294-295, 338-351
+src\writeros\utils\llm_client.py                            54     38    30%   56-99, 122-135, 152-156
+src\writeros\utils\pdf_processor.py                        143     13    91%   21-22, 55, 191, 203-204, 270, 528-529, 548-559
+--------------------------------------------------------------------------------------
+TOTAL                                                     3354   1765    47%
+Coverage HTML written to dir htmlcov
+=========================== short test summary info ===========================
+FAILED tests/pdf/test_entity_resolution.py::TestEntityResolution::test_resolve_entity_by_era_single_match - assert None is not None
+FAILED tests/pdf/test_entity_resolution.py::TestEntityResolution::test_resolve_entity_by_era_temporal_disambiguation - assert None is not None
+FAILED tests/pdf/test_entity_resolution.py::TestEntityResolution::test_resolve_entity_by_era_fallback - assert None is not None
+FAILED tests/pdf/test_entity_resolution.py::TestEntityResolution::test_find_or_create_entity_existing - AssertionError: assert UUID('d4a13ee2-0c3a-42ff-888a-e98be4ccc3e7') == UUID('fa8b3cad-c41b-4103-93ed-7ca87db4432a')
+ +  where UUID('d4a13ee2-0c3a-42ff-888a-e98be4ccc3e7') = Entity(id=UUID('d4a13ee2-0c3a-42ff-888a-e98be4ccc3e7'), type=<EntityType.CHARACTER: 'character'>, created_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 436652), description='Prince Daemon', aliases=[], species=None, death_date=None, tags=[], embedding=array([ 0.01033314,  0.02874373,  0.03672094, ..., -0.00818487,\n       -0.0016282 , -0.01384912], shape=(1536,), dtype=float32), updated_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 436865), vault_id=UUID('c81910d2-6b05-4160-a93b-d09db621dd1a'), name='Daemon', status=<EntityStatus.ALIVE: 'alive'>, birth_date=None, properties={}, canon={'layer': 'primary', 'status': 'active'}).id
+ +  and   UUID('fa8b3cad-c41b-4103-93ed-7ca87db4432a') = Entity(embedding=array([0.1, 0.1, 0.1, ..., 0.1, 0.1, 0.1], shape=(1536,), dtype=float32), created_at=datetime.datetime(2025, 11, 26, 0, 12, 42, 416625), species=None, aliases=[], death_date=None, id=UUID('fa8b3cad-c41b-4103-93ed-7ca87db4432a'), description='Prince Daemon Targaryen', type=<EntityType.CHARACTER: 'character'>, tags=[], name='Daemon', canon={'layer': 'primary', 'status': 'active'}, updated_at=datetime.datetime(2025, 11, 26, 0, 12, 42, 416818), birth_date=None, status=<EntityStatus.ALIVE: 'alive'>, properties={}, vault_id=UUID('c81910d2-6b05-4160-a93b-d09db621dd1a')).id
+FAILED tests/pdf/test_entity_resolution.py::TestEntityResolution::test_find_or_create_entity_new - AttributeError: 'Entity' object has no attribute 'metadata_'. Did you mean: 'metadata'?
+FAILED tests/pdf/test_entity_resolution.py::TestEntityResolution::test_prevent_duplicate_entities_across_eras - AssertionError: assert UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6') != UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6')
+ +  where UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6') = Entity(id=UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6'), type=<EntityType.CHARACTER: 'character'>, created_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983213), description='Aegon I', aliases=[], species=None, death_date=None, tags=[], embedding=array([ 0.054375  , -0.0282103 ,  0.04136401, ..., -0.00712988,\n        0.00796834, -0.02152641], shape=(1536,), dtype=float32), updated_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983309), vault_id=UUID('b163d8aa-877e-4b57-8221-75af8c74a84d'), name='Aegon', status=<EntityStatus.ALIVE: 'alive'>, birth_date=None, properties={}, canon={'layer': 'primary', 'status': 'active'}).id
+ +  and   UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6') = Entity(id=UUID('26c4dea6-e44d-4377-8b94-ccd6878a78a6'), type=<EntityType.CHARACTER: 'character'>, created_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983213), description='Aegon I', aliases=[], species=None, death_date=None, tags=[], embedding=array([ 0.054375  , -0.0282103 ,  0.04136401, ..., -0.00712988,\n        0.00796834, -0.02152641], shape=(1536,), dtype=float32), updated_at=datetime.datetime(2025, 11, 26, 0, 12, 43, 983309), vault_id=UUID('b163d8aa-877e-4b57-8221-75af8c74a84d'), name='Aegon', status=<EntityStatus.ALIVE: 'alive'>, birth_date=None, properties={}, canon={'layer': 'primary', 'status': 'active'}).id
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestPDFPipelineBasic::test_process_pdf_with_override_metadata - sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+FROM documents 
+WHERE documents.vault_id = %(vault_id_1)s::UUID]
+[parameters: {'vault_id_1': UUID('c3f3a9bf-8731-4258-a250-8fc2f1e856ba')}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestPDFEntityGraph::test_pdf_creates_entities - sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT entities.created_at, entities.updated_at, entities.id, entities.vault_id, entities.type, entities.name, entities.description, entities.status, entities.aliases, entities.species, entities.birth_date, entities.death_date, entities.properties, entities.tags, entities.canon, entities.embedding 
+FROM entities 
+WHERE entities.vault_id = %(vault_id_1)s::UUID]
+[parameters: {'vault_id_1': UUID('f55721e6-93b3-46d6-a655-85458362d6e7')}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestPDFEntityGraph::test_pdf_entity_deduplication - sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+FROM documents 
+WHERE documents.vault_id = %(vault_id_1)s::UUID]
+[parameters: {'vault_id_1': UUID('7cbfc6bd-ac38-4df1-8fb6-be7c70bc8a53')}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestMultiPDFProcessing::test_process_multiple_pdfs - sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+FROM documents 
+WHERE documents.vault_id = %(vault_id_1)s::UUID]
+[parameters: {'vault_id_1': UUID('9ac475aa-dc81-4db9-8d45-10da6af4cd2b')}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestMultiPDFProcessing::test_vault_indexer_pdf_integration - assert 0 >= 1
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestTemporalScenarios::test_multi_era_pdf_processing - assert 1 == 0
+ +  where 1 = len(['(psycopg2.errors.UndefinedTable) relation "documents" does not exist\nLINE 1: DELETE FROM documents WHERE documents.vault_id = \'19334514-4...\n                    ^\n\n[SQL: DELETE FROM documents WHERE documents.vault_id = %(vault_id_1)s::UUID AND (documents.metadata ->> %(metadata_1)s) = %(param_1)s RETURNING documents.id]\n[parameters: {\'vault_id_1\': UUID(\'19334514-40ea-40b6-8843-44f700d9c73b\'), \'metadata_1\': \'source_file\', \'param_1\': \'multi_era_test.pdf\'}]\n(Background on this error at: https://sqlalche.me/e/20/f405)'])
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestTemporalScenarios::test_temporal_entity_resolution_in_pipeline - sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT entities.created_at, entities.updated_at, entities.id, entities.vault_id, entities.type, entities.name, entities.description, entities.status, entities.aliases, entities.species, entities.birth_date, entities.death_date, entities.properties, entities.tags, entities.canon, entities.embedding 
+FROM entities 
+WHERE entities.vault_id = %(vault_id_1)s::UUID AND (entities.name LIKE '%%' || %(name_1)s || '%%')]
+[parameters: {'vault_id_1': UUID('9ac31e2f-93ae-428a-a578-f7bf5376920f'), 'name_1': 'Aegon'}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+FAILED tests/pdf/test_pdf_pipeline_e2e.py::TestErrorHandling::test_pdf_reindexing - sqlalchemy.exc.InternalError: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT documents.created_at, documents.updated_at, documents.id, documents.vault_id, documents.title, documents.content, documents.doc_type, documents.metadata, documents.source_id, documents.embedding 
+FROM documents 
+WHERE documents.vault_id = %(vault_id_1)s::UUID]
+[parameters: {'vault_id_1': UUID('a94dbfe9-f974-4b87-857f-637276fddad3')}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+ERROR tests/pdf/test_pdf_processor.py::TestPDFExtraction::test_extract_pdf_text - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 0, 904129), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 0, 904244), 'id': UUID('a9c53e69-1b81-42af-be31-cc721ccfd31f'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestPDFExtraction::test_extract_pdf_metadata - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 1, 669279), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 1, 669397), 'id': UUID('969cf3d2-8e89-4eeb-a8cf-4ca26dde7090'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestPDFChunking::test_chunk_pdf_text - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 2, 552704), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 2, 552858), 'id': UUID('a7d6e835-b43f-4301-8adf-9eb848d1aff4'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestPDFChunking::test_chunks_stored_in_database - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 3, 312261), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 3, 312397), 'id': UUID('0c5c546a-af8e-4d4c-8340-c5a84f3584c7'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestEntityExtraction::test_extract_entities_from_pdf - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 159233), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 159458), 'id': UUID('2028a454-5d93-484b-8def-f856cd505b7f'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestEntityExtraction::test_relationships_created_from_pdf - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 994104), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 4, 994213), 'id': UUID('9b7cd6b0-99d0-4a07-a4bb-5f7353739a03'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestVaultIndexerIntegration::test_vault_indexer_processes_pdfs - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 5, 770580), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 5, 770699), 'id': UUID('9d3aca90-8056-4456-8227-214dabd4ee71'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestVaultIndexerIntegration::test_vault_indexer_skips_pdfs_when_disabled - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 6, 792751), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 6, 792996), 'id': UUID('93fadf24-085b-45f4-8673-d1797f0020ed'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestPDFProcessorEndToEnd::test_full_pdf_workflow - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 7, 677382), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 7, 677639), 'id': UUID('f2fb5ac6-e6f7-446a-b934-8a628cfba5dc'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestPDFProcessorEndToEnd::test_process_pdf_directory - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 8, 614723), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 8, 615044), 'id': UUID('93e76151-2000-4494-bfe0-518afe94cdad'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR tests/pdf/test_pdf_processor.py::TestPDFProcessorEndToEnd::test_pdf_with_metadata_override - sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "vaults" does not exist
+LINE 1: INSERT INTO vaults (created_at, updated_at, id, name, descri...
+                    ^
+
+[SQL: INSERT INTO vaults (created_at, updated_at, id, name, description, owner_id, connection_type, local_system_path, default_model, settings, entity_count, scene_count, word_count, last_indexed_at) VALUES (%(created_at)s, %(updated_at)s, %(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(connection_type)s, %(local_system_path)s, %(default_model)s, %(settings)s::JSONB, %(entity_count)s, %(scene_count)s, %(word_count)s, %(last_indexed_at)s)]
+[parameters: {'created_at': datetime.datetime(2025, 11, 26, 0, 13, 9, 390815), 'updated_at': datetime.datetime(2025, 11, 26, 0, 13, 9, 390924), 'id': UUID('dc83b527-6c18-4b6f-95a6-387b90ecac37'), 'name': 'Test PDF Vault', 'description': None, 'owner_id': None, 'connection_type': 'LOCAL_OBSIDIAN', 'local_system_path': None, 'default_model': 'gpt-4', 'settings': '{}', 'entity_count': 0, 'scene_count': 0, 'word_count': 0, 'last_indexed_at': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+=========== 14 failed, 19 passed, 75 warnings, 11 errors in 30.47s ============

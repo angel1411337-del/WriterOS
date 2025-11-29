@@ -122,54 +122,6 @@ class ProcessingEngine:
             return [{"text": s.text, "start": s.start} for s in transcript.segments]
         except Exception:
             return []
-        finally:
-            if os.path.exists(audio_path): os.remove(audio_path)
-
-    def get_transcript(self, video_id: str) -> str:
-        try:
-            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-            try: t = transcript_list.find_manually_created_transcript(['en'])
-            except:
-                try: t = transcript_list.find_generated_transcript(['en'])
-                except: t = transcript_list.find_transcript(['en'])
-            data = t.fetch()
-            return " ".join([i['text'] for i in data])
-        except Exception:
-            logger.warning(f"⚠️ Transcript API failed. Engaging Audio Fallback...")
-            audio_path = self._download_audio_fallback(video_id)
-            if audio_path:
-                data = self._transcribe_audio(audio_path)
-                return " ".join([i['text'] for i in data])
-            return ""
-
-# --- Obsidian Writer ---
-
-class ObsidianWriter:
-    def __init__(self, vault_path: Path):
-        self.vault_path = vault_path
-        self.dirs = {
-            "craft": self.vault_path / "Writing_Bible",
-            "chars": self.vault_path / "Story_Bible" / "Characters",
-            "locs": self.vault_path / "Story_Bible" / "Locations",
-            "orgs": self.vault_path / "Story_Bible" / "Organizations",
-            "systems": self.vault_path / "Story_Bible" / "Systems",
-        }
-        for d in self.dirs.values():
-            d.mkdir(parents=True, exist_ok=True)
-
-        self.history_file = self.vault_path / "processed_videos.json"
-        self.processed_ids = self._load_history()
-
-    def _load_history(self) -> List[str]:
-        if self.history_file.exists():
-            try:
-                with open(self.history_file, 'r') as f: return json.load(f)
-            except: return []
-        return []
-
-    def mark_as_processed(self, video_id: str):
-        if video_id not in self.processed_ids:
-            self.processed_ids.append(video_id)
             with open(self.history_file, 'w') as f: json.dump(self.processed_ids, f)
 
     def is_processed(self, video_id: str) -> bool:

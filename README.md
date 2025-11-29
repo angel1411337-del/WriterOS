@@ -47,6 +47,7 @@ WriterOS is a commercial AI writing assistant for authors managing complex ficti
 - LangChain for LLM orchestration
 - PostgreSQL 16 with pgvector extension
 - OpenAI GPT-4o for reasoning tasks
+- FastEmbed for local, free embeddings (BAAI/bge models)
 - Docker Compose for orchestration
 
 ---

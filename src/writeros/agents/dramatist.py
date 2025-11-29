@@ -3,15 +3,17 @@ Dramatist Agent - Tracks emotional beats, pacing, and tension curves
 """
 import json
 from typing import List, Dict, Any, Optional
-from uuid import uuid4
+from uuid import uuid4, UUID
 from sqlmodel import Session, select
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 from .base import BaseAgent, logger
 from writeros.schema import Document
-from writeros.utils.db import engine
+from writeros.utils import db as db_utils
 
+from writeros.services.conflict_engine import ConflictEngine
+from writeros.schema.enums import ConflictStatus
 
 class DramatistAgent(BaseAgent):
     """Analyzes tension, emotion, and pacing in narrative scenes"""
@@ -19,6 +21,7 @@ class DramatistAgent(BaseAgent):
     def __init__(self, model_name="gpt-5.1"):
         super().__init__(model_name)
         self.log.info("dramatist_initialized")
+        self.conflict_engine = ConflictEngine()
         
         # Genre-specific tension curve templates
         self.genre_templates = {
@@ -70,11 +73,14 @@ Tension indicators:
 Consider: conflict, pacing, stakes, danger, urgency, and unresolved questions.
 
 Return ONLY a number between 1.0 and 10.0 (e.g., "7.5")"""),
-            ("user", f"Genre: {genre}\n\nScene:\n{scene_text[:2000]}")  # Limit to 2000 chars
+            ("user", "Genre: {genre}\n\nScene:\n{scene_text}")
         ])
         
-        chain = prompt | self.llm | StrOutputParser()
-        result = await chain.ainvoke({})
+        chain = prompt | self.llm.client | StrOutputParser()
+        result = await chain.ainvoke({
+            "genre": genre,
+            "scene_text": scene_text[:2000]
+        })
         
         try:
             score = float(result.strip())
@@ -97,11 +103,13 @@ Emotion indicators:
 Consider: character reactions, dialogue intensity, internal conflict, and emotional stakes.
 
 Return ONLY a number between 1.0 and 10.0 (e.g., "6.8")"""),
-            ("user", f"Scene:\n{scene_text[:2000]}")
+            ("user", "Scene:\n{scene_text}")
         ])
         
-        chain = prompt | self.llm | StrOutputParser()
-        result = await chain.ainvoke({})
+        chain = prompt | self.llm.client | StrOutputParser()
+        result = await chain.ainvoke({
+            "scene_text": scene_text[:2000]
+        })
         
         try:
             score = float(result.strip())
@@ -289,3 +297,26 @@ Return ONLY a number between 1.0 and 10.0 (e.g., "6.8")"""),
             "validation": validation,
             "visualization": visualization,
         }
+
+    async def generate_scene_instructions(self, vault_id: UUID, character_ids: List[str]) -> List[str]:
+        """
+        Generates pacing instructions based on active conflicts between characters.
+        """
+        self.log.info("generating_scene_instructions", vault_id=str(vault_id), characters=character_ids)
+        
+        tension_map = self.conflict_engine.get_tension_map(vault_id)
+        instructions = []
+        
+        # Filter tension map for involved characters
+        relevant_conflicts = [
+            entry for entry in tension_map 
+            if entry["character_id"] in character_ids
+        ]
+        
+        for entry in relevant_conflicts:
+            if entry["status"] == ConflictStatus.RISING_ACTION:
+                instructions.append(f"Maintain high tension. Conflict '{entry['conflict_name']}' is in RISING_ACTION. Do not resolve yet.")
+            elif entry["status"] == ConflictStatus.CLIMAX:
+                instructions.append(f"Push for maximum intensity! Conflict '{entry['conflict_name']}' is at CLIMAX.")
+                
+        return instructions

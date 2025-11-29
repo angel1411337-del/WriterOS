@@ -1,0 +1,391 @@
+[2m2025-11-27T02:43:30.367311Z[0m [[32m[1minfo     [0m] [1mdatabase_engine_configured    [0m [36mmax_overflow[0m=[35m40[0m [36mpool_pre_ping[0m=[35mTrue[0m [36mpool_recycle[0m=[35m3600[0m [36mpool_size[0m=[35m20[0m [36mtotal_connections[0m=[35m60[0m
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f9e0' in position 0: character maps to <undefined>
+Call stack:
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 495, in <module>
+    app()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 310, in __call__
+    return get_command(self)(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1462, in __call__
+    return self.main(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 803, in main
+    return _main(
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 192, in _main
+    rv = self.invoke(ctx)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1850, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1246, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 814, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 691, in wrapper
+    return callback(**use_params)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 214, in chat
+    from writeros.agents.orchestrator import OrchestratorAgent
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\agents\__init__.py", line 3, in <module>
+    from .navigator import NavigatorAgent  # <--- NEW
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\agents\navigator.py", line 9, in <module>
+    from writeros.rag.retriever import retriever
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\rag\__init__.py", line 1, in <module>
+    from .retriever import RAGRetriever, RetrievalResult, retriever
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\rag\retriever.py", line 468, in <module>
+    retriever = RAGRetriever()
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\rag\retriever.py", line 37, in __init__
+    self.embedder = embedding_service or get_embedding_service()
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\utils\embeddings.py", line 75, in get_embedding_service
+    return _embedding_service_factory(embedding_model)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\utils\embeddings.py", line 26, in __new__
+    instance._initialize(embedding_model)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\utils\embeddings.py", line 42, in _initialize
+    logger.info("\U0001f9e0 Embedding Service initialized (%s)", model)
+Message: '\U0001f9e0 Embedding Service initialized (%s)'
+Arguments: ('text-embedding-3-small',)
+
+Thinking...
+
+[2m2025-11-27T02:43:32.437594Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.437847Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mOrchestratorAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mFalse[0m
+[2m2025-11-27T02:43:32.438389Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.438459Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mProfilerAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.442965Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.443096Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mDramatistAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.443151Z[0m [[32m[1minfo     [0m] [1mdramatist_initialized         [0m [36magent[0m=[35mDramatistAgent[0m
+[2m2025-11-27T02:43:32.443352Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.443406Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mArchitectAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.443584Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.443634Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mChronologistAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.444735Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.444806Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mMechanicAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.446481Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-4o[0m
+[2m2025-11-27T02:43:32.446610Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mNavigatorAgent[0m [36mmodel[0m=[35mgpt-4o[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.448875Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-4o[0m
+[2m2025-11-27T02:43:32.449044Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mProducerAgent[0m [36mmodel[0m=[35mgpt-4o[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.449614Z[0m [[32m[1minfo     [0m] [1mproducer_initialized          [0m [36magent[0m=[35mProducerAgent[0m [36mvault_root[0m=[35m'C:\\Users\\rahme\\Desktop\\Genius Loci'[0m
+[2m2025-11-27T02:43:32.450017Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.450132Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mPsychologistAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.452103Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.452267Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mStylistAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.454163Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-5.1[0m
+[2m2025-11-27T02:43:32.454304Z[0m [[32m[1minfo     [0m] [1magent_initialized             [0m [36magent[0m=[35mTheoristAgent[0m [36mmodel[0m=[35mgpt-5.1[0m [36mtracking_enabled[0m=[35mTrue[0m
+[2m2025-11-27T02:43:32.458443Z[0m [[32m[1minfo     [0m] [1mtools_registry_initialized    [0m [36magent[0m=[35mOrchestratorAgent[0m [36mvault_path[0m=[35m'C:\\Users\\rahme\\Desktop\\Genius Loci'[0m
+[2m2025-11-27T02:43:32.578052Z[0m [[32m[1minfo     [0m] [1mstarting_iterative_rag        [0m [36magent[0m=[35mOrchestratorAgent[0m [36mquery[0m=[35m'Tell me about Elara'[0m
+[2m2025-11-27T02:43:32.578253Z[0m [[32m[1minfo     [0m] [1miterative_retrieval_started   [0m [36mmax_hops[0m=[35m10[0m [36mquery[0m=[35m'Tell me about Elara'[0m
+[2m2025-11-27T02:43:32.578642Z[0m [[32m[1minfo     [0m] [1mllm_client_initialized        [0m [36mmodel[0m=[35mgpt-4o[0m
+[2m2025-11-27T02:43:32.578713Z[0m [[32m[1minfo     [0m] [1mretrieval_hop                 [0m [36mhop[0m=[35m1[0m [36mquery[0m=[35m'Tell me about Elara'[0m
+HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2m2025-11-27T02:43:35.171915Z[0m [[32m[1minfo     [0m] [1mquery_refined                 [0m [36mnew_query[0m=[35m'What role does Elara play in the plot of "A Game of Thrones"?'[0m
+[2m2025-11-27T02:43:35.172058Z[0m [[32m[1minfo     [0m] [1mretrieval_hop                 [0m [36mhop[0m=[35m2[0m [36mquery[0m=[35m'What role does Elara play in the plot of "A Game of Thrones"?'[0m
+HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2m2025-11-27T02:43:36.508515Z[0m [[32m[1minfo     [0m] [1mquery_refined                 [0m [36mnew_query[0m=[35m'What role does Elara play in the events of "A Game of Thrones"?'[0m
+[2m2025-11-27T02:43:36.508644Z[0m [[32m[1minfo     [0m] [1mretrieval_hop                 [0m [36mhop[0m=[35m3[0m [36mquery[0m=[35m'What role does Elara play in the events of "A Game of Thrones"?'[0m
+HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2m2025-11-27T02:43:37.726303Z[0m [[32m[1minfo     [0m] [1mquery_refined                 [0m [36mnew_query[0m=[35m'What role does Elara play in the events of A Game of Thrones?'[0m
+[2m2025-11-27T02:43:37.726471Z[0m [[32m[1minfo     [0m] [1mretrieval_hop                 [0m [36mhop[0m=[35m4[0m [36mquery[0m=[35m'What role does Elara play in the events of A Game of Thrones?'[0m
+HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+[2m2025-11-27T02:43:38.473302Z[0m [[32m[1minfo     [0m] [1miterative_retrieval_converged [0m [36mhop[0m=[35m4[0m
+[2m2025-11-27T02:43:38.473490Z[0m [[32m[1minfo     [0m] [1miterative_retrieval_complete  [0m [36mhops[0m=[35m4[0m [36mtotal_docs[0m=[35m6[0m [36mtotal_entities[0m=[35m0[0m [36mtotal_events[0m=[35m0[0m [36mtotal_facts[0m=[35m0[0m
+[2m2025-11-27T02:43:38.473642Z[0m [[32m[1minfo     [0m] [1mchecking_agent_relevance      [0m [36magent[0m=[35mOrchestratorAgent[0m [36magent_count[0m=[35m10[0m
+[2m2025-11-27T02:43:38.473870Z[0m [[32m[1minfo     [0m] [1magent_responding              [0m [36magent[0m=[35marchitect[0m [36mconfidence[0m=[35m1.0[0m
+[2m2025-11-27T02:43:38.473938Z[0m [[32m[1minfo     [0m] [1magent_responding              [0m [36magent[0m=[35mchronologist[0m [36mconfidence[0m=[35m1.0[0m
+[2m2025-11-27T02:43:38.473987Z[0m [[32m[1minfo     [0m] [1magent_responding              [0m [36magent[0m=[35mdramatist[0m [36mconfidence[0m=[35m1.0[0m
+[2m2025-11-27T02:43:38.474031Z[0m [[32m[1minfo     [0m] [1magent_skipped                 [0m [36magent[0m=[35mmechanic[0m [36mreason[0m=[35m'No mechanics context detected'[0m
+[2m2025-11-27T02:43:38.474074Z[0m [[32m[1minfo     [0m] [1magent_skipped                 [0m [36magent[0m=[35mnavigator[0m [36mreason[0m=[35m'No travel-related content'[0m
+[2m2025-11-27T02:43:38.474114Z[0m [[32m[1minfo     [0m] [1magent_responding              [0m [36magent[0m=[35mproducer[0m [36mconfidence[0m=[35m1.0[0m
+[2m2025-11-27T02:43:38.474152Z[0m [[32m[1minfo     [0m] [1magent_skipped                 [0m [36magent[0m=[35mprofiler[0m [36mreason[0m=[35m'No character analysis needed'[0m
+[2m2025-11-27T02:43:38.474196Z[0m [[32m[1minfo     [0m] [1magent_responding              [0m [36magent[0m=[35mpsychologist[0m [36mconfidence[0m=[35m1.0[0m
+[2m2025-11-27T02:43:38.474235Z[0m [[32m[1minfo     [0m] [1magent_responding              [0m [36magent[0m=[35mstylist[0m [36mconfidence[0m=[35m1.0[0m
+[2m2025-11-27T02:43:38.474274Z[0m [[32m[1minfo     [0m] [1magent_responding              [0m [36magent[0m=[35mtheorist[0m [36mconfidence[0m=[35m1.0[0m
+[2m2025-11-27T02:43:38.474313Z[0m [[32m[1minfo     [0m] [1mexecuting_agents              [0m [36magent[0m=[35mOrchestratorAgent[0m [36magent_count[0m=[35m7[0m
+[2m2025-11-27T02:43:38.474402Z[0m [[32m[1minfo     [0m] [1marchitect_run                 [0m [36magent[0m=[35mArchitectAgent[0m [36mquery[0m=[35m'Tell me about Elara'[0m
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23f3' in position 65: character maps to <undefined>
+Call stack:
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 495, in <module>
+    app()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 310, in __call__
+    return get_command(self)(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1462, in __call__
+    return self.main(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 803, in main
+    return _main(
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 192, in _main
+    rv = self.invoke(ctx)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1850, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1246, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 814, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 691, in wrapper
+    return callback(**use_params)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 260, in chat
+    asyncio.run(_run())
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 712, in run_until_complete
+    self.run_forever()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 683, in run_forever
+    self._run_once()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 2050, in _run_once
+    handle._run()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\agents\chronologist.py", line 34, in run
+    logger.info(f"\u23f3 Chronologist sequencing events in: {title}...")
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 216, in info
+    return self._proxy_to_logger("info", event, *args, **kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 280, in _proxy_to_logger
+    return super()._proxy_to_logger(method_name, event=event, **event_kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\_base.py", line 223, in _proxy_to_logger
+    return getattr(self._logger, method_name)(*args, **kw)
+Message: '\x1b[2m2025-11-27T02:43:38.474808Z\x1b[0m [\x1b[32m\x1b[1minfo     \x1b[0m] \x1b[1m\u23f3 Chronologist sequencing events in: User Query...\x1b[0m'
+Arguments: ()
+[2m2025-11-27T02:43:38.481599Z[0m [[32m[1minfo     [0m] [1mrunning_dramatist             [0m [36magent[0m=[35mDramatistAgent[0m [36mtitle[0m=[35m'User Query'[0m
+[2m2025-11-27T02:43:38.482801Z[0m [[32m[1minfo     [0m] [1manalyzing_scene               [0m [36magent[0m=[35mDramatistAgent[0m [36mtitle[0m=[35m'User Query'[0m
+[2m2025-11-27T02:43:38.483367Z[0m [[32m[1minfo     [0m] [1mrunning_producer              [0m [36magent[0m=[35mProducerAgent[0m [36mtitle[0m=[35m'User Query'[0m
+[2m2025-11-27T02:43:38.483666Z[0m [[32m[1minfo     [0m] [1manalyzing_psyche              [0m [36magent[0m=[35mPsychologistAgent[0m [36mtitle[0m=[35m'User Query'[0m
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f485' in position 65: character maps to <undefined>
+Call stack:
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 495, in <module>
+    app()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 310, in __call__
+    return get_command(self)(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1462, in __call__
+    return self.main(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 803, in main
+    return _main(
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 192, in _main
+    rv = self.invoke(ctx)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1850, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1246, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 814, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 691, in wrapper
+    return callback(**use_params)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 260, in chat
+    asyncio.run(_run())
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 712, in run_until_complete
+    self.run_forever()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 683, in run_forever
+    self._run_once()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 2050, in _run_once
+    handle._run()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\agents\stylist.py", line 26, in run
+    logger.info(f"\U0001f485 Stylist critiquing: {title}...")
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 216, in info
+    return self._proxy_to_logger("info", event, *args, **kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 280, in _proxy_to_logger
+    return super()._proxy_to_logger(method_name, event=event, **event_kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\_base.py", line 223, in _proxy_to_logger
+    return getattr(self._logger, method_name)(*args, **kw)
+Message: '\x1b[2m2025-11-27T02:43:38.483906Z\x1b[0m [\x1b[32m\x1b[1minfo     \x1b[0m] \x1b[1m\U0001f485 Stylist critiquing: User Query...\x1b[0m'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f485' in position 65: character maps to <undefined>
+Call stack:
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 495, in <module>
+    app()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 310, in __call__
+    return get_command(self)(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1462, in __call__
+    return self.main(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 803, in main
+    return _main(
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 192, in _main
+    rv = self.invoke(ctx)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1850, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1246, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 814, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 691, in wrapper
+    return callback(**use_params)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 260, in chat
+    asyncio.run(_run())
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 712, in run_until_complete
+    self.run_forever()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 683, in run_forever
+    self._run_once()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 2050, in _run_once
+    handle._run()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\agents\stylist.py", line 27, in run
+    return await self.critique_prose(full_text, existing_notes)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\agents\stylist.py", line 30, in critique_prose
+    logger.info("\U0001f485 Stylist analyzing prose...")
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 216, in info
+    return self._proxy_to_logger("info", event, *args, **kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 280, in _proxy_to_logger
+    return super()._proxy_to_logger(method_name, event=event, **event_kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\_base.py", line 223, in _proxy_to_logger
+    return getattr(self._logger, method_name)(*args, **kw)
+Message: '\x1b[2m2025-11-27T02:43:38.486023Z\x1b[0m [\x1b[32m\x1b[1minfo     \x1b[0m] \x1b[1m\U0001f485 Stylist analyzing prose...  \x1b[0m'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f9e0' in position 65: character maps to <undefined>
+Call stack:
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 495, in <module>
+    app()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 310, in __call__
+    return get_command(self)(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1462, in __call__
+    return self.main(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 803, in main
+    return _main(
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\core.py", line 192, in _main
+    rv = self.invoke(ctx)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1850, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1246, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 814, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\typer\main.py", line 691, in wrapper
+    return callback(**use_params)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\cli\main.py", line 260, in chat
+    asyncio.run(_run())
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 712, in run_until_complete
+    self.run_forever()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 683, in run_forever
+    self._run_once()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 2050, in _run_once
+    handle._run()
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\rahme\IdeaProjects\YouTube Transcript Agent\src\writeros\agents\theorist.py", line 42, in run
+    logger.info(f"\U0001f9e0 Theorist analyzing craft: {title}...")
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 216, in info
+    return self._proxy_to_logger("info", event, *args, **kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\stdlib.py", line 280, in _proxy_to_logger
+    return super()._proxy_to_logger(method_name, event=event, **event_kw)
+  File "C:\Users\rahme\AppData\Local\Programs\Python\Python313\Lib\site-packages\structlog\_base.py", line 223, in _proxy_to_logger
+    return getattr(self._logger, method_name)(*args, **kw)
+Message: '\x1b[2m2025-11-27T02:43:38.487975Z\x1b[0m [\x1b[32m\x1b[1minfo     \x1b[0m] \x1b[1m\U0001f9e0 Theorist analyzing craft: User Query...\x1b[0m'
+Arguments: ()
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2m2025-11-27T02:43:40.841595Z[0m [[32m[1minfo     [0m] [1mscene_analyzed                [0m [36magent[0m=[35mDramatistAgent[0m [36memotion[0m=[35m2.1[0m [36mtension[0m=[35m1.0[0m
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+## ? SYSTEMATIC ANALYSIS
+### ?? TIMELINE ANALYSIS
+**Events Identified:** 1
+1. **User requests information about Elara** (Order: 1)
+   The user asks the assistant to "Tell me about Elara," without providing further temporal or narrative context.
+
+**?? Continuity Notes:** The request for information about Elara has no explicit connection to the previously listed A Game of Thrones document chunks. There are no time markers or narrative transitions tying Elara to those events, so Elara’s place in the overall chronology cannot be determined from the provided text. If Elara is a character from another work, campaign, or setting, that timeline has not yet been established.
+
+### ? PSYCHOLOGICAL ANALYSIS
+**Characters Analyzed:** 1
+
+**Elara**
+- Archetype: Unknown
+- Core Desire: Unknown (insufficient context provided to determine)
+- Core Fear: Unknown (insufficient context provided to determine)
+
+## ? NARRATIVE SUMMARY
+
+You’re asking about Elara, but there isn’t a character by that name in *A Game of Thrones* (book 1) or in the text I have from that book. That means Elara is either from a different story, a later book, another medium (game, show, etc.), or she’s your own original character or idea.
+
+To actually tell you about Elara in a way that feels satisfying, you’d need to pin down who she is to you: Is she from a specific series or game? Or are you creating her, and you want help fleshing her out—what she wants, what she fears, what she’s done? If you share the context (e.g., “Elara is a rogue mage in my fantasy world,” or “Elara is from X book/anime/game”), you can get a much richer answer—personality, motivations, relationships, and how she fits into her world—rather than just vague lore.
+
